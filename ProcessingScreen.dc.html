@@ -17,11 +17,11 @@
 </helmet>
 <div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
 
-  <header style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
-    <button onClick="{{ openMenu }}" aria-label="เมนู" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+  <header style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+    <button onClick="{{ back }}" aria-label="ย้อนกลับ" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
-    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">AI กำลังประมวลผล</div>
     <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px">บ</div>
   </header>
 
@@ -83,31 +83,6 @@
     <button onClick="{{ next }}" disabled="{{ running }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ nextLabel }}</button>
   </div>
 
-  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position:absolute;inset:0;z-index:40;background:var(--color-bg);display:flex;flex-direction:column">
-      <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--color-divider)">
-        <div style="font-family:var(--font-heading);font-weight:800;font-size:15px">เมนู</div>
-        <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
-        </button>
-      </div>
-      <div style="flex:1;overflow:auto">
-        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
-          <button onClick="{{ item.go }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 16px;background:{{ item.bg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;font-family:var(--font-heading);font-weight:800;font-size:18px;line-height:1.4;color:var(--color-text)">
-            <span>{{ item.label }}</span>
-            <span style="font-size:12px;font-family:var(--font-body);font-weight:400;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ item.note }}</span>
-          </button>
-        </sc-for>
-      </div>
-      <div style="flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:2px solid var(--color-divider)">
-        <div style="width:40px;height:40px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:14px">บ</div>
-        <div>
-          <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">ครูเบญจมาศ</div>
-          <div style="font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">โรงเรียนตัวอย่าง · ใช้งานอยู่</div>
-        </div>
-      </div>
-    </div>
-  </sc-if>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
@@ -123,15 +98,17 @@ const FILES = [
   { name: 'ใบส่งของ 0422.png', ext: 'PNG' },
   { name: 'ใบเบิกพัสดุ 0034.pdf', ext: 'PDF' },
   { name: 'ใบสำคัญรับเงิน 0089.jpg', ext: 'JPG' },
-  { name: 'ใบเสร็จ ร้านสมใจ INV-0012.jpg', ext: 'JPG' },
+  { name: 'ใบเสร็จ ร้าน ABC DOC-0012.jpg', ext: 'JPG' },
 ];
-const STAGES = ['อ่านตัวอักษร', 'จำแนกประเภท', 'ดึงข้อมูล'];
+/* The three working stages; "เสร็จสิ้น" is the fourth step the prompt lists
+   and is the state a document lands in once all three have run. */
+const STAGES = ['อ่านเอกสาร', 'จำแนกประเภท', 'ตรวจสอบข้อมูล'];
 const PER_DOC = STAGES.length;
 const TOTAL = FILES.length * PER_DOC;
 const MUTED = 'color-mix(in srgb, var(--color-text) 55%, transparent)';
 
 class Component extends DCLogic {
-  state = { tick: 0, menuOpen: false };
+  state = { tick: 0 };
 
   componentDidMount() {
     this.timer = setInterval(() => {
@@ -151,16 +128,8 @@ class Component extends DCLogic {
     const activeIndex = running ? doneCount : -1;
     const activeStage = running ? STAGES[tick % PER_DOC] : '';
 
-    const nav = [
-      { label: 'เอกสาร', note: 'คุณอยู่ที่นี่', here: true },
-      { label: 'การเบิกจ่าย', note: 'รอตรวจ 8 รายการ', to: 'disbursement' },
-      { label: 'ครุภัณฑ์', note: '7 รายการ', to: 'assetRegister' },
-      { label: 'โครงการ', note: '4 โครงการ', to: 'validation' },
-      { label: 'ประวัติการใช้งาน', note: '' },
-      { label: 'ช่วยเหลือ', note: '' },
-    ];
-
     return {
+      back: () => go('scan'),
       title: running ? 'AI กำลังอ่านเอกสาร' : 'อ่านเอกสารครบแล้ว',
       subtitle: running
         ? 'ระบบกำลังอ่านตัวอักษร จำแนกประเภทเอกสาร และดึงข้อมูลออกมา แตะหัวข้อเพื่อข้าม'
@@ -175,7 +144,7 @@ class Component extends DCLogic {
         { label: 'ใบเสร็จ', value: '8 ฉบับ' },
         { label: 'การเบิกจ่าย', value: '8 รายการ' },
         { label: 'ครุภัณฑ์', value: '7 รายการ' },
-        { label: 'ยอดรวม', value: '฿40,980' },
+        { label: 'ยอดรวม', value: '฿246,500' },
       ],
       cells: FILES.map((f, i) => ({
         fill: i < doneCount ? 'var(--color-accent)'
@@ -189,20 +158,12 @@ class Component extends DCLogic {
           name: f.name,
           ext: f.ext,
           done: done,
-          stage: done ? 'เสร็จ' : active ? activeStage : 'รอคิว',
+          stage: done ? 'เสร็จสิ้น' : active ? activeStage : 'รอคิว',
           stageColor: active ? 'var(--color-accent-700)' : MUTED,
           thumbBg: active ? 'var(--color-accent-100)' : 'var(--color-neutral-200)',
           opacity: done || active ? '1' : '0.55',
         };
       }),
-      navItems: nav.map(n => ({
-        label: n.label, note: n.note,
-        bg: n.here ? 'var(--color-accent-100)' : 'transparent',
-        go: n.to ? () => go(n.to) : () => this.setState({ menuOpen: false }),
-      })),
-      menuOpen: this.state.menuOpen,
-      openMenu: () => this.setState({ menuOpen: true }),
-      closeAll: () => this.setState({ menuOpen: false }),
       skip: () => { this.stop(); this.setState({ tick: TOTAL }); },
       next: () => go('review'),
     };

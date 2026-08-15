@@ -17,11 +17,11 @@
 </helmet>
 <div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
 
-  <header style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
-    <button onClick="{{ openMenu }}" aria-label="เมนู" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+  <header style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+    <button onClick="{{ back }}" aria-label="ย้อนกลับ" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
-    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">สแกนเอกสาร</div>
     <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px">บ</div>
   </header>
 
@@ -81,32 +81,6 @@
     </div>
   </div>
 
-  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position:absolute;inset:0;z-index:40;background:var(--color-bg);display:flex;flex-direction:column">
-      <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--color-divider)">
-        <div style="font-family:var(--font-heading);font-weight:800;font-size:15px">เมนู</div>
-        <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
-        </button>
-      </div>
-      <div style="flex:1;overflow:auto">
-        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
-          <button onClick="{{ item.go }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 16px;background:{{ item.bg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;font-family:var(--font-heading);font-weight:800;font-size:18px;line-height:1.4;color:var(--color-text)">
-            <span>{{ item.label }}</span>
-            <span style="font-size:12px;font-family:var(--font-body);font-weight:400;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ item.note }}</span>
-          </button>
-        </sc-for>
-      </div>
-      <div style="flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:2px solid var(--color-divider)">
-        <div style="width:40px;height:40px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:14px">บ</div>
-        <div>
-          <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">ครูเบญจมาศ</div>
-          <div style="font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">โรงเรียนตัวอย่าง · ใช้งานอยู่</div>
-        </div>
-      </div>
-    </div>
-  </sc-if>
-
   <sc-if value="{{ cameraOpen }}" hint-placeholder-val="{{ false }}">
     <div style="position:absolute;inset:0;z-index:50;background:#141312;display:flex;flex-direction:column">
       <div style="flex:none;padding:14px 16px;color:#fff;font-family:var(--font-heading);font-weight:800;font-size:14px;display:flex;justify-content:space-between;align-items:center">
@@ -163,42 +137,29 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { menuOpen: false, cameraOpen: false, uploadOpen: false, docs: [], picked: {}, shots: 0 };
+  state = { cameraOpen: false, uploadOpen: false, docs: [], picked: {}, shots: 0 };
 
-  close = () => this.setState({ menuOpen: false, cameraOpen: false, uploadOpen: false });
+  close = () => this.setState({ cameraOpen: false, uploadOpen: false });
 
   renderVals() {
     const { docs, picked } = this.state;
     const lib = [
       { id: 'f1', name: 'IMG_2041.jpg', meta: 'รูปภาพ · วันนี้ 09:14 · 2.1 MB', ext: 'JPG' },
-      { id: 'f2', name: 'ใบเสร็จ ร้านสมใจ.jpg', meta: 'รูปภาพ · วันนี้ 09:12 · 1.8 MB', ext: 'JPG' },
-      { id: 'f3', name: 'ใบเสนอราคา SCI-2026-024.pdf', meta: 'ไฟล์ · 14/08/2026 · 340 KB', ext: 'PDF' },
-      { id: 'f4', name: 'ใบส่งของ 0421.png', meta: 'ไฟล์ · 13/08/2026 · 620 KB', ext: 'PNG' },
-    ];
-    const nav = [
-      { label: 'เอกสาร', note: 'คุณอยู่ที่นี่', here: true },
-      { label: 'การเบิกจ่าย', note: 'รอตรวจ 8 รายการ', to: 'disbursement' },
-      { label: 'ครุภัณฑ์', note: '7 รายการ', to: 'assetRegister' },
-      { label: 'โครงการ', note: '4 โครงการ', to: 'validation' },
-      { label: 'ประวัติการใช้งาน', note: '' },
-      { label: 'ช่วยเหลือ', note: '' },
+      { id: 'f2', name: 'ใบเสร็จ ร้าน ABC.jpg', meta: 'รูปภาพ · วันนี้ 09:12 · 1.8 MB', ext: 'JPG' },
+      { id: 'f3', name: 'ใบเสนอราคา SCI-2026-024.pdf', meta: 'ไฟล์ · 15/08/2026 · 340 KB', ext: 'PDF' },
+      { id: 'f4', name: 'ใบส่งของ 0421.png', meta: 'ไฟล์ · 14/08/2026 · 620 KB', ext: 'PNG' },
     ];
     const pickedCount = Object.values(picked).filter(Boolean).length;
 
     return {
+      back: () => go('home'),
       docs: docs.map((d, i) => ({ ...d, remove: () => this.setState(s => ({ docs: s.docs.filter((_, j) => j !== i) })) })),
       hasDocs: docs.length > 0,
       countLabel: docs.length + ' รายการ',
       sendLabel: 'ส่ง ' + docs.length + ' เอกสารให้ AI',
-      menuOpen: this.state.menuOpen,
       cameraOpen: this.state.cameraOpen,
       uploadOpen: this.state.uploadOpen,
       addLabel: pickedCount ? 'เพิ่ม ' + pickedCount + ' ไฟล์เข้ารายการ' : 'เลือกไฟล์ที่ต้องการเพิ่ม',
-      navItems: nav.map(n => ({
-        label: n.label, note: n.note,
-        bg: n.here ? 'var(--color-accent-100)' : 'transparent',
-        go: n.to ? () => go(n.to) : this.close,
-      })),
       library: lib.map(f => ({
         ...f,
         bg: picked[f.id] ? 'var(--color-accent-100)' : 'transparent',
@@ -206,13 +167,12 @@ class Component extends DCLogic {
         tick: picked[f.id] ? '#fff' : 'transparent',
         toggle: () => this.setState(s => ({ picked: { ...s.picked, [f.id]: !s.picked[f.id] } })),
       })),
-      openMenu: () => this.setState({ menuOpen: true }),
       openCamera: () => this.setState({ cameraOpen: true }),
       openUpload: () => this.setState({ uploadOpen: true }),
       closeAll: this.close,
       capture: () => this.setState(s => {
         const n = s.shots + 1;
-        return { shots: n, cameraOpen: false, docs: [...s.docs, { name: 'ภาพสแกน ' + n + '.jpg', meta: 'รูปภาพ · เมื่อสักครู่ · 14/08/2026', ext: 'JPG' }] };
+        return { shots: n, cameraOpen: false, docs: [...s.docs, { name: 'ภาพสแกน ' + n + '.jpg', meta: 'รูปภาพ · เมื่อสักครู่ · 15/08/2026', ext: 'JPG' }] };
       }),
       addPicked: () => this.setState(s => {
         const add = lib.filter(f => s.picked[f.id]).map(f => ({ name: f.name, meta: f.meta, ext: f.ext }));

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/styles.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap">
+<script src="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/_ds_bundle.js"></script>
+<script src="flow.js"></script>
+<style>:root{--font-body:"Archivo","Noto Sans Thai",system-ui,sans-serif;--font-heading:"Archivo","Noto Sans Thai",system-ui,sans-serif}</style>
+</helmet>
+<div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <header style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-0.01em;line-height:1.1">Kru<span style="color:var(--color-accent-700)">Scan</span></div>
+    <button onClick="{{ toHelp }}" aria-label="ช่วยเหลือ" style="width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 013.9-2 2.2 2.2 0 01.1 3.6c-.9.6-1.5 1.1-1.5 2.1"></path><path d="M12 17h.01"></path></svg>
+    </button>
+  </header>
+
+  <div style="flex:1;overflow:auto;padding:20px 16px 24px">
+    <h1 style="font-size:25px;line-height:1.24;letter-spacing:-0.01em;margin:0 0 20px;text-wrap:pretty">บัญชีของฉัน</h1>
+
+    <div style="display:flex;align-items:center;gap:14px;border:2px solid var(--color-divider);padding:14px">
+      <div style="width:60px;height:60px;flex:none;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:22px">บ</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:18px;line-height:1.3;letter-spacing:-0.01em">ครูเบญจมาศ ใจดี</div>
+        <div style="font-size:12.5px;line-height:1.55;margin-top:3px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">benjamas@example.ac.th</div>
+        <div style="font-size:12.5px;line-height:1.55;color:color-mix(in srgb, var(--color-text) 55%, transparent)">โรงเรียนตัวอย่าง · เจ้าหน้าที่พัสดุ</div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
+        <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ข้อมูลบัญชี</h6>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">5 รายการ</span>
+      </div>
+      <sc-for list="{{ info }}" as="f" hint-placeholder-count="5">
+        <div style="display:flex;align-items:baseline;gap:12px;padding:12px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+          <span style="width:104px;flex:none;font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ f.label }}</span>
+          <span style="flex:1;min-width:0;font-size:14px;font-weight:600;line-height:1.45;text-align:right">{{ f.value }}</span>
+        </div>
+      </sc-for>
+
+      <div style="margin-top:14px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--color-text);padding:11px 14px;background:var(--color-neutral-200)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+        <span style="font-size:13.5px;line-height:1.5">โรงเรียนได้รับการยืนยันแล้ว</span>
+      </div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
+        <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ตั้งค่า</h6>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">5 รายการ</span>
+      </div>
+
+      <button onClick="{{ toggleAlerts }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:13px 0;background:transparent;border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
+        <span style="flex:1;min-width:0">
+          <span style="display:block;font-size:14.5px;font-weight:600;line-height:1.45">การแจ้งเตือน</span>
+          <span style="display:block;font-size:12px;line-height:1.5;margin-top:2px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ alertsNote }}</span>
+        </span>
+        <span style="width:52px;height:28px;flex:none;border:2px solid var(--color-text);background:{{ trackBg }};display:flex;align-items:center;justify-content:{{ knobSide }};padding:2px">
+          <span style="width:20px;height:20px;background:{{ knobBg }};display:block"></span>
+        </span>
+      </button>
+
+      <sc-for list="{{ settings }}" as="s" hint-placeholder-count="4">
+        <button onClick="{{ s.open }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:13px 0;background:transparent;border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
+          <span style="flex:1;min-width:0">
+            <span style="display:block;font-size:14.5px;font-weight:600;line-height:1.45">{{ s.label }}</span>
+            <span style="display:block;font-size:12px;line-height:1.5;margin-top:2px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ s.note }}</span>
+          </span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2.2" stroke-linecap="square" style="flex:none"><path d="M9 6l6 6-6 6"></path></svg>
+        </button>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:26px;border-top:2px solid var(--color-accent);padding-top:14px">
+      <h6 style="margin:0 0 6px;font-size:12px;letter-spacing:0.04em;color:var(--color-accent-700)">พื้นที่อันตราย</h6>
+      <p style="font-size:12.5px;line-height:1.6;margin:0 0 12px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">ออกจากระบบแล้วต้องยืนยันรหัส OTP ใหม่เมื่อเข้าใช้งานครั้งถัดไป</p>
+      <button onClick="{{ logout }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px;gap:10px;border-color:var(--color-accent);color:var(--color-accent-700)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5H5v14h10"></path><path d="M13 12h8m0 0l-3-3m3 3l-3 3"></path></svg>ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <nav aria-label="เมนูหลัก" style="flex:none;display:flex;border-top:2px solid var(--color-text);background:var(--color-bg)">
+    <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+      <button onClick="{{ t.go }}" aria-label="{{ t.aria }}" aria-current="{{ t.current }}" style="flex:1;height:62px;margin-top:-2px;border:0;border-top:2px solid {{ t.rule }};background:transparent;cursor:pointer;color:{{ t.color }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.02em">
+        <sc-if value="{{ t.isHome }}" hint-placeholder-val="{{ true }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M3 11l9-7 9 7v9H3z"></path><path d="M10 20v-6h4v6"></path></svg>
+        </sc-if>
+        <sc-if value="{{ t.isSchedule }}" hint-placeholder-val="{{ false }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M3 5h18v16H3z"></path><path d="M3 10h18"></path><path d="M8 3v4M16 3v4"></path></svg>
+        </sc-if>
+        <sc-if value="{{ t.isProfile }}" hint-placeholder-val="{{ false }}">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-3.6 3.6-6 8-6s8 2.4 8 6"></path></svg>
+        </sc-if>
+        <span>{{ t.label }}</span>
+      </button>
+    </sc-for>
+  </nav>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { alertsOn: true };
+
+  tabsFor(here) {
+    const T = [
+      { key: 'home',     label: 'หน้าแรก',  aria: 'หน้าแรก' },
+      { key: 'schedule', label: 'ตารางงาน', aria: 'ตารางงานของโครงการ' },
+      { key: 'profile',  label: 'โปรไฟล์',  aria: 'บัญชีของฉัน' },
+    ];
+    return T.map(t => ({
+      ...t,
+      isHome: t.key === 'home',
+      isSchedule: t.key === 'schedule',
+      isProfile: t.key === 'profile',
+      current: t.key === here ? 'page' : undefined,
+      rule:  t.key === here ? 'var(--color-accent)' : 'transparent',
+      color: t.key === here ? 'var(--color-accent-700)' : 'color-mix(in srgb, var(--color-text) 55%, transparent)',
+      go: () => go(t.key),
+    }));
+  }
+
+  renderVals() {
+    const on = this.state.alertsOn;
+
+    const info = [
+      { label: 'ชื่อ-นามสกุล',   value: 'ครูเบญจมาศ ใจดี' },
+      { label: 'อีเมล',          value: 'benjamas@example.ac.th' },
+      { label: 'โรงเรียน',       value: 'โรงเรียนตัวอย่าง' },
+      { label: 'ตำแหน่ง',        value: 'เจ้าหน้าที่พัสดุ' },
+      { label: 'หมายเลข API',    value: 'SCH-1042-8890' },
+    ];
+
+    const settings = [
+      { label: 'แก้ไขข้อมูลส่วนตัว', note: 'ชื่อ อีเมล และตำแหน่ง' },
+      { label: 'เปลี่ยนรหัสผ่าน',    note: 'เปลี่ยนล่าสุด 02/08/2026' },
+      { label: 'การยืนยัน OTP',      note: 'ส่งไปที่ 08X-XXX-4471' },
+      { label: 'ความปลอดภัย',        note: 'อุปกรณ์ที่เข้าใช้งานและประวัติการเข้าสู่ระบบ' },
+    ];
+
+    return {
+      tabs: this.tabsFor('profile'),
+      info,
+      settings: settings.map(s => ({ ...s, open: () => {} })),
+      alertsNote: on ? 'เปิดอยู่ · แจ้งเมื่อ AI ตรวจพบข้อผิดพลาด' : 'ปิดอยู่',
+      trackBg: on ? 'var(--color-accent)' : 'transparent',
+      knobBg:  on ? 'var(--color-bg)' : 'var(--color-text)',
+      knobSide: on ? 'flex-end' : 'flex-start',
+      toggleAlerts: () => this.setState(s => ({ alertsOn: !s.alertsOn })),
+      toHelp: () => go('help'),
+      logout: () => go('login'),
+    };
+  }
+}
+</script>
+</body>
+</html>

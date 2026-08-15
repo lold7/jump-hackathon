@@ -17,17 +17,17 @@
 </helmet>
 <div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
 
-  <header style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
-    <button onClick="{{ openMenu }}" aria-label="เมนู" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+  <header style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+    <button onClick="{{ back }}" aria-label="ย้อนกลับ" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
-    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">ส่งออกข้อมูล</div>
     <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px">บ</div>
   </header>
 
-  <div style="flex:1;overflow:auto;padding:22px 16px 18px">
-    <h1 style="font-size:27px;line-height:1.22;letter-spacing:-0.01em;margin:0 0 10px;text-wrap:pretty">ส่งออกข้อมูล</h1>
-    <p style="font-size:14px;line-height:1.65;margin:0 0 20px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">โครงการจัดซื้อวัสดุห้องวิทยาศาสตร์ · SCI-2026-024 · เงินอุดหนุน</p>
+  <div style="flex:1;overflow:auto;padding:20px 16px 18px">
+    <h1 style="font-size:25px;line-height:1.24;letter-spacing:-0.01em;margin:0 0 8px;text-wrap:pretty">ตรวจข้อมูลก่อนส่งออก</h1>
+    <p style="font-size:13.5px;line-height:1.6;margin:0 0 20px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์ · SCI-2026-024 · เงินอุดหนุน</p>
 
     <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
       <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">สรุปชุดเอกสาร</h6>
@@ -41,7 +41,7 @@
     </sc-for>
     <div style="display:flex;align-items:baseline;justify-content:space-between;border-top:2px solid var(--color-text);padding-top:12px;margin-top:2px">
       <span style="font-family:var(--font-heading);font-weight:800;font-size:15px">ยอดรวม</span>
-      <span style="font-family:var(--font-heading);font-weight:800;font-size:24px;letter-spacing:-0.015em">฿40,980</span>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:24px;letter-spacing:-0.015em">{{ grandTotal }}</span>
     </div>
 
     <div style="margin-top:26px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
@@ -67,12 +67,13 @@
       <div style="margin-top:18px;border-left:4px solid var(--color-accent);background:var(--color-accent-100);padding:12px 14px">
         <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700)">ยังส่งออกไม่ได้</div>
         <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ blockedNote }}</div>
-        <button onClick="{{ toValidation }}" class="btn btn-secondary" style="justify-content:flex-start;height:44px;font-size:14px;padding-inline:14px;margin-top:10px;background:var(--color-bg)">ไปที่ศูนย์ตรวจสอบ</button>
+        <button onClick="{{ toReview }}" class="btn btn-secondary" style="justify-content:flex-start;height:44px;font-size:14px;padding-inline:14px;margin-top:10px;background:var(--color-bg)">กลับไปตรวจสอบข้อมูล</button>
       </div>
     </sc-if>
 
     <div style="margin-top:26px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
       <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">รูปแบบไฟล์</h6>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">แนะนำ Excel</span>
     </div>
     <div style="margin-top:12px">
       <div class="seg">
@@ -85,6 +86,36 @@
       </div>
       <div style="font-size:12px;line-height:1.6;margin-top:10px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ไฟล์ที่จะได้: {{ fileName }}</div>
     </div>
+
+    <div style="margin-top:26px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
+      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ตัวอย่างข้อมูลที่จะส่งออก</h6>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ tableShape }}</span>
+    </div>
+
+    <div style="margin-top:12px;border:2px solid var(--color-divider);overflow-x:auto;-webkit-overflow-scrolling:touch">
+      <table class="table" style="min-width:1080px;font-size:12px;white-space:nowrap">
+        <thead>
+          <tr>
+            <sc-for list="{{ cols }}" as="c" hint-placeholder-count="13">
+              <th style="padding:8px 10px;font-size:10px">{{ c }}</th>
+            </sc-for>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ previewRows }}" as="r" hint-placeholder-count="3">
+            <tr>
+              <sc-for list="{{ r.cells }}" as="cell" hint-placeholder-count="13">
+                <td style="padding:8px 10px;text-align:{{ cell.align }}">{{ cell.text }}</td>
+              </sc-for>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px">
+      <span style="flex:1;min-width:0;font-size:12px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">เลื่อนตารางไปทางขวาเพื่อดูคอลัมน์ที่เหลือ</span>
+      <button onClick="{{ openTable }}" class="btn btn-secondary" style="flex:none;height:40px;font-size:13px;padding-inline:12px">ดูทั้งหมด</button>
+    </div>
   </div>
 
   <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg)">
@@ -92,97 +123,132 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M12 4v12m0 0l-5-5m5 5l5-5M4 18v2h16v-2"></path></svg>{{ submitLabel }}</button>
   </div>
 
-  <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
-    <div style="position:absolute;inset:0;z-index:60;background:var(--color-bg);display:flex;flex-direction:column;justify-content:center;padding:28px 20px">
-      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.4" stroke-linecap="square"><path d="M4 12l5 5L20 6"></path></svg>
-      <div style="font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1.3;letter-spacing:-0.01em;margin-top:18px">ส่งออก 12 เอกสารเรียบร้อยแล้ว</div>
-      <p style="font-size:14px;line-height:1.65;margin-top:10px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ doneNote }}</p>
-      <button onClick="{{ toScan }}" class="btn btn-secondary" style="justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px;margin-top:8px">กลับไปหน้าสแกนเอกสาร</button>
-    </div>
-  </sc-if>
-
-  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position:absolute;inset:0;z-index:40;background:var(--color-bg);display:flex;flex-direction:column">
-      <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--color-divider)">
-        <div style="font-family:var(--font-heading);font-weight:800;font-size:15px">เมนู</div>
-        <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+  <sc-if value="{{ tableOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:50;background:var(--color-bg);display:flex;flex-direction:column">
+      <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:2px solid var(--color-divider)">
+        <div style="min-width:0">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;line-height:1.25">ตัวอย่างข้อมูลทั้งหมด</div>
+          <div style="font-size:12px;line-height:1.5;margin-top:2px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ fileName }}</div>
+        </div>
+        <button onClick="{{ closeTable }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;background:transparent;border:0;cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
         </button>
       </div>
-      <div style="flex:1;overflow:auto">
-        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
-          <button onClick="{{ item.go }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 16px;background:{{ item.bg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;font-family:var(--font-heading);font-weight:800;font-size:18px;line-height:1.4;color:var(--color-text)">
-            <span>{{ item.label }}</span>
-            <span style="font-size:12px;font-family:var(--font-body);font-weight:400;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ item.note }}</span>
-          </button>
-        </sc-for>
+      <div style="flex:1;overflow:auto;-webkit-overflow-scrolling:touch">
+        <table class="table" style="min-width:1080px;font-size:12px;white-space:nowrap">
+          <thead>
+            <tr>
+              <sc-for list="{{ cols }}" as="c" hint-placeholder-count="13">
+                <th style="padding:9px 10px;font-size:10px;position:sticky;top:0;background:var(--color-bg)">{{ c }}</th>
+              </sc-for>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{ allRows }}" as="r" hint-placeholder-count="12">
+              <tr>
+                <sc-for list="{{ r.cells }}" as="cell" hint-placeholder-count="13">
+                  <td style="padding:9px 10px;text-align:{{ cell.align }}">{{ cell.text }}</td>
+                </sc-for>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
       </div>
-      <div style="flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:2px solid var(--color-divider)">
-        <div style="width:40px;height:40px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:14px">บ</div>
-        <div>
-          <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">ครูเบญจมาศ</div>
-          <div style="font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">โรงเรียนตัวอย่าง · ใช้งานอยู่</div>
-        </div>
+      <div style="flex:none;padding:12px 16px;border-top:2px solid var(--color-divider)">
+        <button onClick="{{ closeTable }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ปิด</button>
       </div>
     </div>
   </sc-if>
+
+  <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:60;background:var(--color-bg);display:flex;flex-direction:column;justify-content:center;padding:28px 20px">
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.4" stroke-linecap="square"><path d="M4 12l5 5L20 6"></path></svg>
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1.3;letter-spacing:-0.01em;margin-top:18px">ส่งออกไฟล์สำเร็จ</div>
+      <p style="font-size:14px;line-height:1.65;margin-top:10px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ doneNote }}</p>
+      <button onClick="{{ toHome }}" class="btn btn-secondary" style="justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px;margin-top:8px">กลับหน้าหลัก</button>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 /* The five rules CLAUDE.md says the demo must visibly enforce. */
 const CHECKS = [
+  { id: 'amountsAgree',   label: 'ยอดคำนวณตรงกับยอดในใบเสร็จทุกฉบับ' },
   { id: 'chequeRequired', label: 'เลขที่เช็คครบถ้วนทุกรายการ' },
   { id: 'chequeUnique',   label: 'เลขที่เช็คไม่ซ้ำกัน' },
   { id: 'assetUnique',    label: 'เลขครุภัณฑ์ไม่ซ้ำกัน' },
   { id: 'countUnique',    label: 'ครั้งที่เบิกจ่ายไม่ซ้ำในโครงการ' },
-  { id: 'amountsAgree',   label: 'ยอดเงินตรงกันทุกเอกสาร' },
 ];
 
 const FORMATS = [
   { id: 'xlsx', label: 'Excel', ext: 'xlsx' },
   { id: 'csv',  label: 'CSV',   ext: 'csv' },
-  { id: 'pdf',  label: 'PDF',   ext: 'pdf' },
+  { id: 'docx', label: 'Word',  ext: 'docx' },
 ];
 
+const COLS = [
+  'เลขที่เอกสาร', 'ประเภทเอกสาร', 'ประเภทการเงิน', 'วันที่', 'ผู้ขาย', 'โครงการ', 'แหล่งเงิน',
+  'รายการ', 'จำนวน', 'ราคาต่อหน่วย', 'ยอดรวม', 'วิธีชำระเงิน', 'เลขครุภัณฑ์',
+];
+/* Columns 8-10 are money/counts and get right-aligned. */
+const RIGHT = { 8: true, 9: true, 10: true };
+
+const PROJ = 'SCI-2026-024';
+const FUND = 'เงินอุดหนุน';
+
+/* One tuple per exported row, in column order minus the constants. */
+const ROWS = [
+  ['DOC-0012', 'ใบเสร็จ',          'บจ.', '15/08/2026', 'ร้าน ABC',          'กล้องจุลทรรศน์',   '10', '฿8,500',  '฿85,000', 'เช็ค',        'SCI-000234'],
+  ['DOC-0011', 'ใบสำคัญรับเงิน',   'บจ.', '14/08/2026', 'ร้านวิทยาภัณฑ์',    'ชุดทดลองไฟฟ้า',    '2',  '฿3,200',  '฿6,400',  'เช็ค',        'SCI-000235'],
+  ['DOC-0010', 'ใบเสร็จ',          'บจ.', '13/08/2026', 'ร้านครุภัณฑ์ไทย',   'ตู้เก็บสารเคมี',    '1',  '฿12,400', '฿12,400', 'เช็ค',        'SCI-000236'],
+  ['DOC-0009', 'ใบส่งของ',         'บจ.', '13/08/2026', 'ร้านครุภัณฑ์ไทย',   'ตู้เก็บสารเคมี',    '1',  '฿12,400', '฿12,400', 'เงินโอน',     'SCI-000236'],
+  ['DOC-0008', 'ใบเบิกพัสดุ',      'งด.', '12/08/2026', 'โรงเรียนตัวอย่าง',  'กระดาษกรอง',       '10', '฿85',     '฿850',    'เงินสด',      '—'],
+  ['DOC-0007', 'ใบเสร็จ',          'บจ.', '12/08/2026', 'ร้าน ABC',          'บีกเกอร์แก้ว',      '12', '฿140',    '฿1,680',  'เงินสด',      '—'],
+  ['DOC-0006', 'ใบสำคัญรับเงิน',   'ยจ.', '11/08/2026', 'ร้านวิทยาภัณฑ์',    'เครื่องชั่งดิจิทัล', '1',  '฿6,900',  '฿6,900',  'บัญชีธนาคาร', 'SCI-000237'],
+  ['DOC-0005', 'ใบเสร็จ',          'บจ.', '11/08/2026', 'ร้านครุภัณฑ์ไทย',   'ตู้อบความร้อน',     '1',  '฿42,000', '฿42,000', 'เช็ค',        'SCI-000238'],
+  ['DOC-0004', 'ใบส่งของ',         'บจ.', '10/08/2026', 'ร้าน ABC',          'บีกเกอร์แก้ว',      '12', '฿140',    '฿1,680',  'เงินโอน',     '—'],
+  ['DOC-0003', 'ใบเบิกพัสดุ',      'งด.', '10/08/2026', 'โรงเรียนตัวอย่าง',  'ถุงมือยาง',        '20', '฿58',     '฿1,150',  'เงินสด',      '—'],
+  ['DOC-0002', 'ใบเสนอราคา',       'บจ.', '08/08/2026', 'ร้าน ABC',          'กล้องจุลทรรศน์',   '10', '฿8,500',  '฿85,000', 'เช็ค',        'SCI-000234'],
+  ['DOC-0001', 'ใบเสร็จ',          'บจ.', '07/08/2026', 'ร้านวิทยาภัณฑ์',    'หลอดทดลอง',        '24', '฿88',     '฿2,120',  'บัญชีธนาคาร', '—'],
+];
+
+/* Splice the two per-project constants back into column order 5 and 6. */
+const toRow = t => ({
+  cells: [t[0], t[1], t[2], t[3], t[4], 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์', FUND, t[5], t[6], t[7], t[8], t[9], t[10]]
+    .map((text, i) => ({ text, align: RIGHT[i] ? 'right' : 'left' })),
+});
+
 class Component extends DCLogic {
-  state = { format: 'xlsx', failing: {}, done: false, menuOpen: false };
+  state = { format: 'xlsx', failing: {}, done: false, tableOpen: false };
 
   renderVals() {
     const { failing, format } = this.state;
     const fmt = FORMATS.find(f => f.id === format);
     const bad = CHECKS.filter(c => failing[c.id]);
     const blocked = bad.length > 0;
-    const fileName = 'SCI-2026-024_14082026.' + fmt.ext;
-
-    const nav = [
-      { label: 'เอกสาร', note: '', to: 'scan' },
-      { label: 'การเบิกจ่าย', note: 'รอตรวจ 8 รายการ', to: 'disbursement' },
-      { label: 'ครุภัณฑ์', note: '7 รายการ', to: 'assetRegister' },
-      { label: 'โครงการ', note: 'คุณอยู่ที่นี่', here: true },
-      { label: 'ประวัติการใช้งาน', note: '' },
-      { label: 'ช่วยเหลือ', note: '' },
-    ];
+    const fileName = PROJ + '_15082026.' + fmt.ext;
+    const rows = ROWS.map(toRow);
 
     return {
+      back: () => go('review'),
+
       summary: [
         { label: 'ใบเสร็จ', value: '8 ฉบับ' },
         { label: 'การเบิกจ่าย', value: '8 รายการ' },
         { label: 'ครุภัณฑ์', value: '7 รายการ' },
         { label: 'วัสดุ', value: '4 รายการ' },
       ],
+      grandTotal: '฿246,500',
 
       checkLabel: blocked ? bad.length + ' ข้อไม่ผ่าน' : 'ผ่านทั้ง ' + CHECKS.length + ' ข้อ',
-      checks: CHECKS.map(c => ({
-        label: c.label,
-        ok: !failing[c.id],
-        bad: !!failing[c.id],
-      })),
+      checks: CHECKS.map(c => ({ label: c.label, ok: !failing[c.id], bad: !!failing[c.id] })),
 
       blocked: blocked,
       blockedNote: blocked
         ? 'มี ' + bad.length + ' ข้อที่ยังไม่ผ่านการตรวจสอบ แก้ไขให้ครบก่อนจึงจะส่งออกได้'
         : '',
-      toValidation: () => go('validation'),
+      toReview: () => go('review'),
 
       formats: FORMATS.map(f => ({
         label: f.label,
@@ -191,21 +257,20 @@ class Component extends DCLogic {
       })),
       fileName: fileName,
 
-      submitLabel: blocked ? 'แก้ไขข้อที่ไม่ผ่านก่อน' : 'ส่งออกข้อมูล',
+      cols: COLS,
+      tableShape: COLS.length + ' คอลัมน์ · ' + ROWS.length + ' แถว',
+      previewRows: rows.slice(0, 3),
+      allRows: rows,
+      tableOpen: this.state.tableOpen,
+      openTable: () => this.setState({ tableOpen: true }),
+      closeTable: () => this.setState({ tableOpen: false }),
+
+      submitLabel: blocked ? 'แก้ไขข้อที่ไม่ผ่านก่อน' : 'ส่งออกเป็นไฟล์ ' + fmt.label,
       submit: () => this.setState({ done: true }),
 
       done: this.state.done,
-      doneNote: 'ไฟล์ ' + fileName + ' · 12 เอกสาร · ยอดรวม ฿40,980 · พร้อมส่งให้ฝ่ายการเงิน',
-      toScan: () => go('scan'),
-
-      navItems: nav.map(n => ({
-        label: n.label, note: n.note,
-        bg: n.here ? 'var(--color-accent-100)' : 'transparent',
-        go: n.to ? () => go(n.to) : () => this.setState({ menuOpen: false }),
-      })),
-      menuOpen: this.state.menuOpen,
-      openMenu: () => this.setState({ menuOpen: true }),
-      closeAll: () => this.setState({ menuOpen: false }),
+      doneNote: 'ไฟล์ ' + fileName + ' · 12 เอกสาร · ยอดรวม ฿246,500 · พร้อมส่งให้ฝ่ายการเงิน',
+      toHome: () => go('home'),
     };
   }
 }

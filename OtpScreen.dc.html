@@ -21,7 +21,7 @@
     <button onClick="{{ back }}" aria-label="ย้อนกลับ" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
-    <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+    <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-0.01em">Kru<span style="color:var(--color-accent-700)">Scan</span></div>
   </div>
 
   <div style="flex:1;overflow:auto;padding:28px 16px 18px">
@@ -75,7 +75,7 @@ class Component extends DCLogic {
       clear: () => this.setState({ digits: '' }),
 
       submitLabel: incomplete ? 'กรอกรหัสให้ครบ 6 หลัก' : 'ยืนยัน',
-      submit: () => go('scan'),
+      submit: () => go('home'),
       back: () => go('login'),
     };
   }

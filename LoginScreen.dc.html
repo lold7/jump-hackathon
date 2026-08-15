@@ -17,61 +17,125 @@
 </helmet>
 <div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
 
-  <div style="flex:none;padding:26px 16px 0">
-    <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+  <div style="flex:none;display:flex;align-items:center;gap:11px;padding:24px 16px 0">
+    <div style="width:38px;height:38px;flex:none;background:var(--color-accent);display:flex;align-items:center;justify-content:center;color:var(--color-bg)">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M3 8V4h4M17 4h4v4M21 16v4h-4M7 20H3v-4"></path><path d="M3 12h18"></path></svg>
+    </div>
+    <div style="min-width:0">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:20px;letter-spacing:-0.015em;line-height:1.1">Kru<span style="color:var(--color-accent-700)">Scan</span></div>
+      <div style="font-size:11.5px;line-height:1.5;margin-top:2px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">AI จัดการงานเอกสาร คืนเวลาครูสู่ห้องเรียน</div>
+    </div>
   </div>
 
-  <div style="flex:1;overflow:auto;padding:34px 16px 18px">
-    <h1 style="font-size:31px;line-height:1.2;letter-spacing:-0.015em;margin:0 0 10px;text-wrap:pretty">เข้าสู่ระบบ</h1>
-    <p style="font-size:14px;line-height:1.65;margin:0 0 28px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">ใช้หมายเลข API ของโรงเรียนเพื่อเริ่มใช้งาน ระบบจะส่งรหัส OTP ไปยังเบอร์ที่ผูกไว้</p>
+  <div style="flex:1;overflow:auto;padding:30px 16px 18px">
+    <h1 style="font-size:30px;line-height:1.2;letter-spacing:-0.015em;margin:0 0 10px;text-wrap:pretty">เข้าสู่ระบบ</h1>
+    <p style="font-size:14px;line-height:1.65;margin:0 0 26px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">เข้าสู่ระบบด้วยอีเมลของสถานศึกษา ระบบจะส่งรหัส OTP ไปยังเบอร์ที่ผูกกับหมายเลข API</p>
 
-    <div class="field" style="margin-bottom:18px">
-      <label for="apiNo" style="margin:0 0 6px;display:block;font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">หมายเลข API ของโรงเรียน</label>
-      <input id="apiNo" class="input" value="{{ apiNo }}" onChange="{{ onApi }}" placeholder="SCH-0000-0000" style="height:48px;font-size:16px;border-color:{{ apiBorder }}">
-      <sc-if value="{{ apiBad }}" hint-placeholder-val="{{ false }}">
-        <div style="font-size:11.5px;line-height:1.5;margin-top:6px;color:var(--color-accent-700)">รูปแบบต้องเป็น SCH-0000-0000</div>
-      </sc-if>
+    <sc-for list="{{ fields }}" as="f" hint-placeholder-count="3">
+      <div class="field" style="padding:0 0 18px">
+        <label for="{{ f.id }}" style="margin:0 0 6px;display:block;font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ f.label }}</label>
+        <div style="display:flex;gap:8px;align-items:stretch">
+          <input id="{{ f.id }}" class="input" type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.onInput }}" placeholder="{{ f.placeholder }}" style="flex:1;min-width:0;height:48px;font-size:16px;border-color:{{ f.border }}">
+          <sc-if value="{{ f.secret }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ f.toggle }}" aria-label="{{ f.toggleAria }}" style="width:48px;height:48px;flex:none;background:var(--color-surface);border:1px solid var(--color-divider);cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"></path><circle cx="12" cy="12" r="3"></circle><path d="{{ f.slash }}"></path></svg>
+            </button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ f.bad }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11.5px;line-height:1.5;margin-top:6px;color:var(--color-accent-700)">{{ f.error }}</div>
+        </sc-if>
+      </div>
+    </sc-for>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:-4px">
+      <button onClick="{{ forgot }}" class="btn btn-ghost" style="font-size:13px;padding-inline:0">ลืมรหัสผ่าน?</button>
     </div>
 
-    <div class="field" style="margin-bottom:24px">
-      <label for="phone" style="margin:0 0 6px;display:block;font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">เบอร์โทรศัพท์ที่ผูกไว้</label>
-      <input id="phone" class="input" value="{{ phone }}" onChange="{{ onPhone }}" style="height:48px;font-size:16px">
-    </div>
-
-    <div style="border-top:2px solid var(--color-divider);padding-top:16px;display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:12.5px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 62%, transparent)">
-      <span style="font-family:var(--font-heading);font-weight:800;color:var(--color-accent-700)">1</span><span>ยืนยันหมายเลข API และรับรหัส OTP</span>
+    <div style="margin-top:24px;border-top:2px solid var(--color-divider);padding-top:16px;display:grid;grid-template-columns:auto 1fr;gap:8px 12px;font-size:12.5px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 62%, transparent)">
+      <span style="font-family:var(--font-heading);font-weight:800;color:var(--color-accent-700)">1</span><span>ยืนยันตัวตนด้วยอีเมลและรหัส OTP</span>
       <span style="font-family:var(--font-heading);font-weight:800;color:var(--color-accent-700)">2</span><span>ถ่ายรูปเอกสาร แล้ว AI อ่านและกรอกข้อมูลให้</span>
-      <span style="font-family:var(--font-heading);font-weight:800;color:var(--color-accent-700)">3</span><span>ตรวจสอบความถูกต้อง แล้วส่งออกข้อมูล</span>
+      <span style="font-family:var(--font-heading);font-weight:800;color:var(--color-accent-700)">3</span><span>ตรวจสอบความถูกต้อง แล้วส่งออกเป็นไฟล์ Excel</span>
     </div>
   </div>
 
-  <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg)">
-    <button onClick="{{ submit }}" disabled="{{ apiBad }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ submitLabel }}</button>
-    <div style="font-size:11.5px;line-height:1.6;margin-top:10px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ต้นแบบสำหรับสาธิต ไม่มีการเชื่อมต่อระบบจริง</div>
+  <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg);display:flex;flex-direction:column;gap:8px">
+    <button onClick="{{ submit }}" disabled="{{ blocked }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ submitLabel }}</button>
+    <button onClick="{{ toRegister }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ยังไม่มีบัญชี? สมัครสมาชิก</button>
+    <div style="font-size:11.5px;line-height:1.6;margin-top:2px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ต้นแบบสำหรับสาธิต ไม่มีการเชื่อมต่อระบบจริง</div>
   </div>
+
+  <sc-if value="{{ forgotOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:50;background:color-mix(in srgb, #201e1d 45%, transparent);display:flex;flex-direction:column;justify-content:flex-end">
+      <div style="background:var(--color-bg);border-top:2px solid var(--color-text);display:flex;flex-direction:column">
+        <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:2px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:17px">ลืมรหัสผ่าน</div>
+          <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;background:transparent;border:0;cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+          </button>
+        </div>
+        <div style="padding:16px">
+          <p style="font-size:14px;line-height:1.7;margin:0">ระบบจะส่งลิงก์ตั้งรหัสผ่านใหม่ไปยังอีเมลที่ผูกกับหมายเลข API ของโรงเรียน หากยังเข้าไม่ได้ กรุณาติดต่อผู้ดูแลระบบของสถานศึกษา</p>
+        </div>
+        <div style="flex:none;padding:12px 16px;border-top:2px solid var(--color-divider);display:flex;flex-direction:column;gap:8px">
+          <button onClick="{{ closeAll }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:50px;font-size:16px;padding-inline:16px">ส่งลิงก์ตั้งรหัสผ่านใหม่</button>
+          <button onClick="{{ closeAll }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
-const API_RE = /^SCH-\d{4}-\d{4}$/;
+const FIELDS = [
+  { key: 'email',  id: 'lEmail', label: 'อีเมล',    placeholder: 'you@example.ac.th', test: v => v.includes('@') && v.includes('.'), error: 'รูปแบบอีเมลไม่ถูกต้อง' },
+  { key: 'pass',   id: 'lPass',  label: 'รหัสผ่าน', placeholder: 'รหัสผ่านของคุณ', secret: true, test: v => v.length >= 8, error: 'รหัสผ่านต้องยาวอย่างน้อย 8 ตัวอักษร' },
+  { key: 'apiNo',  id: 'lApi',   label: 'หมายเลข API ของโรงเรียน', placeholder: 'SCH-0000-0000', test: v => /^SCH-\d{4}-\d{4}$/.test(v), error: 'รูปแบบต้องเป็น SCH-0000-0000' },
+];
 
 class Component extends DCLogic {
-  state = { apiNo: 'SCH-1042-8890', phone: '08X-XXX-4471' };
+  state = {
+    v: { email: 'benjamas@example.ac.th', pass: 'kruscan2026', apiNo: 'SCH-1042-8890' },
+    showPass: false,
+    forgotOpen: false,
+  };
 
   renderVals() {
-    const apiNo = (this.state.apiNo || '').trim();
-    const apiBad = !API_RE.test(apiNo);
+    const { v, showPass } = this.state;
+
+    const fields = FIELDS.map(f => {
+      const val = v[f.key];
+      const empty = !val.trim();
+      const failed = !!f.test && !empty && !f.test(val);
+      const bad = empty || failed;
+      return {
+        id: f.id, label: f.label, value: val, placeholder: f.placeholder,
+        type: f.secret && !showPass ? 'password' : 'text',
+        secret: !!f.secret,
+        /* The eye gets a strike-through path only while the value is visible. */
+        slash: showPass ? 'M4 4l16 16' : '',
+        toggle: () => this.setState(s => ({ showPass: !s.showPass })),
+        toggleAria: showPass ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน',
+        bad: bad,
+        error: empty ? 'กรอก' + f.label + 'ก่อน' : (f.error || ''),
+        border: bad ? 'var(--color-accent)' : 'var(--color-divider)',
+        onInput: e => this.setState(s => ({ v: { ...s.v, [f.key]: e.target.value } })),
+      };
+    });
+
+    const blocked = fields.some(f => f.bad);
 
     return {
-      apiNo: this.state.apiNo,
-      apiBad: apiBad,
-      apiBorder: apiBad ? 'var(--color-accent)' : 'var(--color-divider)',
-      onApi: e => { const v = e.target.value; this.setState({ apiNo: v }); },
-
-      phone: this.state.phone,
-      onPhone: e => { const v = e.target.value; this.setState({ phone: v }); },
-
-      submitLabel: apiBad ? 'กรอกหมายเลข API ให้ถูกต้อง' : 'ขอรหัส OTP',
+      fields,
+      blocked: blocked,
+      submitLabel: blocked ? 'กรอกข้อมูลให้ครบก่อน' : 'ขอรหัส OTP',
       submit: () => go('otp'),
+      toRegister: () => go('register'),
+
+      forgotOpen: this.state.forgotOpen,
+      forgot: () => this.setState({ forgotOpen: true }),
+      closeAll: () => this.setState({ forgotOpen: false }),
     };
   }
 }

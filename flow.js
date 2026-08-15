@@ -4,10 +4,21 @@
    through eleven screens. */
 window.FLOW = {
   login:         'LoginScreen.dc.html',
+  register:      'RegisterScreen.dc.html',
   otp:           'OtpScreen.dc.html',
+  home:          'HomeScreen.dc.html',
+  project:       'ProjectDetailScreen.dc.html',
+  newProject:    'CreateProjectScreen.dc.html',
+  schedule:      'ScheduleScreen.dc.html',
+  profile:       'ProfileScreen.dc.html',
+  help:          'HelpScreen.dc.html',
   scan:          'ScanScreen.dc.html',
   processing:    'ProcessingScreen.dc.html',
   review:        'ReviewScreen.dc.html',
+  export:        'ExportScreen.dc.html',
+
+  /* Retired spine — these screens are folded into `review` and get deleted
+     once every caller is off them. Do not add new references. */
   categorize:    'CategorizeScreen.dc.html',
   disbursement:  'DisbursementScreen.dc.html',
   payment:       'PaymentScreen.dc.html',
@@ -15,7 +26,6 @@ window.FLOW = {
   assetClassify: 'AssetClassifyScreen.dc.html',
   assetRegister: 'AssetRegisterScreen.dc.html',
   validation:    'ValidationScreen.dc.html',
-  export:        'ExportScreen.dc.html',
 };
 
 window.go = function (key) {

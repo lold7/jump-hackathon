@@ -17,15 +17,15 @@
 </helmet>
 <div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
 
-  <header style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
-    <button onClick="{{ openMenu }}" aria-label="เมนู" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+  <header style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+    <button onClick="{{ back }}" aria-label="ย้อนกลับ" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
-    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">ตรวจสอบข้อมูลจาก AI</div>
     <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px">บ</div>
   </header>
 
-  <div style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 6px 8px 6px;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+  <div style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 6px;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
     <button onClick="{{ prev }}" disabled="{{ atFirst }}" aria-label="เอกสารก่อนหน้า" style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:{{ prevColor }}">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
@@ -38,34 +38,54 @@
     </button>
   </div>
 
-  <div style="flex:1;overflow:auto;padding:16px 16px 18px">
+  <div style="flex:1;overflow:auto;padding:16px 16px 20px">
 
-    <div style="height:148px;background:var(--color-neutral-200);border:1px solid var(--color-divider);position:relative;overflow:hidden">
-      <div style="position:absolute;left:18px;right:18px;top:20px;height:9px;background:var(--color-neutral-400)"></div>
-      <div style="position:absolute;left:18px;width:110px;top:38px;height:6px;background:var(--color-neutral-300)"></div>
-      <div style="position:absolute;left:18px;right:18px;top:58px;height:1px;background:var(--color-neutral-400)"></div>
-      <div style="position:absolute;left:18px;width:150px;top:70px;height:6px;background:var(--color-neutral-300)"></div>
-      <div style="position:absolute;left:18px;width:96px;top:84px;height:6px;background:var(--color-neutral-300)"></div>
-      <div style="position:absolute;right:18px;width:70px;top:104px;height:14px;background:var(--color-neutral-400)"></div>
-      <div style="position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:11px;letter-spacing:.04em;color:var(--color-neutral-700)">ตัวอย่างเอกสาร</div>
+    <div style="height:108px;background:var(--color-neutral-200);border:1px solid var(--color-divider);position:relative;overflow:hidden">
+      <div style="position:absolute;left:18px;right:18px;top:16px;height:9px;background:var(--color-neutral-400)"></div>
+      <div style="position:absolute;left:18px;width:110px;top:33px;height:6px;background:var(--color-neutral-300)"></div>
+      <div style="position:absolute;left:18px;right:18px;top:50px;height:1px;background:var(--color-neutral-400)"></div>
+      <div style="position:absolute;left:18px;width:150px;top:60px;height:6px;background:var(--color-neutral-300)"></div>
+      <div style="position:absolute;right:18px;width:70px;top:74px;height:14px;background:var(--color-neutral-400)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:11px;letter-spacing:.04em;color:var(--color-neutral-700)">ตัวอย่างเอกสาร</div>
     </div>
+    <div style="font-size:12px;line-height:1.6;margin-top:8px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ overallLabel }}</div>
 
-    <sc-if value="{{ blocked }}" hint-placeholder-val="{{ true }}">
-      <div style="margin-top:16px;border-left:4px solid var(--color-accent-2);background:var(--color-accent-2-100);padding:12px 14px;display:flex;gap:10px">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-2-800)" stroke-width="2" stroke-linecap="square" style="flex:none;margin-top:2px"><path d="M12 3l9 17H3z"></path><path d="M12 10v4"></path><path d="M12 17v1"></path></svg>
-        <div style="min-width:0">
-          <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-2-800)">ความมั่นใจต่ำ</div>
-          <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ blockedNote }}</div>
+    <sc-if value="{{ hasError }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:18px;border-left:4px solid var(--color-accent);background:var(--color-accent-100);padding:14px">
+        <div style="display:flex;align-items:flex-start;gap:10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-700)" stroke-width="2" stroke-linecap="square" style="flex:none;margin-top:2px"><path d="M12 3l9 17H3z"></path><path d="M12 10v4"></path><path d="M12 17v1"></path></svg>
+          <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700)">AI ไม่มั่นใจข้อมูล</div>
+              <span class="tag tag-accent" style="flex:none;font-size:11px;font-family:var(--font-heading);font-weight:800">{{ errChipText }}</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+              <span style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ errLabel }}</span>
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:22px;line-height:1.2;color:var(--color-accent-700)">{{ errValue }}</span>
+            </div>
+            <div style="font-size:13px;line-height:1.6;margin-top:6px">{{ errWhy }}</div>
+          </div>
         </div>
+        <button onClick="{{ openVoice }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:46px;font-size:15px;padding-inline:14px;gap:9px;margin-top:12px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M9 4h6v9H9z"></path><path d="M5 12a7 7 0 0014 0"></path><path d="M12 19v2"></path></svg>แก้ด้วยเสียง</button>
+        <button onClick="{{ editErr }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:44px;font-size:14px;padding-inline:14px;gap:9px;margin-top:8px;background:var(--color-bg)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 20h4L20 8l-4-4L4 16z"></path></svg>แก้เอง</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ wasFixed }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:18px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--color-text);padding:12px 14px;background:var(--color-neutral-200)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+        <span style="font-size:13.5px;line-height:1.5">{{ fixedLine }}</span>
       </div>
     </sc-if>
 
     <div style="margin-top:22px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
-      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ข้อมูลที่ดึงได้</h6>
-      <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ fieldCountLabel }}</span>
+      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ข้อมูลหลัก</h6>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ factCountLabel }}</span>
     </div>
 
-    <sc-for list="{{ fields }}" as="f" hint-placeholder-count="7">
+    <sc-for list="{{ facts }}" as="f" hint-placeholder-count="6">
       <button onClick="{{ f.edit }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 0;background:{{ f.rowBg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
         <span style="flex:1;min-width:0">
           <span style="display:block;font-size:12px;line-height:1.4;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ f.label }}</span>
@@ -83,11 +103,122 @@
       </button>
     </sc-for>
 
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-top:2px solid var(--color-text);padding-top:12px;margin-top:2px">
+      <span style="min-width:0">
+        <span style="display:block;font-family:var(--font-heading);font-weight:800;font-size:15px">ยอดคำนวณ</span>
+        <span style="display:block;font-size:12px;line-height:1.5;margin-top:3px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ calcNote }}</span>
+      </span>
+      <span style="flex:none;text-align:right">
+        <span style="display:block;font-family:var(--font-heading);font-weight:800;font-size:24px;letter-spacing:-0.015em;color:{{ calcColor }}">{{ calcValue }}</span>
+        <sc-if value="{{ calcBad }}" hint-placeholder-val="{{ true }}">
+          <span class="tag tag-accent" style="display:inline-block;margin-top:5px;font-size:11px;font-family:var(--font-heading);font-weight:800">ไม่ตรงกับใบเสร็จ</span>
+        </sc-if>
+      </span>
+    </div>
+
+    <div style="margin-top:26px;border-top:2px solid var(--color-divider)">
+      <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
+        <button onClick="{{ s.toggle }}" style="width:100%;display:flex;align-items:center;gap:10px;padding:15px 0;background:transparent;border:0;border-bottom:2px solid var(--color-divider);cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
+          <span style="flex:1;min-width:0">
+            <span style="display:block;font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.3">{{ s.title }}</span>
+            <span style="display:block;font-size:12px;line-height:1.5;margin-top:3px;color:color-mix(in srgb, var(--color-text) 55%, transparent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ s.summary }}</span>
+          </span>
+          <span class="tag tag-neutral" style="flex:none;font-size:11px;font-family:var(--font-heading);font-weight:800">{{ s.countLabel }}</span>
+          <span style="width:36px;height:36px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--color-neutral-700)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="{{ s.chevron }}"></path></svg>
+          </span>
+        </button>
+
+        <sc-if value="{{ s.open }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:4px 0 10px">
+
+            <sc-if value="{{ s.hasChoices }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:10px 0 8px">
+                <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">{{ s.choiceLabel }}</h6>
+                <span class="tag tag-neutral" style="font-size:11px;font-family:var(--font-heading);font-weight:800">{{ s.choiceChip }}</span>
+              </div>
+              <sc-for list="{{ s.choices }}" as="c" hint-placeholder-count="4">
+                <label class="radio" style="width:100%;box-sizing:border-box;align-items:flex-start;padding:12px;background:{{ c.bg }};border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);font-size:15px">
+                  <input type="radio" name="{{ s.choiceName }}" checked="{{ c.checked }}" onChange="{{ c.pick }}">
+                  <span class="dot" style="margin-top:3px"></span>
+                  <span style="flex:1;min-width:0">
+                    <span style="display:block;font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">{{ c.label }}</span>
+                    <span style="display:block;font-size:12.5px;line-height:1.55;margin-top:2px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ c.note }}</span>
+                  </span>
+                </label>
+              </sc-for>
+            </sc-if>
+
+            <sc-for list="{{ s.rows }}" as="f" hint-placeholder-count="4">
+              <button onClick="{{ f.edit }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 0;background:{{ f.rowBg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font-size:12px;line-height:1.4;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ f.label }}</span>
+                  <span style="display:block;font-size:15px;font-weight:600;line-height:1.45;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.value }}</span>
+                </span>
+                <sc-if value="{{ f.showChip }}" hint-placeholder-val="{{ true }}">
+                  <span class="{{ f.chipClass }}" style="flex:none;font-size:11px;font-family:var(--font-heading);font-weight:800">{{ f.chipText }}</span>
+                </sc-if>
+                <sc-if value="{{ f.showTick }}" hint-placeholder-val="{{ false }}">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+                </sc-if>
+                <span style="width:36px;height:36px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--color-neutral-700)">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 20h4L20 8l-4-4L4 16z"></path></svg>
+                </span>
+              </button>
+            </sc-for>
+
+            <sc-if value="{{ s.hasNote }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;border-left:4px solid {{ s.noteBar }};background:{{ s.noteBg }};padding:12px 14px">
+                <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:{{ s.noteColor }}">{{ s.noteKicker }}</div>
+                <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ s.noteText }}</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ s.hasQr }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px;display:flex;gap:14px;align-items:flex-start">
+                <div style="width:96px;height:96px;flex:none;background:var(--color-neutral-200);border:2px solid var(--color-text);display:flex;align-items:center;justify-content:center">
+                  <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="square">
+                    <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3z"></path>
+                    <path d="M15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"></path>
+                  </svg>
+                </div>
+                <div style="min-width:0">
+                  <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">QR สำหรับติดครุภัณฑ์</div>
+                  <div style="font-size:12.5px;line-height:1.6;margin-top:4px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">พิมพ์แล้วติดที่ตัวครุภัณฑ์ สแกนเพื่อดูประวัติการใช้งานและผู้รับผิดชอบ</div>
+                </div>
+              </div>
+            </sc-if>
+
+          </div>
+        </sc-if>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:26px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
+      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">การตรวจสอบ</h6>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ checkLabel }}</span>
+    </div>
+    <sc-for list="{{ checks }}" as="c" hint-placeholder-count="5">
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+        <sc-if value="{{ c.ok }}" hint-placeholder-val="{{ true }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+        </sc-if>
+        <sc-if value="{{ c.bad }}" hint-placeholder-val="{{ false }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-700)" stroke-width="2" stroke-linecap="square" style="flex:none"><path d="M12 3l9 17H3z"></path><path d="M12 10v4"></path><path d="M12 17v1"></path></svg>
+        </sc-if>
+        <span style="flex:1;min-width:0;font-size:14px;line-height:1.5">{{ c.label }}</span>
+        <sc-if value="{{ c.bad }}" hint-placeholder-val="{{ false }}">
+          <span class="tag tag-accent" style="flex:none;font-size:11px;font-family:var(--font-heading);font-weight:800">ต้องแก้ไข</span>
+        </sc-if>
+      </div>
+    </sc-for>
+
     <p style="font-size:12.5px;line-height:1.6;margin:16px 0 0;color:color-mix(in srgb, var(--color-text) 62%, transparent)">ทุกช่องแก้ไขได้ ตัวเลขเปอร์เซ็นต์คือความมั่นใจของ AI ในการอ่านช่องนั้น</p>
   </div>
 
-  <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg)">
-    <button onClick="{{ confirmAll }}" disabled="{{ blocked }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ nextLabel }}</button>
+  <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg);display:flex;flex-direction:column;gap:8px">
+    <button onClick="{{ submit }}" disabled="{{ blocked }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ primaryLabel }}</button>
+    <button onClick="{{ save }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">บันทึกไว้ก่อน</button>
   </div>
 
   <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
@@ -106,8 +237,8 @@
           </div>
           <input id="fieldInput" class="input" value="{{ draft }}" onChange="{{ onDraft }}" style="height:46px;font-size:16px">
           <sc-if value="{{ sheetLow }}" hint-placeholder-val="{{ false }}">
-            <div style="margin-top:14px;border-left:4px solid var(--color-accent-2);background:var(--color-accent-2-100);padding:12px 14px">
-              <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-2-800)">ต้องยืนยัน</div>
+            <div style="margin-top:14px;border-left:4px solid var(--color-accent);background:var(--color-accent-100);padding:12px 14px">
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700)">ต้องยืนยัน</div>
               <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ sheetNote }}</div>
             </div>
           </sc-if>
@@ -120,153 +251,463 @@
     </div>
   </sc-if>
 
-  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div style="position:absolute;inset:0;z-index:40;background:var(--color-bg);display:flex;flex-direction:column">
-      <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--color-divider)">
-        <div style="font-family:var(--font-heading);font-weight:800;font-size:15px">เมนู</div>
-        <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
-        </button>
-      </div>
-      <div style="flex:1;overflow:auto">
-        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
-          <button onClick="{{ item.go }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 16px;background:{{ item.bg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;font-family:var(--font-heading);font-weight:800;font-size:18px;line-height:1.4;color:var(--color-text)">
-            <span>{{ item.label }}</span>
-            <span style="font-size:12px;font-family:var(--font-body);font-weight:400;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ item.note }}</span>
+  <sc-if value="{{ voiceOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:50;background:color-mix(in srgb, #201e1d 45%, transparent);display:flex;flex-direction:column;justify-content:flex-end">
+      <div style="background:var(--color-bg);border-top:2px solid var(--color-text);max-height:86%;display:flex;flex-direction:column">
+        <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:2px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:17px">แก้ไขด้วยเสียง</div>
+          <button onClick="{{ closeVoice }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;background:transparent;border:0;cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
           </button>
-        </sc-for>
-      </div>
-      <div style="flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:2px solid var(--color-divider)">
-        <div style="width:40px;height:40px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:14px">บ</div>
-        <div>
-          <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">ครูเบญจมาศ</div>
-          <div style="font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">โรงเรียนตัวอย่าง · ใช้งานอยู่</div>
+        </div>
+
+        <div style="flex:1;overflow:auto;padding:18px 16px">
+          <div style="display:flex;align-items:center;gap:16px">
+            <button onClick="{{ startListening }}" aria-label="เริ่มพูด" style="width:72px;height:72px;flex:none;background:{{ micBg }};border:2px solid var(--color-text);cursor:pointer;display:flex;align-items:center;justify-content:center">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="{{ micStroke }}" stroke-width="2" stroke-linecap="square"><path d="M9 4h6v9H9z"></path><path d="M5 12a7 7 0 0014 0"></path><path d="M12 19v2"></path></svg>
+            </button>
+            <div style="flex:1;min-width:0">
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;line-height:1.3">{{ voiceStateLabel }}</div>
+              <div style="display:flex;align-items:flex-end;gap:2px;height:32px;margin-top:10px">
+                <sc-for list="{{ voiceBars }}" as="b" hint-placeholder-count="12">
+                  <span style="width:6px;height:{{ b.h }};background:{{ b.fill }};display:block"></span>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <sc-if value="{{ voiceHasTranscript }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:20px;border-left:4px solid var(--color-accent);padding:10px 14px;background:var(--color-accent-100)">
+              <div style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-family:var(--font-heading);font-weight:800;color:var(--color-accent-700)">ได้ยินว่า</div>
+              <div style="font-size:15px;line-height:1.55;margin-top:5px">“{{ voiceTranscript }}”</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ voiceHasChange }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:18px;border:2px solid var(--color-divider);padding:14px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="flex:1;min-width:0;font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ voiceChangeLabel }}</span>
+                <span style="font-size:16px;text-decoration:line-through;color:color-mix(in srgb, var(--color-text) 45%, transparent)">{{ voiceFrom }}</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2.2" stroke-linecap="square" style="flex:none"><path d="M4 12h14m0 0l-5-5m5 5l-5 5"></path></svg>
+                <span style="font-family:var(--font-heading);font-weight:800;font-size:20px;color:var(--color-accent-700)">{{ voiceTo }}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+                <span style="flex:1;min-width:0;font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">ยอดคำนวณ</span>
+                <span style="font-size:16px;text-decoration:line-through;color:color-mix(in srgb, var(--color-text) 45%, transparent)">{{ voiceTotalFrom }}</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2.2" stroke-linecap="square" style="flex:none"><path d="M4 12h14m0 0l-5-5m5 5l-5 5"></path></svg>
+                <span style="font-family:var(--font-heading);font-weight:800;font-size:20px">{{ voiceTotalTo }}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:9px;margin-top:12px">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+                <span style="font-size:13px;line-height:1.55">{{ voiceCheck }}</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ voiceHasDone }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:16px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--color-text);padding:12px 14px;background:var(--color-neutral-200)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+              <span style="font-size:13.5px;line-height:1.5">แก้ไขข้อมูลด้วยเสียงเรียบร้อยแล้ว</span>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="flex:none;padding:12px 16px;border-top:2px solid var(--color-divider);display:flex;flex-direction:column;gap:8px">
+          <button onClick="{{ voicePrimary }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:50px;font-size:16px;padding-inline:16px">{{ voicePrimaryLabel }}</button>
+          <sc-if value="{{ voiceCanCancel }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ closeVoice }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ยกเลิก</button>
+          </sc-if>
         </div>
       </div>
     </div>
   </sc-if>
+
+  <sc-if value="{{ savedOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:60;background:var(--color-bg);display:flex;flex-direction:column;justify-content:center;padding:28px 20px">
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.4" stroke-linecap="square"><path d="M4 12l5 5L20 6"></path></svg>
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1.3;letter-spacing:-0.01em;margin-top:18px">บันทึกฉบับร่างแล้ว</div>
+      <p style="font-size:14px;line-height:1.65;margin-top:10px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ savedNote }}</p>
+      <button onClick="{{ toHome }}" class="btn btn-secondary" style="justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px;margin-top:8px">กลับไปหน้าแรก</button>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
-const KEYS = [
-  { key: 'type',   label: 'ประเภทเอกสาร' },
-  { key: 'num',    label: 'เลขที่เอกสาร' },
-  { key: 'date',   label: 'วันที่' },
-  { key: 'vendor', label: 'ผู้ขาย' },
-  { key: 'item',   label: 'รายการ' },
-  { key: 'qty',    label: 'จำนวน' },
-  { key: 'amount', label: 'จำนวนเงิน' },
+/* Confidence bands. CLAUDE.md: >=80 plain, 70-79 warn, <70 blocks export. */
+const CHIP  = { ok: 'tag tag-neutral', warn: 'tag tag-accent-2', bad: 'tag tag-accent' };
+const ROWBG = { ok: 'transparent', warn: 'var(--color-accent-2-100)', bad: 'var(--color-accent-100)' };
+const band  = c => (c >= 80 ? 'ok' : (c >= 70 ? 'warn' : 'bad'));
+const baht  = n => '฿' + n.toLocaleString('en-US');
+const DIM   = 'color-mix(in srgb, var(--color-text) 30%, transparent)';
+
+/* Every field the screen can show, in one registry. Section field-lists are
+   just arrays of these keys, which is what keeps the template branch-free. */
+const LABEL = {
+  vendor: 'ผู้ขาย', date: 'วันที่', item: 'รายการ', qty: 'จำนวน', unit: 'ราคาต่อหน่วย', total: 'ยอดในใบเสร็จ',
+  docType: 'ประเภทเอกสาร', finType: 'ประเภทการเงิน', project: 'โครงการ', fund: 'แหล่งเงิน',
+  chequeNo: 'เลขที่เช็ค', chequeDate: 'วันที่บนเช็ค', chequeBank: 'ธนาคาร', chequeAmount: 'จำนวนเงิน', chequeStatus: 'สถานะเช็ค',
+  cashDate: 'วันที่ชำระ', cashAmount: 'จำนวนเงิน',
+  trBank: 'ธนาคารปลายทาง', trAccount: 'เลขที่บัญชี', trRef: 'เลขอ้างอิงรายการ', trDate: 'วันที่โอน',
+  baBank: 'ชื่อธนาคาร', baName: 'ชื่อบัญชี', baNo: 'เลขที่บัญชี', baDate: 'วันที่', baAmount: 'จำนวนเงิน',
+  assetCat: 'หมวดหมู่ครุภัณฑ์', assetId: 'เลขครุภัณฑ์', assetLoc: 'สถานที่จัดเก็บ', assetOwner: 'ผู้รับผิดชอบ',
+};
+
+const FACT_KEYS = ['vendor', 'date', 'item', 'qty', 'unit', 'total'];
+const DOC_KEYS  = ['docType', 'finType', 'project', 'fund'];
+
+const PAY_METHODS = [
+  { id: 'cheque',   label: 'เช็ค',          note: 'ต้องระบุเลขที่เช็คและธนาคาร',  keys: ['chequeNo', 'chequeDate', 'chequeBank', 'chequeAmount', 'chequeStatus'] },
+  { id: 'cash',     label: 'เงินสด',        note: 'ระบุวันที่ชำระและจำนวนเงิน',    keys: ['cashDate', 'cashAmount'] },
+  { id: 'transfer', label: 'เงินโอน',       note: 'ต้องมีเลขอ้างอิงรายการโอน',     keys: ['trBank', 'trAccount', 'trRef', 'trDate'] },
+  { id: 'bank',     label: 'บัญชีธนาคาร',   note: 'ระบุชื่อบัญชีและเลขที่บัญชี',    keys: ['baBank', 'baName', 'baNo', 'baDate', 'baAmount'] },
 ];
 
-/* Queue is sorted lowest-confidence first, so the document that needs a human
-   is the one the reviewer lands on. DOC-0012 is the canonical demo document. */
+const ASSET_TYPES = [
+  { id: 'durable',    label: 'ครุภัณฑ์', note: 'มูลค่าต่อหน่วยเกิน ฿5,000 และใช้งานได้เกิน 1 ปี ต้องลงทะเบียน', keys: ['assetCat', 'assetId', 'assetLoc', 'assetOwner'] },
+  { id: 'consumable', label: 'วัสดุ',    note: 'ของใช้สิ้นเปลือง ไม่ต้องลงทะเบียนครุภัณฑ์',                      keys: [] },
+];
+
+/* The voice demo. `to` and the receipt total are the only two numbers that
+   have to agree — change both together if you re-script the correction. */
+const VOICE = { transcript: 'เปลี่ยนจำนวนเป็น 10 ชิ้น', key: 'qty', from: '20', to: '10' };
+const VSTEP = { listen: 1, transcript: 7, apply: 12, done: 17 };
+const BARS  = [10, 22, 16, 30, 20, 12, 26, 18, 24, 14, 28, 16];
+
 const DOCS = [
-  { id: 'DOC-0012', type: 'ใบเสร็จ', num: 'INV-0012', date: '14/08/2026', vendor: 'ร้านสมใจ', item: 'กล้องจุลทรรศน์', qty: '1 หน่วย', amount: '฿8,500',
-    conf: { type: 96, num: 95, date: 94, vendor: 91, item: 88, qty: 93, amount: 72 },
-    note: 'ลายมือในช่องจำนวนเงินอ่านได้ไม่ชัด กรุณาตรวจสอบกับเอกสารต้นฉบับก่อนยืนยัน' },
-  { id: 'DOC-0011', type: 'ใบสำคัญรับเงิน', num: '0089', date: '14/08/2026', vendor: 'ร้านวิทยาภัณฑ์', item: 'ชุดทดลองไฟฟ้า', qty: '2 หน่วย', amount: '฿3,200',
-    conf: { type: 94, num: 92, date: 95, vendor: 89, item: 87, qty: 91, amount: 78 },
-    note: 'ตัวเลขหลักสุดท้ายในช่องจำนวนเงินอ่านได้ไม่ชัด กรุณาตรวจสอบก่อนยืนยัน' },
-  { id: 'DOC-0010', type: 'ใบเสร็จ', num: 'INV-0010', date: '13/08/2026', vendor: 'ร้านครุภัณฑ์ไทย', item: 'ตู้เก็บสารเคมี', qty: '1 หน่วย', amount: '฿12,400', conf: { type: 97, num: 96, date: 96, vendor: 93, item: 90, qty: 95, amount: 94 } },
-  { id: 'DOC-0009', type: 'ใบส่งของ', num: '0422', date: '13/08/2026', vendor: 'ร้านครุภัณฑ์ไทย', item: 'ตู้เก็บสารเคมี', qty: '1 หน่วย', amount: '฿12,400', conf: { type: 95, num: 94, date: 95, vendor: 92, item: 91, qty: 94, amount: 93 } },
-  { id: 'DOC-0008', type: 'ใบเบิกพัสดุ', num: '0034', date: '12/08/2026', vendor: 'โรงเรียนตัวอย่าง', item: 'กระดาษกรอง', qty: '10 หน่วย', amount: '฿850', conf: { type: 96, num: 95, date: 97, vendor: 96, item: 92, qty: 93, amount: 96 } },
-  { id: 'DOC-0007', type: 'ใบเสร็จ', num: 'INV-0007', date: '12/08/2026', vendor: 'ร้านสมใจ', item: 'บีกเกอร์แก้ว', qty: '12 หน่วย', amount: '฿1,680', conf: { type: 96, num: 94, date: 95, vendor: 93, item: 90, qty: 92, amount: 95 } },
-  { id: 'DOC-0006', type: 'ใบสำคัญรับเงิน', num: '0088', date: '11/08/2026', vendor: 'ร้านวิทยาภัณฑ์', item: 'เครื่องชั่งดิจิทัล', qty: '1 หน่วย', amount: '฿6,900', conf: { type: 95, num: 93, date: 94, vendor: 91, item: 89, qty: 94, amount: 92 } },
-  { id: 'DOC-0005', type: 'ใบเสร็จ', num: 'INV-0005', date: '11/08/2026', vendor: 'ร้านครุภัณฑ์ไทย', item: 'กล้องจุลทรรศน์', qty: '1 หน่วย', amount: '฿8,500', conf: { type: 97, num: 96, date: 96, vendor: 94, item: 93, qty: 95, amount: 96 } },
-  { id: 'DOC-0004', type: 'ใบส่งของ', num: '0421', date: '10/08/2026', vendor: 'ร้านสมใจ', item: 'บีกเกอร์แก้ว', qty: '12 หน่วย', amount: '฿1,680', conf: { type: 94, num: 93, date: 94, vendor: 92, item: 90, qty: 91, amount: 93 } },
-  { id: 'DOC-0003', type: 'ใบเบิกพัสดุ', num: '0033', date: '10/08/2026', vendor: 'โรงเรียนตัวอย่าง', item: 'ถุงมือยาง', qty: '20 หน่วย', amount: '฿1,150', conf: { type: 96, num: 95, date: 96, vendor: 95, item: 93, qty: 94, amount: 95 } },
-  { id: 'DOC-0002', type: 'ใบเสนอราคา', num: 'SCI-2026-024', date: '08/08/2026', vendor: 'ร้านสมใจ', item: 'กล้องจุลทรรศน์', qty: '1 หน่วย', amount: '฿8,500', conf: { type: 97, num: 97, date: 96, vendor: 95, item: 94, qty: 96, amount: 97 } },
-  { id: 'DOC-0001', type: 'ใบเสร็จ', num: 'INV-0001', date: '07/08/2026', vendor: 'ร้านวิทยาภัณฑ์', item: 'หลอดทดลอง', qty: '24 หน่วย', amount: '฿2,120', conf: { type: 96, num: 95, date: 95, vendor: 93, item: 91, qty: 93, amount: 94 } },
+  {
+    id: 'DOC-0012', unitPrice: 8500, receiptTotal: 85000,
+    v: {
+      vendor: 'ร้าน ABC', date: '15/08/2026', item: 'กล้องจุลทรรศน์', qty: '20', unit: '฿8,500', total: '฿85,000',
+      docType: 'ใบเสร็จ', finType: 'บจ.', project: 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์', fund: 'เงินอุดหนุน',
+      chequeNo: 'CHQ-008421', chequeDate: '15/08/2026', chequeBank: 'ธนาคารตัวอย่าง', chequeAmount: '฿85,000', chequeStatus: 'ยังไม่ขึ้นเงิน',
+      cashDate: '15/08/2026', cashAmount: '฿85,000',
+      trBank: 'ธนาคารตัวอย่าง', trAccount: '123-4-56789-0', trRef: 'TRF-20260815-0042', trDate: '15/08/2026',
+      baBank: 'ธนาคารตัวอย่าง', baName: 'ร้าน ABC', baNo: '123-4-56789-0', baDate: '15/08/2026', baAmount: '฿85,000',
+      assetCat: 'ครุภัณฑ์วิทยาศาสตร์', assetId: 'SCI-000234', assetLoc: 'ห้องปฏิบัติการวิทยาศาสตร์ 1', assetOwner: 'ครูเบญจมาศ',
+    },
+    c: {
+      vendor: 91, date: 95, item: 93, qty: 62, unit: 96, total: 95,
+      docType: 96, finType: 92, project: 94, fund: 93,
+      chequeNo: 95, chequeDate: 94, chequeBank: 92, chequeAmount: 95, chequeStatus: 90,
+      cashDate: 94, cashAmount: 95,
+      trBank: 92, trAccount: 90, trRef: 93, trDate: 94,
+      baBank: 92, baName: 91, baNo: 90, baDate: 94, baAmount: 95,
+      assetCat: 94, assetId: 94, assetLoc: 87, assetOwner: 91,
+    },
+    why: 'ตัวเลขในช่องจำนวนเขียนด้วยลายมือและมีรอยแก้ ทำให้ AI แยกไม่ออกระหว่าง 10 กับ 20 กรุณาตรวจสอบกับเอกสารต้นฉบับ',
+    projectCode: 'SCI-2026-024',
+  },
+  {
+    id: 'DOC-0011', unitPrice: 3200, receiptTotal: 6400,
+    v: {
+      vendor: 'ร้านวิทยาภัณฑ์', date: '14/08/2026', item: 'ชุดทดลองไฟฟ้า', qty: '2', unit: '฿3,200', total: '฿6,400',
+      docType: 'ใบสำคัญรับเงิน', finType: 'บจ.', project: 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์', fund: 'เงินอุดหนุน',
+      chequeNo: 'CHQ-008419', chequeDate: '14/08/2026', chequeBank: 'ธนาคารตัวอย่าง', chequeAmount: '฿6,400', chequeStatus: 'ขึ้นเงินแล้ว',
+      cashDate: '14/08/2026', cashAmount: '฿6,400',
+      trBank: 'ธนาคารตัวอย่าง', trAccount: '123-4-56712-0', trRef: 'TRF-20260814-0038', trDate: '14/08/2026',
+      baBank: 'ธนาคารตัวอย่าง', baName: 'ร้านวิทยาภัณฑ์', baNo: '123-4-56712-0', baDate: '14/08/2026', baAmount: '฿6,400',
+      assetCat: 'ครุภัณฑ์วิทยาศาสตร์', assetId: 'SCI-000235', assetLoc: 'ห้องปฏิบัติการวิทยาศาสตร์ 1', assetOwner: 'ครูสมชาย',
+    },
+    c: {
+      vendor: 89, date: 95, item: 87, qty: 91, unit: 94, total: 93,
+      docType: 94, finType: 91, project: 93, fund: 92,
+      chequeNo: 93, chequeDate: 94, chequeBank: 92, chequeAmount: 93, chequeStatus: 89,
+      cashDate: 93, cashAmount: 93,
+      trBank: 91, trAccount: 89, trRef: 92, trDate: 93,
+      baBank: 91, baName: 90, baNo: 89, baDate: 93, baAmount: 93,
+      assetCat: 92, assetId: 93, assetLoc: 86, assetOwner: 90,
+    },
+    projectCode: 'SCI-2026-024',
+  },
+  {
+    id: 'DOC-0010', unitPrice: 12400, receiptTotal: 12400,
+    v: {
+      vendor: 'ร้านครุภัณฑ์ไทย', date: '13/08/2026', item: 'ตู้เก็บสารเคมี', qty: '1', unit: '฿12,400', total: '฿12,400',
+      docType: 'ใบเสร็จ', finType: 'บจ.', project: 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์', fund: 'เงินอุดหนุน',
+      chequeNo: 'CHQ-008415', chequeDate: '13/08/2026', chequeBank: 'ธนาคารตัวอย่าง', chequeAmount: '฿12,400', chequeStatus: 'ขึ้นเงินแล้ว',
+      cashDate: '13/08/2026', cashAmount: '฿12,400',
+      trBank: 'ธนาคารตัวอย่าง', trAccount: '123-4-56733-0', trRef: 'TRF-20260813-0031', trDate: '13/08/2026',
+      baBank: 'ธนาคารตัวอย่าง', baName: 'ร้านครุภัณฑ์ไทย', baNo: '123-4-56733-0', baDate: '13/08/2026', baAmount: '฿12,400',
+      assetCat: 'ครุภัณฑ์วิทยาศาสตร์', assetId: 'SCI-000236', assetLoc: 'ห้องเก็บสารเคมี', assetOwner: 'ครูมาลี',
+    },
+    c: {
+      vendor: 93, date: 96, item: 90, qty: 95, unit: 96, total: 94,
+      docType: 97, finType: 93, project: 95, fund: 94,
+      chequeNo: 96, chequeDate: 95, chequeBank: 93, chequeAmount: 95, chequeStatus: 92,
+      cashDate: 95, cashAmount: 95,
+      trBank: 93, trAccount: 91, trRef: 94, trDate: 95,
+      baBank: 93, baName: 92, baNo: 91, baDate: 95, baAmount: 95,
+      assetCat: 95, assetId: 95, assetLoc: 88, assetOwner: 92,
+    },
+    projectCode: 'SCI-2026-024',
+  },
 ];
-
-const LOW = 80;
-const DIM = 'color-mix(in srgb, var(--color-text) 30%, transparent)';
 
 class Component extends DCLogic {
-  state = { i: 0, sheetKey: null, draft: '', edits: {}, confirmed: {}, menuOpen: false };
+  state = {
+    i: 0,
+    edits: {}, confirmed: {}, fixedBy: '',
+    open: { doc: false, pay: false, asset: false },
+    method: 'cheque', assetType: 'durable',
+    sheetKey: null, draft: '',
+    voiceTick: -1,
+    savedOpen: false,
+  };
 
-  close = () => this.setState({ menuOpen: false, sheetKey: null });
+  componentWillUnmount() { this.stop(); }
+
+  stop() { if (this.timer) { clearInterval(this.timer); this.timer = null; } }
 
   valueOf(doc, key) {
-    const edited = this.state.edits[doc.id + '.' + key];
-    return edited === undefined ? doc[key] : edited;
+    const e = this.state.edits[doc.id + '.' + key];
+    return e === undefined ? doc.v[key] : e;
   }
 
+  qtyOf(doc) {
+    const n = parseInt(this.valueOf(doc, 'qty'), 10);
+    return isNaN(n) ? 0 : n;
+  }
+
+  /* One row shape, used by the always-visible facts and by every section. */
+  row(doc, key) {
+    const conf = doc.c[key];
+    const b = band(conf);
+    const done = !!this.state.confirmed[doc.id + '.' + key];
+    const raw = this.valueOf(doc, key);
+    return {
+      label: LABEL[key],
+      value: key === 'qty' ? raw + ' หน่วย' : raw,
+      showChip: !(b !== 'ok' && done),
+      showTick: b !== 'ok' && done,
+      chipClass: CHIP[b],
+      chipText: conf + '%',
+      rowBg: b === 'ok' || done ? 'transparent' : ROWBG[b],
+      edit: () => this.setState({ sheetKey: key, draft: raw }),
+    };
+  }
+
+  toggle(k) {
+    this.setState(s => ({ open: { ...s.open, [k]: !s.open[k] } }));
+  }
+
+  /* Scripted voice progression. Same interval/guard shape as ProcessingScreen:
+     started on demand, cleared on unmount and at the end of the script. */
+  startVoice = () => {
+    if (this.timer) return;
+    this.setState({ voiceTick: VSTEP.listen });
+    this.timer = setInterval(() => {
+      this.setState(s => {
+        const t = s.voiceTick + 1;
+        const out = { voiceTick: t };
+        const id = DOCS[s.i].id + '.' + VOICE.key;
+        /* Commit as soon as the script reaches the apply step, so closing the
+           sheet at any later point leaves the screen already corrected. */
+        if (t >= VSTEP.apply && !s.confirmed[id]) {
+          out.edits = { ...s.edits, [id]: VOICE.to };
+          out.confirmed = { ...s.confirmed, [id]: true };
+          out.fixedBy = 'voice';
+        }
+        return out;
+      }, () => { if (this.state.voiceTick >= VSTEP.done) this.stop(); });
+    }, 200);
+  };
+
+  skipVoice = () => {
+    this.stop();
+    this.setState(s => {
+      const id = DOCS[s.i].id + '.' + VOICE.key;
+      return {
+        voiceTick: VSTEP.done,
+        edits: { ...s.edits, [id]: VOICE.to },
+        confirmed: { ...s.confirmed, [id]: true },
+        fixedBy: 'voice',
+      };
+    });
+  };
+
   renderVals() {
-    const { i, sheetKey, confirmed } = this.state;
-    const doc = DOCS[i];
+    const st = this.state;
+    const doc = DOCS[st.i];
+    const key = k => doc.id + '.' + k;
 
-    const unconfirmed = KEYS.filter(k => doc.conf[k.key] < LOW && !confirmed[doc.id + '.' + k.key]);
-    const blocked = unconfirmed.length > 0;
+    /* Anything below 70% blocks until a human confirms it. */
+    const badKeys = Object.keys(doc.c).filter(k => doc.c[k] < 70 && !st.confirmed[key(k)]);
+    const errKey = badKeys[0];
+    const blocked = badKeys.length > 0;
+    const fixed = !!st.fixedBy && !!st.confirmed[key(VOICE.key)];
 
-    const sheetField = sheetKey ? KEYS.find(k => k.key === sheetKey) : null;
-    const sheetConf = sheetField ? doc.conf[sheetKey] : 0;
-    const sheetLow = !!sheetField && sheetConf < LOW && !confirmed[doc.id + '.' + sheetKey];
+    const qty = this.qtyOf(doc);
+    const calc = qty * doc.unitPrice;
+    const calcOk = calc === doc.receiptTotal;
 
-    const nav = [
-      { label: 'เอกสาร', note: 'คุณอยู่ที่นี่', here: true },
-      { label: 'การเบิกจ่าย', note: 'รอตรวจ 8 รายการ', to: 'disbursement' },
-      { label: 'ครุภัณฑ์', note: '7 รายการ', to: 'assetRegister' },
-      { label: 'โครงการ', note: '4 โครงการ', to: 'validation' },
-      { label: 'ประวัติการใช้งาน', note: '' },
-      { label: 'ช่วยเหลือ', note: '' },
+    const method = PAY_METHODS.find(m => m.id === st.method);
+    const asset = ASSET_TYPES.find(a => a.id === st.assetType);
+
+    const payDetail = { cheque: 'chequeNo', cash: 'cashDate', transfer: 'trRef', bank: 'baNo' }[st.method];
+
+    const sections = [
+      {
+        key: 'doc', title: 'เอกสารและโครงการ',
+        summary: doc.v.docType + ' · ' + doc.v.finType + ' · ' + doc.projectCode,
+        rows: DOC_KEYS,
+      },
+      {
+        key: 'pay', title: 'การชำระเงิน',
+        summary: method.label + ' · ' + this.valueOf(doc, payDetail) + ' · ' + baht(doc.receiptTotal),
+        rows: method.keys,
+        choiceName: 'payMethod', choiceLabel: 'วิธีการชำระเงิน', choiceChip: '95%',
+        choices: PAY_METHODS, picked: st.method, pick: id => this.setState({ method: id }),
+        aiPick: 'cheque',
+      },
+      {
+        key: 'asset', title: 'ครุภัณฑ์และวัสดุ',
+        summary: st.assetType === 'durable'
+          ? 'ครุภัณฑ์ · ' + this.valueOf(doc, 'assetCat') + ' · ' + this.valueOf(doc, 'assetId')
+          : 'วัสดุ · ไม่ต้องลงทะเบียนครุภัณฑ์',
+        rows: asset.keys,
+        choiceName: 'assetType', choiceLabel: 'ประเภทพัสดุ', choiceChip: '94%',
+        choices: ASSET_TYPES, picked: st.assetType, pick: id => this.setState({ assetType: id }),
+        aiPick: 'durable',
+      },
     ];
 
+    const checks = [
+      { label: 'ยอดคำนวณตรงกับยอดในใบเสร็จ', ok: calcOk },
+      { label: 'เลขที่เช็คไม่ซ้ำกับเอกสารอื่น', ok: true },
+      { label: 'เลขครุภัณฑ์ไม่ซ้ำในทะเบียน', ok: true },
+      { label: 'โครงการและแหล่งเงินตรงกัน', ok: true },
+      { label: 'ครั้งที่เบิกจ่ายไม่ซ้ำในโครงการ', ok: true },
+    ];
+    const passed = checks.filter(c => c.ok).length;
+
+    const sheetKey = st.sheetKey;
+    const sheetConf = sheetKey ? doc.c[sheetKey] : 0;
+    const sheetLow = !!sheetKey && sheetConf < 70 && !st.confirmed[key(sheetKey)];
+
+    const tick = st.voiceTick;
+    const listening = tick >= VSTEP.listen && tick < VSTEP.transcript;
+    const phase = listening ? tick % BARS.length : 0;
+    const vApplied = tick >= VSTEP.apply;
+    const vDone = tick >= VSTEP.done;
+
     return {
-      pagerLabel: 'เอกสาร ' + (i + 1) + ' / ' + DOCS.length,
+      back: () => go('scan'),
+      pagerLabel: 'เอกสาร ' + (st.i + 1) + ' / ' + DOCS.length,
       docId: doc.id,
-      atFirst: i === 0,
-      atLast: i === DOCS.length - 1,
-      prevColor: i === 0 ? DIM : 'var(--color-text)',
-      nextColor: i === DOCS.length - 1 ? DIM : 'var(--color-text)',
+      atFirst: st.i === 0,
+      atLast: st.i === DOCS.length - 1,
+      prevColor: st.i === 0 ? DIM : 'var(--color-text)',
+      nextColor: st.i === DOCS.length - 1 ? DIM : 'var(--color-text)',
       prev: () => this.setState(s => ({ i: Math.max(0, s.i - 1), sheetKey: null })),
       next: () => this.setState(s => ({ i: Math.min(DOCS.length - 1, s.i + 1), sheetKey: null })),
 
+      overallLabel: 'AI อ่านได้ ' + Object.keys(doc.c).length + ' ช่อง · ความมั่นใจเฉลี่ย 93%',
+
+      hasError: blocked,
+      errLabel: errKey ? LABEL[errKey] : '',
+      errValue: errKey ? this.valueOf(doc, errKey) : '',
+      errChipText: errKey ? 'ความมั่นใจ ' + doc.c[errKey] + '%' : '',
+      errWhy: doc.why || 'AI อ่านช่องนี้ได้ไม่ชัด กรุณาตรวจสอบกับเอกสารต้นฉบับก่อนยืนยัน',
+      openVoice: () => this.setState({ voiceTick: 0 }),
+      editErr: () => this.setState({ sheetKey: errKey, draft: this.valueOf(doc, errKey) }),
+
+      wasFixed: fixed,
+      fixedLine: LABEL[VOICE.key] + ' ' + doc.v[VOICE.key] + ' → ' + this.valueOf(doc, VOICE.key) +
+        (st.fixedBy === 'voice' ? ' · แก้ไขด้วยเสียง' : ' · แก้ไขเอง'),
+
+      factCountLabel: FACT_KEYS.length + ' ช่อง',
+      facts: FACT_KEYS.map(k => this.row(doc, k)),
+
+      calcNote: qty + ' × ' + baht(doc.unitPrice),
+      calcValue: baht(calc),
+      calcColor: calcOk ? 'var(--color-text)' : 'var(--color-accent-700)',
+      calcBad: !calcOk,
+
+      sections: sections.map(s => ({
+        key: s.key,
+        title: s.title,
+        summary: s.summary,
+        countLabel: s.rows.length + ' ช่อง',
+        open: st.open[s.key],
+        toggle: () => this.toggle(s.key),
+        chevron: st.open[s.key] ? 'M6 15l6-6 6 6' : 'M6 9l6 6 6-6',
+        hasChoices: !!s.choices,
+        choiceName: s.choiceName,
+        choiceLabel: s.choiceLabel,
+        choiceChip: s.choiceChip,
+        choices: (s.choices || []).map(c => ({
+          label: c.label, note: c.note,
+          checked: c.id === s.picked,
+          bg: c.id === s.picked ? 'var(--color-accent-100)' : 'transparent',
+          pick: () => s.pick(c.id),
+        })),
+        rows: s.rows.map(k => this.row(doc, k)),
+        /* The only note this screen shows is "you overrode the AI" — which for
+           the asset group is exactly the วัสดุ case. */
+        hasNote: !!s.aiPick && s.picked !== s.aiPick,
+        noteKicker: 'แก้ไขจากที่ AI แนะนำ',
+        noteText: s.key === 'asset'
+          ? 'ระบบจะบันทึกว่าผู้ใช้เปลี่ยนจาก ครุภัณฑ์ เป็น วัสดุ — วัสดุไม่ต้องลงทะเบียนและไม่มีเลขครุภัณฑ์'
+          : 'ระบบจะบันทึกว่าผู้ใช้เปลี่ยนวิธีการชำระเงินจากที่ AI อ่านได้',
+        noteBar: 'var(--color-accent-2)',
+        noteBg: 'var(--color-accent-2-100)',
+        noteColor: 'var(--color-accent-2-800)',
+        hasQr: s.key === 'asset' && st.assetType === 'durable',
+      })),
+
+      checkLabel: 'ผ่าน ' + passed + ' จาก ' + checks.length + ' ข้อ',
+      checks: checks.map(c => ({ label: c.label, ok: c.ok, bad: !c.ok })),
+
       blocked: blocked,
-      blockedNote: doc.note || '',
-      fieldCountLabel: KEYS.length + ' ช่อง',
-      nextLabel: blocked ? 'ยืนยันช่องที่ความมั่นใจต่ำก่อน' : 'ยืนยันและไปต่อ',
-      confirmAll: () => go('categorize'),
+      primaryLabel: blocked ? 'แก้ช่องที่ความมั่นใจต่ำก่อน' : 'ส่งออกข้อมูล',
+      submit: () => go('export'),
+      save: () => this.setState({ savedOpen: true }),
+      savedOpen: st.savedOpen,
+      savedNote: doc.id + ' · บันทึกเป็นฉบับร่างแล้ว กลับมาตรวจสอบต่อได้จากหน้าแรก',
+      toHome: () => go('home'),
 
-      fields: KEYS.map(k => {
-        const conf = doc.conf[k.key];
-        const isLow = conf < LOW;
-        const isConfirmed = !!confirmed[doc.id + '.' + k.key];
-        return {
-          label: k.label,
-          value: this.valueOf(doc, k.key),
-          showChip: !(isLow && isConfirmed),
-          showTick: isLow && isConfirmed,
-          chipClass: isLow ? 'tag tag-accent-2' : 'tag tag-neutral',
-          chipText: conf + '%',
-          rowBg: isLow && !isConfirmed ? 'var(--color-accent-2-100)' : 'transparent',
-          edit: () => this.setState({ sheetKey: k.key, draft: this.valueOf(doc, k.key) }),
-        };
-      }),
-
-      sheetOpen: !!sheetField,
-      sheetTitle: sheetField ? sheetField.label : '',
-      sheetChipClass: sheetConf < LOW ? 'tag tag-accent-2' : 'tag tag-neutral',
+      sheetOpen: !!sheetKey,
+      sheetTitle: sheetKey ? LABEL[sheetKey] : '',
+      sheetChipClass: sheetKey ? CHIP[band(sheetConf)] : 'tag tag-neutral',
       sheetChipText: 'ความมั่นใจ ' + sheetConf + '%',
       sheetLow: sheetLow,
-      sheetNote: doc.note || '',
+      sheetNote: doc.why || '',
       sheetSaveLabel: sheetLow ? 'ยืนยันค่านี้' : 'บันทึก',
-      draft: this.state.draft,
+      draft: st.draft,
       onDraft: e => this.setState({ draft: e.target.value }),
       saveField: () => this.setState(s => ({
         sheetKey: null,
-        edits: { ...s.edits, [doc.id + '.' + s.sheetKey]: s.draft },
-        confirmed: { ...s.confirmed, [doc.id + '.' + s.sheetKey]: true },
+        edits: { ...s.edits, [key(s.sheetKey)]: s.draft },
+        confirmed: { ...s.confirmed, [key(s.sheetKey)]: true },
+        fixedBy: s.sheetKey === VOICE.key ? 'manual' : s.fixedBy,
       })),
+      closeAll: () => this.setState({ sheetKey: null }),
 
-      navItems: nav.map(n => ({
-        label: n.label, note: n.note,
-        bg: n.here ? 'var(--color-accent-100)' : 'transparent',
-        go: n.to ? () => go(n.to) : this.close,
+      voiceOpen: tick >= 0,
+      voiceStateLabel: vDone ? 'แก้ไขแล้ว' : (vApplied ? 'ใช้การแก้ไขแล้ว' : (tick >= VSTEP.transcript ? 'ถอดความแล้ว' : (listening ? 'กำลังฟัง…' : 'พร้อมฟัง'))),
+      micBg: listening ? 'var(--color-accent)' : 'transparent',
+      micStroke: listening ? 'var(--color-bg)' : 'var(--color-accent-700)',
+      voiceBars: BARS.map((_, k) => ({
+        h: BARS[(k + phase) % BARS.length] + 'px',
+        fill: listening ? 'var(--color-accent)' : 'var(--color-neutral-300)',
       })),
-      menuOpen: this.state.menuOpen,
-      openMenu: () => this.setState({ menuOpen: true }),
-      closeAll: this.close,
+      voiceHasTranscript: tick >= VSTEP.transcript,
+      voiceTranscript: VOICE.transcript,
+      voiceHasChange: vApplied,
+      voiceChangeLabel: LABEL[VOICE.key],
+      voiceFrom: doc.v[VOICE.key],
+      voiceTo: VOICE.to,
+      voiceTotalFrom: baht(parseInt(doc.v[VOICE.key], 10) * doc.unitPrice),
+      voiceTotalTo: baht(parseInt(VOICE.to, 10) * doc.unitPrice),
+      voiceCheck: 'ยอดคำนวณใหม่ตรงกับยอดในใบเสร็จ ' + baht(doc.receiptTotal),
+      voiceHasDone: vDone,
+      voicePrimaryLabel: vDone ? 'เสร็จสิ้น' : (tick === 0 ? 'แตะไมโครโฟนเพื่อเริ่มพูด' : 'ข้าม'),
+      voicePrimary: vDone ? () => { this.stop(); this.setState({ voiceTick: -1 }); }
+                          : (tick === 0 ? this.startVoice : this.skipVoice),
+      voiceCanCancel: tick === 0,
+      startListening: this.startVoice,
+      closeVoice: () => { this.stop(); this.setState({ voiceTick: -1 }); },
     };
   }
 }

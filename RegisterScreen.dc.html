@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/styles.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap">
+<script src="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/_ds_bundle.js"></script>
+<script src="flow.js"></script>
+<style>:root{--font-body:"Archivo","Noto Sans Thai",system-ui,sans-serif;--font-heading:"Archivo","Noto Sans Thai",system-ui,sans-serif}</style>
+</helmet>
+<div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <div style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:2px solid var(--color-divider)">
+    <button onClick="{{ back }}" aria-label="ย้อนกลับ" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
+    </button>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-0.01em;line-height:1.1">Kru<span style="color:var(--color-accent-700)">Scan</span></div>
+  </div>
+
+  <div style="flex:1;overflow:auto;padding:22px 16px 20px">
+    <h1 style="font-size:26px;line-height:1.22;letter-spacing:-0.01em;margin:0 0 8px;text-wrap:pretty">สมัครใช้งาน</h1>
+    <p style="font-size:14px;line-height:1.65;margin:0 0 22px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">ใช้หมายเลข API ของโรงเรียนเพื่อยืนยันว่าคุณเป็นเจ้าหน้าที่ของสถานศึกษา</p>
+
+    <sc-for list="{{ fields }}" as="f" hint-placeholder-count="6">
+      <div class="field" style="padding:0 0 14px">
+        <label for="{{ f.id }}" style="margin:0 0 5px;display:block;font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ f.label }}</label>
+        <div style="display:flex;gap:8px;align-items:stretch">
+          <input id="{{ f.id }}" class="input" type="{{ f.type }}" value="{{ f.value }}" onChange="{{ f.onInput }}" placeholder="{{ f.placeholder }}" style="flex:1;min-width:0;height:46px;font-size:15px;border-color:{{ f.border }}">
+          <sc-if value="{{ f.secret }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ f.toggle }}" aria-label="{{ f.toggleAria }}" style="width:46px;height:46px;flex:none;background:var(--color-surface);border:1px solid var(--color-divider);cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"></path><circle cx="12" cy="12" r="3"></circle><path d="{{ f.slash }}"></path></svg>
+            </button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ f.bad }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:12px;line-height:1.5;margin-top:5px;color:var(--color-accent-700)">{{ f.error }}</div>
+        </sc-if>
+      </div>
+    </sc-for>
+
+    <label style="display:flex;align-items:flex-start;gap:11px;margin-top:6px;cursor:pointer">
+      <button onClick="{{ toggleConsent }}" aria-label="ยอมรับเงื่อนไขการใช้งาน" style="width:24px;height:24px;flex:none;margin-top:1px;border:2px solid var(--color-text);background:{{ consentBg }};cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="{{ consentTick }}" stroke-width="3" stroke-linecap="square"><path d="M4 12l5 5L20 6"></path></svg>
+      </button>
+      <span style="flex:1;min-width:0;font-size:13px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 70%, transparent)">ยอมรับเงื่อนไขการใช้งานและนโยบายคุ้มครองข้อมูลส่วนบุคคลของสถานศึกษา</span>
+    </label>
+
+    <div style="margin-top:24px;border-top:2px solid var(--color-divider);padding-top:14px;display:flex;align-items:baseline;gap:8px">
+      <span style="font-size:13px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 62%, transparent)">มีบัญชีอยู่แล้ว?</span>
+      <button onClick="{{ toLogin }}" class="btn btn-ghost" style="font-size:13px;padding-inline:0">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+
+  <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg)">
+    <button onClick="{{ submit }}" disabled="{{ blocked }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ submitLabel }}</button>
+  </div>
+
+  <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:60;background:var(--color-bg);display:flex;flex-direction:column;justify-content:center;padding:28px 20px">
+      <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.4" stroke-linecap="square"><path d="M4 12l5 5L20 6"></path></svg>
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1.3;letter-spacing:-0.01em;margin-top:18px">สมัครสมาชิกสำเร็จ</div>
+      <p style="font-size:14px;line-height:1.65;margin-top:10px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ doneNote }}</p>
+      <button onClick="{{ toOtp }}" class="btn btn-primary" style="justify-content:flex-start;height:50px;font-size:16px;padding-inline:16px;margin-top:8px">ยืนยันรหัส OTP</button>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const FIELDS = [
+  { key: 'name',    id: 'rName',    label: 'ชื่อ-นามสกุล',        placeholder: 'ครูเบญจมาศ ใจดี' },
+  { key: 'email',   id: 'rEmail',   label: 'อีเมล',               placeholder: 'you@example.ac.th', test: v => v.includes('@') && v.includes('.'), error: 'รูปแบบอีเมลไม่ถูกต้อง' },
+  { key: 'pass',    id: 'rPass',    label: 'รหัสผ่าน',            placeholder: 'อย่างน้อย 8 ตัวอักษร', secret: 'showPass', test: v => v.length >= 8, error: 'รหัสผ่านต้องยาวอย่างน้อย 8 ตัวอักษร' },
+  { key: 'confirm', id: 'rConfirm', label: 'ยืนยันรหัสผ่าน',      placeholder: 'พิมพ์รหัสผ่านอีกครั้ง', secret: 'showConfirm', match: 'pass', error: 'รหัสผ่านไม่ตรงกัน' },
+  { key: 'school',  id: 'rSchool',  label: 'โรงเรียน',            placeholder: 'โรงเรียนตัวอย่าง' },
+  { key: 'apiNo',   id: 'rApi',     label: 'หมายเลข API ของโรงเรียน', placeholder: 'SCH-0000-0000', test: v => /^SCH-\d{4}-\d{4}$/.test(v), error: 'รูปแบบต้องเป็น SCH-0000-0000' },
+];
+
+class Component extends DCLogic {
+  state = {
+    v: { name: 'ครูเบญจมาศ ใจดี', email: 'benjamas@example.ac.th', pass: 'kruscan2026',
+         confirm: 'kruscan2026', school: 'โรงเรียนตัวอย่าง', apiNo: 'SCH-1042-8890' },
+    showPass: false, showConfirm: false,
+    consent: true,
+    done: false,
+  };
+
+  renderVals() {
+    const { v, consent } = this.state;
+
+    const fields = FIELDS.map(f => {
+      const val = v[f.key];
+      const empty = !val.trim();
+      const mismatch = !!f.match && !empty && val !== v[f.match];
+      const failed = !!f.test && !empty && !f.test(val);
+      const bad = empty || mismatch || failed;
+      const shown = f.secret ? this.state[f.secret] : false;
+      return {
+        id: f.id, label: f.label, value: val, placeholder: f.placeholder,
+        type: f.secret && !shown ? 'password' : 'text',
+        secret: !!f.secret,
+        /* The eye gets a strike-through path only while the value is visible. */
+        slash: shown ? 'M4 4l16 16' : '',
+        toggle: f.secret ? () => this.setState(s => ({ [f.secret]: !s[f.secret] })) : () => {},
+        toggleAria: shown ? 'ซ่อนรหัสผ่าน' : 'แสดงรหัสผ่าน',
+        bad: bad,
+        error: empty ? 'กรอก' + f.label + 'ก่อน' : (f.error || ''),
+        border: bad ? 'var(--color-accent)' : 'var(--color-divider)',
+        onInput: e => this.setState(s => ({ v: { ...s.v, [f.key]: e.target.value } })),
+      };
+    });
+
+    const blocked = fields.some(f => f.bad) || !consent;
+
+    return {
+      back: () => go('login'),
+      fields,
+
+      consentBg: consent ? 'var(--color-accent)' : 'transparent',
+      consentTick: consent ? 'var(--color-bg)' : 'transparent',
+      toggleConsent: () => this.setState(s => ({ consent: !s.consent })),
+
+      blocked: blocked,
+      submitLabel: !consent ? 'ยอมรับเงื่อนไขก่อน'
+                 : (fields.some(f => f.bad) ? 'กรอกข้อมูลให้ครบก่อน' : 'สมัครสมาชิก'),
+      submit: () => this.setState({ done: true }),
+
+      done: this.state.done,
+      doneNote: 'ระบบส่งรหัส 6 หลักไปยังเบอร์ที่ผูกกับ ' + v.apiNo + ' กรุณายืนยันเพื่อเริ่มใช้งาน',
+      toOtp: () => go('otp'),
+      toLogin: () => go('login'),
+    };
+  }
+}
+</script>
+</body>
+</html>
