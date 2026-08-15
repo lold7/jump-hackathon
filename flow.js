@@ -16,16 +16,6 @@ window.FLOW = {
   processing:    'ProcessingScreen.dc.html',
   review:        'ReviewScreen.dc.html',
   export:        'ExportScreen.dc.html',
-
-  /* Retired spine — these screens are folded into `review` and get deleted
-     once every caller is off them. Do not add new references. */
-  categorize:    'CategorizeScreen.dc.html',
-  disbursement:  'DisbursementScreen.dc.html',
-  payment:       'PaymentScreen.dc.html',
-  crossdoc:      'CrossDocScreen.dc.html',
-  assetClassify: 'AssetClassifyScreen.dc.html',
-  assetRegister: 'AssetRegisterScreen.dc.html',
-  validation:    'ValidationScreen.dc.html',
 };
 
 window.go = function (key) {

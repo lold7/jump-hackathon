@@ -1,4 +1,4 @@
-# SchoolBackoffice AI — screen spec
+# KruScan — screen spec
 
 Derived from `CLAUDE.md`. This file is the per-screen source of truth: field
 lists, branches, and navigation targets. `CLAUDE.md` remains the source of truth
@@ -12,71 +12,100 @@ the user ships in Thai**, `aria-label` included.
 
 ## Shared patterns
 
-Copy these verbatim into each screen. They are defined once here so eleven
+Copy these verbatim into each screen. They are defined once here so thirteen
 screens do not drift.
 
 ### Screen shell
 
 Root: `height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column`.
-Header `flex:none` + 2px bottom rule. Middle `flex:1;overflow:auto;padding:22px 16px 18px`.
+Header `flex:none` + 2px bottom rule. Middle `flex:1;overflow:auto;padding:20px 16px 18px`.
 Footer `flex:none` + 2px top rule + `padding:12px 16px`. Overlays are
-`position:absolute;inset:0` siblings inside the root — 40 menu, 50 sheet,
-60 success.
+`position:absolute;inset:0` siblings inside the root — 50 sheet, 60 success.
+The FAB is a non-overlay sibling at z-30 so every overlay still covers it.
 
-### Header
+### Header — two kinds
 
-Identical on every screen except 0 and 0b (which have no header):
+**App screens** (Home, Project detail, Schedule, Profile) carry the brand:
 
 ```html
-<header style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
-  <!-- 44×44 hamburger, margin-left:-10px, aria-label="เมนู" -->
-  <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+<header style="flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+  <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:17px;letter-spacing:-0.01em;line-height:1.1">Kru<span style="color:var(--color-accent-700)">Scan</span></div>
+  <!-- optional 44×44 action, then the 36×36 avatar -->
   <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);…">บ</div>
 </header>
 ```
 
-### Menu overlay
+**Task screens** (Scan, Processing, Review, Export, Create project, Help,
+Register) swap the wordmark for a 44×44 back arrow (`margin-left:-10px`,
+`aria-label="ย้อนกลับ"`, path `M15 5l-7 7 7 7`) plus a 15px/800 screen title.
 
-Copied from `ScanScreen.dc.html:83-107`. Six items, current screen highlighted
-with `--color-accent-100`, user block pinned at the bottom
-(ครูเบญจมาศ · โรงเรียนตัวอย่าง · ใช้งานอยู่).
+There is no hamburger and no menu overlay anywhere in the app.
 
-| Label | Note | Target |
-|---|---|---|
-| เอกสาร | — | `scan` |
-| การเบิกจ่าย | รอตรวจ 8 รายการ | `disbursement` |
-| ครุภัณฑ์ | 7 รายการ | `assetRegister` |
-| โครงการ | 4 โครงการ | `validation` |
-| ประวัติการใช้งาน | — | `scan` |
-| ช่วยเหลือ | — | `scan` |
+### Bottom tab bar
 
-The current screen's row uses note `คุณอยู่ที่นี่` and the accent-100 background.
+`flex:none` sibling **after** the action footer, still inside the root column.
+A screen with both stacks: scroll → footer (2px `--color-divider` top rule) →
+tab bar (2px `--color-text` top rule). The heavier ink rule marks app chrome;
+the divider rule marks the screen's own action band.
+
+Three tabs — หน้าแรก / ตารางงาน / โปรไฟล์, 62px tall, `flex:1` each. Active tab
+= 2px `--color-accent` top rule + `--color-accent-700` icon and label +
+`aria-current="page"`; inactive = transparent rule + 55% muted text. Each button
+carries `margin-top:-2px` so the accent segment overprints the bar's own ink
+rule and the top edge stays one unbroken line.
+
+Icons are 24×24, `stroke-linecap="square"`, stroke-width 2. Two of the three
+need more than one `<path>`, so ship all three as literal SVG blocks selected by
+`<sc-if value="{{ t.isHome }}">` rather than interpolating a `d` string. Every
+tab object must set **all three** `isHome`/`isSchedule`/`isProfile` booleans — a
+missing one resolves to undefined and the runtime warns.
+
+### FAB — Home only
+
+`position:absolute;right:16px;bottom:78px;z-index:30`, 60×60, `--color-accent`
+fill, `2px solid var(--color-text)` border, camera glyph in `--color-bg`,
+`aria-label="สแกนเอกสารใหม่"`. Square, no shadow — the ink border does the
+lifting the design system refuses to do with elevation. `bottom:78px` = the
+62px bar plus a 16px gutter.
 
 ### Field row
 
-The workhorse of screens 3, 4, 5, 6, 8, 9. Never a bare value — every AI field
-carries its confidence and stays editable.
+The workhorse of Screen 6. Never a bare value — every AI field carries its
+confidence and stays editable.
 
 ```
 ┌──────────────────────────────────────────────┐
-│ ประเภทเอกสาร                    [94%]  [✎]  │   label 12px / 70%
+│ ประเภทเอกสาร                    [96%]  [✎]  │   label 12px / 70%
 │ ใบเสร็จ                                      │   value 15px / 600
 └──────────────────────────────────────────────┘
    1px solid color-mix(in srgb, var(--color-text) 18%, transparent)
 ```
 
-Row padding `12px 0`. Edit button 44×44. `chipClass` and `chipText` are computed
-in `renderVals()` — the template cannot branch.
+Row padding `12px 0`. Edit affordance 36×36 inside a full-width button.
+`chipClass`, `chipText` and `rowBg` are computed in `renderVals()` — the
+template cannot branch. Confirmed low-confidence rows swap the chip for a
+checkmark and drop the tinted background.
 
 ### Confidence chip
 
 | Band | Class | Meaning |
 |---|---|---|
 | ≥ 80% | `.tag .tag-neutral` | settled, editable |
-| < 80% | `.tag .tag-accent-2` | flagged; blocks export until confirmed |
-| blocking | `.tag .tag-accent` | validation failure, text `ต้องแก้ไข` |
+| 70–79% | `.tag .tag-accent-2` | flagged, editable |
+| < 70% | `.tag .tag-accent` | blocks export until explicitly confirmed |
 
 Always `font-size:11px;font-family:var(--font-heading);font-weight:800`.
+
+### Disclosure row
+
+Used by Screen 6's three sections and by Screen 11's FAQ. 15px/800 title with a
+one-line 12px/55% summary beneath that **carries the branch value**, so the
+section reads without being opened. Optional count chip, then a 36×36 chevron.
+`border-bottom: 2px solid var(--color-divider)`.
+
+The chevron swaps its `d` string — `M6 9l6 6 6-6` closed, `M6 15l6-6 6 6` open.
+Never a CSS rotation: the design system bans transitions, and a rotating chevron
+implies one.
 
 ### Validation banner
 
@@ -86,245 +115,315 @@ warnings use `--color-accent-2` / `--color-accent-2-100`. 4px left border,
 
 ### Bottom-sheet editor
 
-Copied from `ScanScreen.dc.html:132-159`. `z-index:50`, dim backdrop
-`color-mix(in srgb, #201e1d 45%, transparent)`, panel
+`z-index:50`, dim backdrop `color-mix(in srgb, #201e1d 45%, transparent)`, panel
 `border-top:2px solid var(--color-text)`, `max-height:86%`, `.input` inside,
-ยกเลิก / บันทึก in the sheet footer.
+ยกเลิก / บันทึก in the sheet footer. The save button relabels to `ยืนยันค่านี้`
+when the field is below 70%, and a `ต้องยืนยัน` banner appears above it.
+
+### Voice sheet
+
+Same z-50 chrome as the field editor. Driven by one `setInterval(…, 200)`
+started on demand and cleared in `componentWillUnmount` and at the end of the
+script — the same shape `ProcessingScreen.dc.html` already uses. See Screen 6.
 
 ### Success overlay
 
-Copied from `ScanScreen.dc.html:161-168`. `z-index:60`, opaque `--color-bg`,
-46px checkmark in `--color-accent`, 24px/800 title, 14px/62% paragraph,
-secondary button out.
+`z-index:60`, opaque `--color-bg`, 46px checkmark in `--color-accent`, 24px/800
+title, 14px/62% paragraph, button out.
 
 ---
 
-## Screen 0 — Login
+## Screen 1 — Login
 
-**Purpose.** Sign in with the school's API number.
+No header bar; a 38×38 accent logo tile beside the `KruScan` wordmark and the
+tagline `AI จัดการงานเอกสาร คืนเวลาครูสู่ห้องเรียน`.
 
-- Title `เข้าสู่ระบบ`, subtitle `ใช้หมายเลข API ของโรงเรียนเพื่อเริ่มใช้งาน`
-- Field `หมายเลข API` — `.input`, prefilled `SCH-1042-8890`
-- Field `เบอร์โทรศัพท์` — `.input`, prefilled `08X-XXX-4471`
-- Footer primary `ขอรหัส OTP` → `otp`
-- No header, no menu. Wordmark centred in the scroll area instead.
+Three fields, each validated live, each reddening its own border and printing
+its own error line: **อีเมล** (must contain `@` and `.`), **รหัสผ่าน**
+(≥ 8 chars, with a 48×48 eye button that toggles `type` between `password` and
+`text` — the eye gains a `M4 4l16 16` strike path while visible), and
+**หมายเลข API ของโรงเรียน** (`^SCH-\d{4}-\d{4}$`).
 
-## Screen 0b — OTP
+`ลืมรหัสผ่าน?` is a `.btn-ghost` opening a z-50 explanatory sheet. Below the
+fields, the numbered 1-2-3 explainer grid.
 
-**Purpose.** Confirm the one-time code.
+Footer: primary `ขอรหัส OTP` → `otp`, disabled with label
+`กรอกข้อมูลให้ครบก่อน` while any field is bad; secondary
+`ยังไม่มีบัญชี? สมัครสมาชิก` → `register`; then the demo disclaimer.
 
-- Title `ยืนยันรหัส OTP`, body `กรอกรหัส 6 หลักที่ส่งไปยัง 08X-XXX-4471`
-- Six square boxes, 48×56, `--color-surface` fill, 1px divider border,
-  `--color-accent` border on the active box. Tapping fills the next digit.
-- `ขอรหัสใหม่ (60 วินาที)` as `.btn-ghost`
-- Footer primary `ยืนยัน` → `scan`, disabled until six digits are entered
+## Screen 2 — Register
 
-## Screen 1 — Scan documents — **built**
+Back arrow → `login`. Six fields in one `<sc-for>`: ชื่อ-นามสกุล, อีเมล,
+รหัสผ่าน (eye), ยืนยันรหัสผ่าน (eye, must match รหัสผ่าน), โรงเรียน,
+หมายเลข API (same regex). Then a 24×24 square consent checkbox — accent fill
+with a `--color-bg` tick when checked.
 
-`ScanScreen.dc.html`. Footer `ส่ง {n} เอกสารให้ AI` → `processing`.
+Footer primary relabels three ways: `ยอมรับเงื่อนไขก่อน` / `กรอกข้อมูลให้ครบก่อน`
+/ `สมัครสมาชิก`. Submitting paints the z-60 success overlay
+`สมัครสมาชิกสำเร็จ`, whose button `ยืนยันรหัส OTP` → `otp`.
 
-## Screen 2 — AI processing
+## Screen 2b — OTP
 
-**Purpose.** Show the AI reading the batch, so the extraction on Screen 3 has
-visible provenance.
+Back arrow → `login`. Six 58px boxes; the next empty box takes a
+`2px solid var(--color-accent)` border. `กรอกรหัสถัดไป` (`.btn-secondary`)
+reveals one character of `402817` per tap; `ล้างรหัส` (`.btn-ghost`) resets.
+Static resend hint below a 2px rule.
 
-- Title `AI กำลังอ่านเอกสาร`
-- Progress: `{done} / 12 เอกสาร`, plus a 2px rule filling in `--color-accent`
-- Per-document row: filename, then a stage label stepping through
-  `อ่านตัวอักษร` → `จำแนกประเภท` → `ดึงข้อมูล` → `เสร็จ`.
-  Completed rows show the checkmark in `--color-text`; the active row shows its
-  stage in `--color-accent-700`; pending rows are 55% muted.
-- Interval started in `componentDidMount()`, cleared in
-  `componentWillUnmount()`. Tapping the title advances instantly so a presenter
-  is never waiting.
-- Footer `ดูผลลัพธ์` appears only when all 12 are done → `review`
+**Demo gate 1.** Footer is `disabled` and reads `กรอกรหัสให้ครบ 6 หลัก` until
+six digits are in, then `ยืนยัน` → `home`.
 
-## Screen 3 — AI review — **the centrepiece**
+## Screen 3 — Home / project list
 
-**Purpose.** Prove the core claim: AI extracts, the human stays in control, and
-low confidence is visibly gated.
+Brand header with a notification button (8×8 accent dot, opens a z-50 sheet of
+three alerts) and a tappable avatar → `profile`.
 
-Mobile adaptation of the spec's two-column layout, per `CLAUDE.md`: preview on
-top, extracted fields scrolling below.
+`สวัสดี ครูเบญจมาศ` + school line. Two stat blocks side by side: `6`
+เอกสารรอตรวจสอบ (accent border, accent-700 number) and `฿246,500`
+ยอดใช้จ่ายเดือนนี้ (divider border). Then a full-width primary
+`สร้างโครงการ` → `newProject`.
 
-- Pager `เอกสาร 1 / 12` with chevron prev/next, and `DOC-0012` as meta
-- Preview block ~150px tall: `--color-neutral-200` fill, 1px divider border,
-  centred `ตัวอย่างเอกสาร` label
-- Section header `ข้อมูลที่ดึงได้` with the field count on the right
-- Field rows:
+`โครงการของฉัน` — three cards, each with name, `code · owner`, a status tag,
+a 6px progress bar with its percentage, doc count and last-updated line; all
+→ `project`. Status tags: กำลังดำเนินการ `.tag-accent-2` · รอตรวจสอบ
+`.tag-outline` · เสร็จสิ้น `.tag-neutral`.
 
-  | Label | Value | Confidence |
-  |---|---|---|
-  | ประเภทเอกสาร | ใบเสร็จ | 96% |
-  | เลขที่เอกสาร | `INV-0012` | 95% |
-  | วันที่ | 14/08/2026 | 94% |
-  | ผู้ขาย | ร้านสมใจ | 91% |
-  | รายการ | กล้องจุลทรรศน์ | 88% |
-  | จำนวน | 1 หน่วย | 93% |
-  | **จำนวนเงิน** | **฿8,500** | **72%** |
+`งานที่ต้องทำ` — two rows with a 4px severity bar → `review` / `export`.
 
-- **The 72% amount is the money shot.** Flagged with `.tag-accent-2`, a warning
-  banner reading `ลายมือในช่องจำนวนเงินอ่านได้ไม่ชัด กรุณาตรวจสอบก่อนยืนยัน`,
-  and the footer button **disabled** until the user opens that field and taps
-  `ยืนยันค่านี้`. Once confirmed the chip becomes a checkmark in `--color-text`.
-- Tapping any row opens the bottom-sheet editor
-- Footer `ยืนยันและไปต่อ` → `categorize` (Phase A: `payment`)
+No action footer. Tab bar (Home active) + FAB → `scan`. The scroll pads
+`96px` at the bottom so the FAB never covers the last row.
 
-## Screen 4 — Smart categorization
+## Screen 4 — Project detail
 
-**Purpose.** Show the system linking a document to a project and a funding
-source, not just reading it.
+Back arrow → `home`, title, and a 44×44 ⋮ opening a z-50 options sheet
+(แก้ไขโครงการ → `newProject`, ส่งออกข้อมูล → `export`, ดูภาพรวมโครงการ →
+`schedule`).
 
-- Section `โครงการ` — AI pick โครงการจัดซื้อวัสดุห้องวิทยาศาสตร์ `SCI-2026-024`
-  at **94%**, with `เปลี่ยนโครงการ` opening a sheet of three alternates
-- Section `แหล่งเงิน` — AI pick เงินอุดหนุน at **93%**, alternates
-  เงินรายได้สถานศึกษา / เงินบริจาค
-- Selected row uses `--color-accent-100`
-- Footer `ยืนยันการจัดหมวดหมู่` → `disbursement`
+Project name as `h1` with a status tag beside it, `code · owner` beneath, then
+the 8px progress bar. `ข้อมูลโครงการ` — nine label/value rows (ชื่อโครงการ,
+รหัสโครงการ, ผู้รับผิดชอบ, แหล่งที่มาของเงิน, งบประมาณ, ใช้ไปแล้ว,
+ครั้งที่เบิกจ่าย, วันที่เริ่มต้น, วันที่สิ้นสุด) closed by a 2px
+`--color-text` rule and `คงเหลือ ฿113,500`.
 
-## Screen 5 — Disbursement review
+`เอกสารในโครงการ` — five rows with an extension thumbnail, document type,
+`DOC-id · อัปโหลด date`, an AI + validation state line, and a right-hand tag;
+all → `review`.
 
-**Purpose.** The disbursement-type branch and the "count already used" rule.
+Footer: primary `อัปโหลดเอกสาร` → `scan`, secondary `ดูภาพรวมโครงการ` →
+`schedule`. **Plus the tab bar** (Home active) — this is the both-bands case.
 
-- Field `ประเภทการเบิกจ่าย` — `.radio` list: บจ. / ค่าจ้าง / ค่าตอบแทน / อื่น ๆ.
-  Default บจ.
-- **Branch อื่น ๆ** → reveals free-text `.input` labelled
-  `ระบุประเภทการเบิกจ่าย`
-- Field `ครั้งที่` — `3` of `5`, shown as `ครั้งที่ 3 / 5`
-- Validation: setting the count to `2` raises the critical banner
-  `ครั้งที่ 2 ถูกใช้ไปแล้วในโครงการนี้` and disables the footer
-- Footer `ยืนยันการเบิกจ่าย` → `payment`
+## Screen 5 — Scan / upload
 
-## Screen 6 — Payment validation
+Back arrow → `home`. Large tap-target dropzone (`วางเอกสารที่นี่ / หรือ /
+สแกนด้วยกล้อง`) with JPG PNG PDF `.tag-outline` chips, opening the camera.
 
-**Purpose.** The four-way payment branch — the clearest proof the system
-understands documents.
+Conditional `พร้อมส่ง` list with per-row remove buttons, then the numbered
+explainer grid.
 
-- Field `วิธีการชำระเงิน` — `.radio` list (vertical; four Thai labels will not
-  fit a segmented control at 390px): เช็ค / เงินสด / เงินโอน / บัญชีธนาคาร.
-  Default เช็ค.
-- Four sibling `<sc-if>` blocks on `isCheque` / `isCash` / `isTransfer` /
-  `isBankAcct`:
+Footer: the primary `ส่ง {n} เอกสารให้ AI` → `processing` **only exists when
+the batch is non-empty**, so the presenter must scan or upload first. Below it,
+a two-up secondary row `อัปโหลดไฟล์` / `สแกนเอกสาร`.
 
-  | Branch | Fields |
-  |---|---|
-  | เช็ค | เลขที่เช็ค `CHQ-008421` **(required)** · วันที่ 14/08/2026 · ธนาคาร ธนาคารตัวอย่าง · จำนวนเงิน ฿8,500 · สถานะ ผ่านการเรียกเก็บแล้ว |
-  | เงินสด | วันที่ชำระ · จำนวนเงิน |
-  | เงินโอน | ธนาคาร · เลขที่บัญชี · เลขอ้างอิงรายการ · วันที่โอน |
-  | บัญชีธนาคาร | ชื่อธนาคาร · ชื่อบัญชี · เลขที่บัญชี · วันที่ · จำนวนเงิน |
+Two overlays, both z-50 and both kept as-is: the full-bleed dark camera view
+(`#141312` / `#211f1e` / `#fff` — the one place hard-coded hex is legal) with
+corner brackets and a 74px shutter, and the multi-select upload sheet.
 
-- Validation, both visibly demonstrable:
-  - Clearing the cheque number → critical banner `เลขที่เช็คจำเป็นต้องระบุ`,
-    footer disabled
-  - Entering `CHQ-008400` → critical banner
-    `เลขที่เช็คนี้ถูกใช้ไปแล้วกับ DOC-0007`
-- Footer `ยืนยันการชำระเงิน` → `crossdoc` (Phase A: `assetClassify`)
+## Screen 5b — AI processing
 
-## Screen 7 — Cross-document validation
+Back arrow → `scan`. Tapping the `h1` calls `skip()` — the presenter's escape
+hatch. 12-cell segmented rule: done `--color-accent`, active
+`--color-accent-400`, pending `--color-neutral-300`.
 
-**Purpose.** Catch a contradiction no single document reveals.
+`setInterval(…, 120)` in `componentDidMount`, cleared in `componentWillUnmount`
+and on completion. Three working stages per document — อ่านเอกสาร → จำแนกประเภท
+→ ตรวจสอบข้อมูล — landing in เสร็จสิ้น, which is the fourth step the brief
+lists. While running, an accent banner names the current stage and filename;
+when finished, a summary grid appears.
 
-- `.table` comparing four amounts for `SCI-2026-024`:
+Footer is `disabled` and reads `กำลังประมวลผล…` until done, then `ดูผลลัพธ์`
+→ `review`.
 
-  | เอกสาร | จำนวนเงิน |
-  |---|---|
-  | ใบเสนอราคา | ฿8,500 |
-  | ใบเสร็จ `INV-0012` | ฿8,500 |
-  | การเบิกจ่าย ครั้งที่ 3 | ฿8,500 |
-  | การชำระเงิน `CHQ-008421` | **฿8,050** |
+## Screen 6 — AI review (the centrepiece)
 
-- The ฿8,050 row is highlighted and raises the critical banner
-  `ยอดชำระเงินไม่ตรงกับใบเสร็จ ต่างกัน ฿450` with a
-  `แก้ไขการชำระเงิน` button → `payment`
-- A `แก้ไขให้ตรงกัน` action resolves it to ฿8,500 so the demo can proceed
-- Footer `ยืนยันการตรวจสอบ` → `assetClassify`, disabled while unresolved
+**This screen absorbs what used to be seven separate screens.** Back arrow →
+`scan`. Sticky pager over three documents, sorted lowest-confidence first, so
+the reviewer lands on the one that needs a human.
 
-## Screen 8 — Asset classification
+Height budget: header 64 · pager 61 · scroll 587 · footer 132.
 
-**Purpose.** The ครุภัณฑ์ / วัสดุ branch.
+Six bands in the scroll:
 
-- Item card: กล้องจุลทรรศน์ · 1 หน่วย · ฿8,500
-- AI call `ครุภัณฑ์` at **94%**, with the reasoning line
-  `มูลค่าต่อหน่วยเกิน ฿5,000 และมีอายุการใช้งานเกิน 1 ปี`
-- Two options, `--color-accent-100` on the selected one:
-  - **ครุภัณฑ์** → shows `หมวดหมู่` = ครุภัณฑ์วิทยาศาสตร์, footer
-    `ไปลงทะเบียนครุภัณฑ์` → `assetRegister`
-  - **วัสดุ** → the category and asset-ID fields visibly disappear, an info line
-    reads `วัสดุไม่ต้องลงทะเบียนครุภัณฑ์`, footer becomes `ยืนยันและไปต่อ` →
-    `export`
-- The branch must be *seen* to change the field set — that is the point.
+1. **Preview strip** — 108px placeholder + caption
+   `AI อ่านได้ N ช่อง · ความมั่นใจเฉลี่ย 93%`.
+2. **Error spotlight** (`hasError`) — 4px `--color-accent` bar on
+   `--color-accent-100`, `.tag-accent` chip, the value at 22px/800, a two-line
+   explanation, and two buttons: `แก้ด้วยเสียง` (primary, 46px) and `แก้เอง`
+   (secondary, 44px, opens the z-50 editor on the same field). Never collapsed.
+   After correction it is replaced by a neutral tick row
+   `จำนวน 20 → 10 · แก้ไขด้วยเสียง`.
+3. **ข้อมูลหลัก** — six always-visible field rows: ผู้ขาย, วันที่, รายการ,
+   **จำนวน**, ราคาต่อหน่วย, ยอดในใบเสร็จ. The จำนวน row is the same field as
+   the spotlight and flips to a tick at the same moment — that is the visible
+   proof the fix landed. Closed by a 2px `--color-text` rule carrying
+   **ยอดคำนวณ** (`qty × unit`, computed in `renderVals()`), its
+   `20 × ฿8,500` note, and a `ไม่ตรงกับใบเสร็จ` `.tag-accent` while mismatched.
+4. **Three disclosure sections**, all collapsed on first paint:
+   - **เอกสารและโครงการ** — ประเภทเอกสาร 96%, ประเภทการเงิน บจ. 92%,
+     โครงการ 94%, แหล่งเงิน 93%. Summary `ใบเสร็จ · บจ. · SCI-2026-024`.
+   - **การชำระเงิน** — a four-option `.radio` group, then that method's rows.
+     Summary `เช็ค · CHQ-008421 · ฿85,000`.
+   - **ครุภัณฑ์และวัสดุ** — a two-option `.radio` group with note lines, then
+     that type's rows, plus the 96px QR block for ครุภัณฑ์ only. Summary
+     `ครุภัณฑ์ · ครุภัณฑ์วิทยาศาสตร์ · SCI-000234` or
+     `วัสดุ · ไม่ต้องลงทะเบียนครุภัณฑ์`.
 
-## Screen 9 — Asset registration
+   Deviating from the AI's pick reveals an `แก้ไขจากที่ AI แนะนำ` accent-2
+   banner inside that section.
+5. **การตรวจสอบ** — five check rows, never collapsed. `ยอดคำนวณตรงกับยอดใน
+   ใบเสร็จ` fails while the quantity is wrong and flips when it is fixed.
+6. **Footnote** — the 12.5px/62% "ทุกช่องแก้ไขได้" paragraph.
 
-**Purpose.** Close the loop from a photograph to a registered asset.
+**Editing is always the z-50 bottom sheet.** No inline `.input` on this screen:
+fifteen rows have to stay the same height, and it is the only way an on-screen
+keyboard does not destroy the layout.
 
-Reachable only from the ครุภัณฑ์ branch.
+**Demo gate 2.** Anything below 70% that is unconfirmed sets `blocked` — the
+footer primary is `disabled` and reads `แก้ช่องที่ความมั่นใจต่ำก่อน`. The
+secondary `บันทึกไว้ก่อน` stays live at all times (a blocked screen with no
+usable control is a dead end) and opens a z-60 `บันทึกฉบับร่างแล้ว` →  `home`.
+Once cleared, the primary reads `ส่งออกข้อมูล` → `export`.
 
-- `เลขครุภัณฑ์` `SCI-000234` with the uniqueness check shown as satisfied —
-  checkmark in `--color-text` and `ไม่ซ้ำกับรายการเดิม`. No green.
-- `หมวดหมู่` ครุภัณฑ์วิทยาศาสตร์
-- `สถานที่จัดเก็บ` ห้องปฏิบัติการวิทยาศาสตร์ 1
-- `ผู้รับผิดชอบ` ครูเบญจมาศ
-- `วันที่รับเข้า` 14/08/2026
-- QR placeholder: 96×96 `--color-neutral-200` block, 2px `--color-text` border,
-  caption `QR สำหรับติดครุภัณฑ์`
-- Footer `ลงทะเบียนครุภัณฑ์` → success overlay → `export`
+**Voice sheet.** `openVoice` sets `voiceTick: 0` (idle). Tapping the 72×72
+square mic starts the ticker. Steps by tick: `1–6` กำลังฟัง… (mic fills accent,
+12-bar level meter animates by rotating a fixed height array — the same idiom as
+ProcessingScreen's progress strip, never a waveform or a glow), `7–11` ถอดความ
+(transcript `เปลี่ยนจำนวนเป็น 10 ชิ้น` on a 4px accent bar), `12–16`
+ใช้การแก้ไข — **commits here**, so closing later is safe — showing
+`20 → 10` and `฿170,000 → ฿85,000` plus the cross-check line, `≥ 17` เรียบร้อย
+and the ticker stops.
 
-## Screen 10 — Validation center
+The sheet's primary is live at every step: `ข้าม` during 1–16 jumps to the end
+and applies the change; `เสร็จสิ้น` at the end closes. `ยกเลิก` is offered only
+while idle.
 
-**Purpose.** One place showing everything still wrong across the batch.
+## Screen 7 — Export
 
-- Section header `ต้องแก้ไข` with count, then `ควรตรวจสอบ` with count
-- Issue rows: severity chip, one-line description, the document it belongs to,
-  and a chevron deep-linking to the screen that fixes it
-  - `ยอดชำระเงินไม่ตรงกับใบเสร็จ` · `DOC-0012` → `crossdoc` (critical)
-  - `เลขที่เช็คซ้ำกับ DOC-0007` · `DOC-0007` → `payment` (critical)
-  - `ลายมือในช่องจำนวนเงินอ่านได้ไม่ชัด` · `DOC-0012` → `review` (warning)
-  - `ยังไม่ระบุผู้รับผิดชอบครุภัณฑ์` · `SCI-000238` → `assetRegister` (warning)
-- Footer `ไปหน้าส่งออกข้อมูล` → `export`
+Back arrow → `review`. `สรุปชุดเอกสาร` four rows closed by a 2px
+`--color-text` rule and `ยอดรวม ฿246,500`. `การตรวจสอบก่อนส่งออก` five check
+rows. A blocked branch exists (banner + disabled footer) but nothing in the UI
+triggers it, so the demo path is always live.
 
-## Screen 11 — Export
+`รูปแบบไฟล์` — a `.seg` control over **Excel / CSV / Word**, Excel first and
+labelled แนะนำ. The filename line updates its extension reactively.
 
-**Purpose.** The payoff — structured data out.
+`ตัวอย่างข้อมูลที่จะส่งออก` — the design system's `.table`, finally used. All
+**13 columns**, no subset, inside a `2px` bordered `overflow-x:auto` window at
+`min-width:1080px` with `white-space:nowrap`; money and count columns
+right-aligned. Three rows inline; `ดูทั้งหมด` opens a z-50 full-bleed overlay
+with all twelve rows and `position:sticky;top:0` headers. `.table th` already
+ships the 2px rule and `.table td` the 1px one, so the design system's 2px/1px
+law needs no override.
 
-- Section header `สรุปชุดเอกสาร` with the canonical totals:
-  12 เอกสาร · 8 ใบเสร็จ · 8 การเบิกจ่าย · 7 ครุภัณฑ์ · **฿40,980**
-- Section `การตรวจสอบก่อนส่งออก` — the five rules from `CLAUDE.md`, each with a
-  checkmark in `--color-text`:
-  - เลขที่เช็คครบถ้วน
-  - เลขที่เช็คไม่ซ้ำ
-  - เลขครุภัณฑ์ไม่ซ้ำ
-  - ครั้งที่เบิกจ่ายไม่ซ้ำ
-  - ยอดเงินตรงกันทุกเอกสาร
-  Any unresolved item shows the critical chip and blocks the footer, with a link
-  to `validation`.
-- Section `รูปแบบไฟล์` — `.seg` with Excel / CSV / PDF, Excel default
-- Footer `ส่งออกข้อมูล` → success overlay
-  `ส่งออก 12 เอกสารเรียบร้อยแล้ว`, body naming the file
-  `SCI-2026-024_14082026.xlsx`, secondary button `กลับไปหน้าสแกนเอกสาร` →
-  `scan`
+Columns: เลขที่เอกสาร · ประเภทเอกสาร · ประเภทการเงิน · วันที่ · ผู้ขาย ·
+โครงการ · แหล่งเงิน · รายการ · จำนวน · ราคาต่อหน่วย · ยอดรวม · วิธีชำระเงิน ·
+เลขครุภัณฑ์.
+
+Write `<thead>`/`<tbody>` explicitly and keep every `<sc-for>` *inside* a
+`<tr>` — the loop emits a Fragment, legal as a child of `<tr>` but not between
+`<table>` and its rows.
+
+Footer primary `ส่งออกเป็นไฟล์ {format}` paints the z-60 success overlay
+`ส่งออกไฟล์สำเร็จ`, whose button `กลับหน้าหลัก` → `home`.
+
+## Screen 8 — Project overview / schedule
+
+Brand header. Project name, an 8px progress bar at 68%, and a 2×2 stat grid
+(งบที่ใช้ไป, เอกสารในโครงการ, ขั้นตอนที่เสร็จแล้ว, เหลือถึงกำหนดส่ง).
+
+`ขั้นตอนการดำเนินงาน` — six timeline entries on a 14px square marker with a
+2px rail between them (the last one's rail is transparent so it does not
+dangle). Each carries name, date range, status tag, owner and document count.
+Tones: `done` accent-filled marker + `.tag-neutral`, `active` accent-2 outlined
+marker + `.tag-accent-2`, `wait` neutral-400 outlined marker + `.tag-outline`.
+
+Closes with an accent-2 banner `คาดว่าจะเสร็จ 20 ส.ค. 2026`. No action footer.
+Tab bar (Schedule active).
+
+## Screen 9 — Create project
+
+Back arrow → `home`. Seven `.input` fields in one `<sc-for>` (ชื่อโครงการ,
+รหัสโครงการ with `^[A-Z]{3}-\d{4}-\d{3}$`, ผู้รับผิดชอบ, รายละเอียดโครงการ,
+งบประมาณ, วันที่เริ่มต้น, วันที่สิ้นสุด), each with its own red border and
+error line. Then `แหล่งที่มาของเงิน` as three `.radio` options — เงินอุดหนุน /
+เงินรายได้สถานศึกษา / เงินอื่น ๆ.
+
+`เพิ่มเติม` (ไม่บังคับ): แนบเอกสารโครงการ → `scan`, and เพิ่มผู้ร่วมโครงการ,
+a toggling row whose tag flips between `เพิ่ม` and `2 คน`.
+
+Footer primary `สร้างโครงการ` (or `กรอกข้อมูลให้ครบก่อน`) paints the z-60
+`สร้างโครงการสำเร็จ` overlay → `project`. No tab bar.
+
+## Screen 10 — Account profile
+
+Brand header with a 44×44 help button → `help`. Avatar block (60×60 initial,
+name, email, `school · role`) inside a 2px border.
+
+`ข้อมูลบัญชี` — five label/value rows, then a neutral tick banner
+`โรงเรียนได้รับการยืนยันแล้ว`.
+
+`ตั้งค่า` — การแจ้งเตือน as a 52×28 square toggle (accent track, `--color-bg`
+knob, `justify-content` flips the knob side), then four chevron rows:
+แก้ไขข้อมูลส่วนตัว, เปลี่ยนรหัสผ่าน, การยืนยัน OTP, ความปลอดภัย.
+
+`พื้นที่อันตราย` — a 2px `--color-accent` top rule, an accent-700 `h6`, an
+explanatory line, and `ออกจากระบบ` as a `.btn-secondary` with accent border and
+accent-700 text → `login`. Tab bar (Profile active).
+
+## Screen 11 — Help / how it works
+
+Back arrow → `profile`. `วิธีใช้งาน KruScan` as an eight-step vertical flow:
+a 28×28 accent square holding the step number, a 2px rail between steps, then a
+15.5px/800 label and a 12.5px/62% note.
+
+`คำถามที่พบบ่อย` — eight FAQ entries using the **same disclosure row** as
+Screen 6, which is what makes it a shared pattern rather than a one-off. Answers
+are 14px/1.7 at 78% opacity.
+
+Closes with a bordered contact block whose primary `ติดต่อทีมสนับสนุน` opens a
+z-50 sheet listing อีเมล, โทรศัพท์ and เวลาทำการ. No tab bar.
 
 ---
 
 ## Flow
 
 ```
-login → otp → scan → processing → review → categorize → disbursement
-      → payment → crossdoc → assetClassify → assetRegister → export
-                                    └ (วัสดุ) ──────────────→ export
+login ──▶ otp ──▶ home ──▶ project ──▶ scan ──▶ processing ──▶ review ──▶ export ──▶ home
+  │                 │                                                        │
+  └─▶ register ─────┘                                                        │
+        │                                                                    │
+        └─▶ otp                                                              │
+                                                                             │
+home ◀── tab bar ──▶ schedule                                                │
+             └─────▶ profile ──▶ help                                        │
+home ──▶ newProject ──▶ project                                              │
+review ── บันทึกไว้ก่อน ────────────────────────────────────────────────────▶ home
 ```
 
-All thirteen screens are built and the full order above runs on footer buttons
-alone. Targets live in `flow.js`; handlers call `go('review')`.
+Targets live in `flow.js`; handlers call `go(key)` and never a raw
+`location.href`.
 
-Three gates must be cleared by hand — they are what the demo is for:
+### Gates cleared by hand
 
-| Screen | Gate | Cleared by |
+| Gate | Screen | Cleared by |
 |---|---|---|
-| 0b | footer locked until six digits | tapping `กรอกรหัสถัดไป` six times |
-| 3 | footer locked by the 72% amount | opening the field and tapping `ยืนยันค่านี้` |
-| 7 | footer locked by the ฿450 mismatch | tapping `แก้ยอดชำระเป็น ฿8,500` |
+| Six OTP digits | 2b | Tapping `กรอกรหัสถัดไป` six times |
+| The 62% จำนวน field | 6 | `แก้ด้วยเสียง` (voice sheet) or `แก้เอง` (z-50 editor) |
 
-Two more validations are demonstrable but not blocking by default: entering
-`CHQ-008400` on Screen 6 trips the cheque-uniqueness rule, and entering `2` on
-Screen 5 trips the disbursement-count rule.
+Clearing the second gate also flips `ยอดคำนวณ` from ฿170,000 to ฿85,000 and the
+`ยอดคำนวณตรงกับยอดในใบเสร็จ` check from failing to passing — one action, three
+visible consequences. That is the demo's payoff.
+
+### Demonstrable but non-blocking
+
+Switching payment method or asset type on Screen 6 raises the
+`แก้ไขจากที่ AI แนะนำ` banner and rewrites the section's field set and summary
+line, but never blocks the footer.

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SchoolBackoffice AI — preview</title>
+<title>KruScan — preview</title>
 <link rel="stylesheet" href="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/styles.css">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap">
@@ -22,7 +22,7 @@
 </style>
 </head>
 <body>
-  <h4 style="margin:0 0 4px">SchoolBackoffice AI</h4>
+  <h4 style="margin:0 0 4px">KruScan</h4>
   <p style="font-size:13px;margin:0 0 8px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">
     ทุกหน้าจอที่ขนาดจริง 390×844 — คลิกชื่อหน้าจอเพื่อเปิดเต็มจอ
   </p>
@@ -34,22 +34,19 @@
 <script>
 /* Add a screen here when it lands. `file: null` renders a placeholder. */
 var SCREENS = [
-  { n: '0',  label: 'เข้าสู่ระบบ',            file: 'LoginScreen.dc.html' },
-  { n: '0b', label: 'ยืนยันรหัส OTP',         file: 'OtpScreen.dc.html' },
-  { n: '1',  label: 'สแกนเอกสาร',             file: 'ScanScreen.dc.html' },
-  { n: '2',  label: 'AI ประมวลผล',            file: 'ProcessingScreen.dc.html' },
-  { n: '3',  label: 'ตรวจสอบข้อมูล',          file: 'ReviewScreen.dc.html' },
-  { n: '4',  label: 'จัดหมวดหมู่',            file: 'CategorizeScreen.dc.html' },
-  { n: '5',  label: 'ตรวจสอบการเบิกจ่าย',     file: 'DisbursementScreen.dc.html' },
-  { n: '6',  label: 'ตรวจสอบการชำระเงิน',     file: 'PaymentScreen.dc.html' },
-  { n: '7',  label: 'ตรวจสอบข้ามเอกสาร',      file: 'CrossDocScreen.dc.html' },
-  { n: '8',  label: 'จำแนกครุภัณฑ์',          file: 'AssetClassifyScreen.dc.html' },
-  { n: '9',  label: 'ลงทะเบียนครุภัณฑ์',      file: 'AssetRegisterScreen.dc.html' },
-  { n: '10', label: 'ศูนย์ตรวจสอบ',           file: 'ValidationScreen.dc.html' },
-  { n: '11', label: 'ส่งออกข้อมูล',           file: 'ExportScreen.dc.html' },
-  { n: '12', label: 'หน้าแรก',                file: 'HomeScreen.dc.html' },
-  { n: '13', label: 'ตารางงาน',               file: 'ScheduleScreen.dc.html' },
-  { n: '14', label: 'บัญชีของฉัน',            file: 'ProfileScreen.dc.html' },
+  { n: '1',  label: 'เข้าสู่ระบบ',         file: 'LoginScreen.dc.html' },
+  { n: '2',  label: 'สมัครใช้งาน',         file: 'RegisterScreen.dc.html' },
+  { n: '2b', label: 'ยืนยันรหัส OTP',      file: 'OtpScreen.dc.html' },
+  { n: '3',  label: 'หน้าแรก',             file: 'HomeScreen.dc.html' },
+  { n: '4',  label: 'รายละเอียดโครงการ',   file: 'ProjectDetailScreen.dc.html' },
+  { n: '5',  label: 'สแกนเอกสาร',          file: 'ScanScreen.dc.html' },
+  { n: '5b', label: 'AI ประมวลผล',         file: 'ProcessingScreen.dc.html' },
+  { n: '6',  label: 'ตรวจสอบข้อมูลจาก AI', file: 'ReviewScreen.dc.html' },
+  { n: '7',  label: 'ส่งออกข้อมูล',        file: 'ExportScreen.dc.html' },
+  { n: '8',  label: 'ภาพรวมโครงการ',       file: 'ScheduleScreen.dc.html' },
+  { n: '9',  label: 'สร้างโครงการ',        file: 'CreateProjectScreen.dc.html' },
+  { n: '10', label: 'บัญชีของฉัน',         file: 'ProfileScreen.dc.html' },
+  { n: '11', label: 'ช่วยเหลือ',           file: 'HelpScreen.dc.html' },
 ];
 
 document.getElementById('grid').innerHTML = SCREENS.map(function (s) {

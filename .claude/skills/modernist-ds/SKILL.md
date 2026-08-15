@@ -137,11 +137,39 @@ position:relative; overflow:hidden` — fixed header, scrolling middle
 (`flex:1; overflow:auto`), fixed action footer.
 
 **Overlays** are `position:absolute; inset:0` siblings inside the screen root,
-with z-index 40 (menu), 50 (camera / sheet), 60 (success). Bottom sheets have
+with z-index 50 (camera / sheet) and 60 (success). Bottom sheets have
 `border-top: 2px solid var(--color-text)` — heavier than a normal divider.
 
 **Selected state** = `--color-accent-100` background. Not a checkmark alone,
-not a border change.
+not a border change. This rule is written for *list rows*; see the tab bar for
+the one place it deliberately does not apply.
+
+**Bottom tab bar.** A `flex:none` sibling **after** the action footer, still
+inside the root column, with `border-top: 2px solid var(--color-text)`. A
+screen carrying both stacks: scroll → footer (2px divider rule) → tab bar (2px
+ink rule). The heavier ink rule marks app chrome; the divider rule marks the
+screen's own action band.
+
+Three 62px tabs, `flex:1` each. Active = a 2px `--color-accent` top rule plus
+`--color-accent-700` icon and label, **not** an `--color-accent-100` fill: a
+130×62 tinted block sitting under an accent primary button reads as a second
+CTA. Each button carries `margin-top:-2px` so the accent segment overprints the
+bar's own rule and the top edge stays one unbroken line with a coloured segment
+cut into it. Set `aria-current="page"` on the active tab.
+
+**Square FAB.** `position:absolute; z-index:30`, 60×60, `--color-accent` fill,
+`2px solid var(--color-text)` border, glyph in `--color-bg`. Square, no shadow —
+the ink border does the lifting the system refuses to do with elevation. z-30
+keeps every overlay above it.
+
+**Disclosure row.** 15px/800 title with a 12px/55% summary beneath that carries
+the collapsed content's key value, so the section reads without being opened.
+Optional count chip, then a 36×36 chevron. `border-bottom: 2px solid
+var(--color-divider)`.
+
+The chevron **swaps its `d` string** — `M6 9l6 6 6-6` closed, `M6 15l6-6 6 6`
+open. Never a CSS rotation: this system has no transitions, and a rotating
+chevron implies one.
 
 ---
 
@@ -170,7 +198,7 @@ conventions into project screens.
 
 UI copy is Thai. Headings are sentence-style and plain-spoken, not marketing
 voice. Keep `aria-label` in Thai too. Latin product names stay Latin
-(`SchoolBackoffice AI`).
+(`KruScan`, `Excel`, `CHQ-008421`).
 
 ---
 
@@ -182,7 +210,12 @@ voice. Keep `aria-label` in Thai too. Latin product names stay Latin
 - Introduce a second typeface, or use font-weight 500/600/700 for headings.
 - Center button labels or center-align body text.
 - Swap square-linecap icons for rounded ones, or add an icon library.
-- Add animation or transitions unless explicitly asked.
+- Add animation or transitions unless explicitly asked. **Two sanctioned
+  exceptions already exist** and must not be stripped as violations: the
+  `setInterval` ticker driving `ProcessingScreen.dc.html`, and the scripted
+  ticker driving `ReviewScreen.dc.html`'s voice sheet. Both are stepped state
+  changes started on demand and cleared in `componentWillUnmount` — no CSS
+  transitions, no keyframes.
 - Convert screens to React/Tailwind/a component framework.
 - Refactor or "clean up" `styles.css` while doing feature work.
 - Restyle existing screens while adding a new one. Touch only what was asked.
