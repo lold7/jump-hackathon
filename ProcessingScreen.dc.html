@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/styles.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap">
+<script src="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/_ds_bundle.js"></script>
+<script src="flow.js"></script>
+<style>:root{--font-body:"Archivo","Noto Sans Thai",system-ui,sans-serif;--font-heading:"Archivo","Noto Sans Thai",system-ui,sans-serif}</style>
+</helmet>
+<div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <header style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+    <button onClick="{{ openMenu }}" aria-label="เมนู" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+    </button>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+    <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px">บ</div>
+  </header>
+
+  <div style="flex:1;overflow:auto;padding:22px 16px 18px">
+    <button onClick="{{ skip }}" aria-label="ข้ามการประมวลผล" style="display:block;width:100%;text-align:left;background:transparent;border:0;padding:0;cursor:pointer;color:var(--color-text);font-family:var(--font-body)">
+      <h1 style="font-size:27px;line-height:1.22;letter-spacing:-0.01em;margin:0 0 10px;text-wrap:pretty">{{ title }}</h1>
+    </button>
+    <p style="font-size:14px;line-height:1.65;margin:0 0 22px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">{{ subtitle }}</p>
+
+    <div style="display:flex;align-items:baseline;gap:8px">
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:46px;line-height:1;letter-spacing:-0.015em">{{ doneCount }}</span>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:20px;line-height:1;color:color-mix(in srgb, var(--color-text) 55%, transparent)">/ 12</span>
+      <span style="margin-left:auto;font-size:12px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">เอกสารที่อ่านแล้ว</span>
+    </div>
+
+    <div style="display:flex;gap:2px;margin-top:12px">
+      <sc-for list="{{ cells }}" as="cell" hint-placeholder-count="12">
+        <span style="flex:1;height:8px;background:{{ cell.fill }}"></span>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ running }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:18px;border-left:4px solid var(--color-accent);background:var(--color-accent-100);padding:12px 14px">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700)">{{ currentStage }}</div>
+        <div style="font-size:13px;line-height:1.6;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ currentName }}</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ finished }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:18px;border-top:2px solid var(--color-divider);padding-top:14px;display:grid;grid-template-columns:1fr auto;gap:8px 12px;font-size:13px;line-height:1.5">
+        <sc-for list="{{ summary }}" as="row" hint-placeholder-count="4">
+          <span style="color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ row.label }}</span>
+          <span style="font-family:var(--font-heading);font-weight:800;text-align:right">{{ row.value }}</span>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <div style="margin-top:24px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
+        <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">เอกสารในชุดนี้</h6>
+        <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">12 รายการ</span>
+      </div>
+      <sc-for list="{{ docs }}" as="doc" hint-placeholder-count="12">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);opacity:{{ doc.opacity }}">
+          <div style="width:40px;height:52px;flex:none;background:{{ doc.thumbBg }};border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;color:var(--color-neutral-700);font-family:var(--font-heading);font-weight:800;font-size:9px">{{ doc.ext }}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:14px;font-weight:600;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ doc.name }}</div>
+            <div style="font-size:12px;line-height:1.5;color:{{ doc.stageColor }}">{{ doc.stage }}</div>
+          </div>
+          <sc-if value="{{ doc.done }}" hint-placeholder-val="{{ false }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg)">
+    <button onClick="{{ next }}" disabled="{{ running }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ nextLabel }}</button>
+  </div>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:40;background:var(--color-bg);display:flex;flex-direction:column">
+      <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--color-divider)">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:15px">เมนู</div>
+        <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+        </button>
+      </div>
+      <div style="flex:1;overflow:auto">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+          <button onClick="{{ item.go }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 16px;background:{{ item.bg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;font-family:var(--font-heading);font-weight:800;font-size:18px;line-height:1.4;color:var(--color-text)">
+            <span>{{ item.label }}</span>
+            <span style="font-size:12px;font-family:var(--font-body);font-weight:400;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ item.note }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <div style="flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:2px solid var(--color-divider)">
+        <div style="width:40px;height:40px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:14px">บ</div>
+        <div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">ครูเบญจมาศ</div>
+          <div style="font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">โรงเรียนตัวอย่าง · ใช้งานอยู่</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const FILES = [
+  { name: 'ใบเสนอราคา SCI-2026-024.pdf', ext: 'PDF' },
+  { name: 'ใบส่งของ 0421.png', ext: 'PNG' },
+  { name: 'ใบเบิกพัสดุ 0033.pdf', ext: 'PDF' },
+  { name: 'IMG_2041.jpg', ext: 'JPG' },
+  { name: 'ใบเสร็จ ร้านวิทยาภัณฑ์.jpg', ext: 'JPG' },
+  { name: 'ใบสำคัญรับเงิน 0088.jpg', ext: 'JPG' },
+  { name: 'เช็ค CHQ-008421.jpg', ext: 'JPG' },
+  { name: 'ใบเสร็จ ร้านครุภัณฑ์ไทย.jpg', ext: 'JPG' },
+  { name: 'ใบส่งของ 0422.png', ext: 'PNG' },
+  { name: 'ใบเบิกพัสดุ 0034.pdf', ext: 'PDF' },
+  { name: 'ใบสำคัญรับเงิน 0089.jpg', ext: 'JPG' },
+  { name: 'ใบเสร็จ ร้านสมใจ INV-0012.jpg', ext: 'JPG' },
+];
+const STAGES = ['อ่านตัวอักษร', 'จำแนกประเภท', 'ดึงข้อมูล'];
+const PER_DOC = STAGES.length;
+const TOTAL = FILES.length * PER_DOC;
+const MUTED = 'color-mix(in srgb, var(--color-text) 55%, transparent)';
+
+class Component extends DCLogic {
+  state = { tick: 0, menuOpen: false };
+
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      if (this.state.tick >= TOTAL) { this.stop(); return; }
+      this.setState(s => ({ tick: s.tick + 1 }));
+    }, 120);
+  }
+
+  componentWillUnmount() { this.stop(); }
+
+  stop = () => { if (this.timer) { clearInterval(this.timer); this.timer = null; } };
+
+  renderVals() {
+    const { tick } = this.state;
+    const doneCount = Math.min(Math.floor(tick / PER_DOC), FILES.length);
+    const running = doneCount < FILES.length;
+    const activeIndex = running ? doneCount : -1;
+    const activeStage = running ? STAGES[tick % PER_DOC] : '';
+
+    const nav = [
+      { label: 'เอกสาร', note: 'คุณอยู่ที่นี่', here: true },
+      { label: 'การเบิกจ่าย', note: 'รอตรวจ 8 รายการ', to: 'disbursement' },
+      { label: 'ครุภัณฑ์', note: '7 รายการ', to: 'assetRegister' },
+      { label: 'โครงการ', note: '4 โครงการ', to: 'validation' },
+      { label: 'ประวัติการใช้งาน', note: '' },
+      { label: 'ช่วยเหลือ', note: '' },
+    ];
+
+    return {
+      title: running ? 'AI กำลังอ่านเอกสาร' : 'อ่านเอกสารครบแล้ว',
+      subtitle: running
+        ? 'ระบบกำลังอ่านตัวอักษร จำแนกประเภทเอกสาร และดึงข้อมูลออกมา แตะหัวข้อเพื่อข้าม'
+        : 'ตรวจสอบข้อมูลที่ AI อ่านได้ แล้วแก้ไขส่วนที่ยังไม่ถูกต้อง',
+      doneCount: doneCount,
+      running: running,
+      finished: !running,
+      currentName: running ? FILES[activeIndex].name : '',
+      currentStage: activeStage,
+      nextLabel: running ? 'กำลังประมวลผล…' : 'ดูผลลัพธ์',
+      summary: [
+        { label: 'ใบเสร็จ', value: '8 ฉบับ' },
+        { label: 'การเบิกจ่าย', value: '8 รายการ' },
+        { label: 'ครุภัณฑ์', value: '7 รายการ' },
+        { label: 'ยอดรวม', value: '฿40,980' },
+      ],
+      cells: FILES.map((f, i) => ({
+        fill: i < doneCount ? 'var(--color-accent)'
+            : i === activeIndex ? 'var(--color-accent-400)'
+            : 'var(--color-neutral-300)',
+      })),
+      docs: FILES.map((f, i) => {
+        const done = i < doneCount;
+        const active = i === activeIndex;
+        return {
+          name: f.name,
+          ext: f.ext,
+          done: done,
+          stage: done ? 'เสร็จ' : active ? activeStage : 'รอคิว',
+          stageColor: active ? 'var(--color-accent-700)' : MUTED,
+          thumbBg: active ? 'var(--color-accent-100)' : 'var(--color-neutral-200)',
+          opacity: done || active ? '1' : '0.55',
+        };
+      }),
+      navItems: nav.map(n => ({
+        label: n.label, note: n.note,
+        bg: n.here ? 'var(--color-accent-100)' : 'transparent',
+        go: n.to ? () => go(n.to) : () => this.setState({ menuOpen: false }),
+      })),
+      menuOpen: this.state.menuOpen,
+      openMenu: () => this.setState({ menuOpen: true }),
+      closeAll: () => this.setState({ menuOpen: false }),
+      skip: () => { this.stop(); this.setState({ tick: TOTAL }); },
+      next: () => go('review'),
+    };
+  }
+}
+</script>
+</body>
+</html>
