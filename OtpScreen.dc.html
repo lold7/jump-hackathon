@@ -28,21 +28,30 @@
     <h1 style="font-size:31px;line-height:1.2;letter-spacing:-0.015em;margin:0 0 10px;text-wrap:pretty">ยืนยันรหัส OTP</h1>
     <p style="font-size:14px;line-height:1.65;margin:0 0 28px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">กรอกรหัส 6 หลักที่ส่งไปยัง 08X-XXX-4471</p>
 
-    <div style="display:flex;gap:8px">
-      <sc-for list="{{ boxes }}" as="b" hint-placeholder-count="6">
-        <div style="flex:1;height:58px;background:var(--color-surface);border:{{ b.border }};display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1">{{ b.char }}</div>
-      </sc-for>
+    <div style="position:relative">
+      <div style="display:flex;gap:8px">
+        <sc-for list="{{ boxes }}" as="b" hint-placeholder-count="6">
+          <div style="flex:1;height:58px;background:var(--color-surface);border:{{ b.border }};display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1">{{ b.char }}</div>
+        </sc-for>
+      </div>
+      <input id="otpCode" aria-label="รหัส OTP 6 หลัก" type="text" inputMode="numeric" maxLength="6" value="{{ digits }}" onChange="{{ type }}" onKeyDown="{{ keydown }}" style="position:absolute;inset:0;width:100%;height:100%;padding:0;margin:0;background:transparent;border:0;outline:none;opacity:0;font:inherit;cursor:text">
     </div>
 
-    <div style="display:flex;align-items:center;gap:12px;margin-top:20px">
-      <button onClick="{{ fill }}" class="btn btn-secondary" style="justify-content:flex-start;height:44px;font-size:14px;padding-inline:14px">{{ fillLabel }}</button>
-      <button onClick="{{ clear }}" class="btn btn-ghost" style="height:44px;font-size:14px">ล้างรหัส</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px">
+      <span style="font-size:11.5px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ hint }}</span>
+      <button onClick="{{ clear }}" class="btn btn-ghost" style="height:32px;font-size:13px;padding-inline:0">ล้างรหัส</button>
     </div>
+
+    <sc-if value="{{ wrong }}" hint-placeholder-val="{{ false }}">
+      <div style="margin-top:4px;font-size:12px;line-height:1.6;color:var(--color-accent-700)">รหัส OTP ไม่ถูกต้อง ลองใหม่อีกครั้ง</div>
+    </sc-if>
 
     <div style="margin-top:26px;border-top:2px solid var(--color-divider);padding-top:16px;display:flex;align-items:baseline;justify-content:space-between;gap:12px">
       <span style="font-size:13px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 62%, transparent)">ยังไม่ได้รับรหัส?</span>
       <span style="font-size:13px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ขอรหัสใหม่ได้ใน 60 วินาที</span>
     </div>
+
+    <div style="margin-top:16px;font-size:11.5px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ต้นแบบสำหรับสาธิต รหัสทดสอบคือ 402817</div>
   </div>
 
   <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg)">
@@ -60,22 +69,35 @@ class Component extends DCLogic {
   renderVals() {
     const { digits } = this.state;
     const incomplete = digits.length < LEN;
+    /* Only judge the code once all six digits are in — flagging a mismatch
+       mid-typing would put the field in an error state on the first keystroke. */
+    const wrong = !incomplete && digits !== CODE;
+    const blocked = incomplete || wrong;
+    const submit = () => { if (!blocked) go('home'); };
 
     return {
+      digits: digits,
       boxes: Array.from({ length: LEN }, (_, i) => ({
         char: digits[i] || '',
-        border: i === digits.length && incomplete
+        border: wrong
           ? '2px solid var(--color-accent)'
-          : '1px solid var(--color-divider)',
+          : i === digits.length && incomplete
+            ? '2px solid var(--color-accent)'
+            : '1px solid var(--color-divider)',
       })),
 
-      incomplete: incomplete,
-      fillLabel: incomplete ? 'กรอกรหัสถัดไป' : 'กรอกครบแล้ว',
-      fill: () => this.setState(s => ({ digits: CODE.slice(0, Math.min(s.digits.length + 1, LEN)) })),
+      /* The input is layered transparently over the boxes, so the value has to
+         be filtered back to digits here — the boxes are the only display. */
+      type: e => this.setState({ digits: e.target.value.replace(/\D/g, '').slice(0, LEN) }),
+      keydown: e => { if (e.key === 'Enter') submit(); },
       clear: () => this.setState({ digits: '' }),
 
-      submitLabel: incomplete ? 'กรอกรหัสให้ครบ 6 หลัก' : 'ยืนยัน',
-      submit: () => go('home'),
+      wrong: wrong,
+      hint: digits ? 'กรอกแล้ว ' + digits.length + ' จาก 6 หลัก' : 'แตะช่องด้านบนแล้วพิมพ์รหัส 6 หลัก',
+
+      incomplete: blocked,
+      submitLabel: incomplete ? 'กรอกรหัสให้ครบ 6 หลัก' : wrong ? 'รหัสไม่ถูกต้อง' : 'ยืนยัน',
+      submit: submit,
       back: () => go('login'),
     };
   }

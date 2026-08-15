@@ -22,7 +22,6 @@
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
     <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">ตรวจสอบข้อมูลจาก AI</div>
-    <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px">บ</div>
   </header>
 
   <div style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 6px;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
@@ -31,7 +30,7 @@
     </button>
     <div style="flex:1;min-width:0;text-align:center">
       <div style="font-family:var(--font-heading);font-weight:800;font-size:14px;line-height:1.2">{{ pagerLabel }}</div>
-      <div style="font-size:11px;line-height:1.4;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ docId }} · เรียงตามความมั่นใจต่ำสุดก่อน</div>
+      <div style="font-size:11px;line-height:1.4;color:color-mix(in srgb, var(--color-text) 55%, transparent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ docSub }}</div>
     </div>
     <button onClick="{{ next }}" disabled="{{ atLast }}" aria-label="เอกสารถัดไป" style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:{{ nextColor }}">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M9 5l7 7-7 7"></path></svg>
@@ -133,9 +132,8 @@
           <div style="padding:4px 0 10px">
 
             <sc-if value="{{ s.hasChoices }}" hint-placeholder-val="{{ false }}">
-              <div style="display:flex;align-items:baseline;justify-content:space-between;padding:10px 0 8px">
+              <div style="padding:10px 0 8px">
                 <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">{{ s.choiceLabel }}</h6>
-                <span class="tag tag-neutral" style="font-size:11px;font-family:var(--font-heading);font-weight:800">{{ s.choiceChip }}</span>
               </div>
               <sc-for list="{{ s.choices }}" as="c" hint-placeholder-count="4">
                 <label class="radio" style="width:100%;box-sizing:border-box;align-items:flex-start;padding:12px;background:{{ c.bg }};border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);font-size:15px">
@@ -174,21 +172,6 @@
               </div>
             </sc-if>
 
-            <sc-if value="{{ s.hasQr }}" hint-placeholder-val="{{ false }}">
-              <div style="margin-top:16px;display:flex;gap:14px;align-items:flex-start">
-                <div style="width:96px;height:96px;flex:none;background:var(--color-neutral-200);border:2px solid var(--color-text);display:flex;align-items:center;justify-content:center">
-                  <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2" stroke-linecap="square">
-                    <path d="M3 3h6v6H3zM15 3h6v6h-6zM3 15h6v6H3z"></path>
-                    <path d="M15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z"></path>
-                  </svg>
-                </div>
-                <div style="min-width:0">
-                  <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">QR สำหรับติดครุภัณฑ์</div>
-                  <div style="font-size:12.5px;line-height:1.6;margin-top:4px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">พิมพ์แล้วติดที่ตัวครุภัณฑ์ สแกนเพื่อดูประวัติการใช้งานและผู้รับผิดชอบ</div>
-                </div>
-              </div>
-            </sc-if>
-
           </div>
         </sc-if>
       </sc-for>
@@ -198,7 +181,7 @@
       <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">การตรวจสอบ</h6>
       <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ checkLabel }}</span>
     </div>
-    <sc-for list="{{ checks }}" as="c" hint-placeholder-count="5">
+    <sc-for list="{{ checks }}" as="c" hint-placeholder-count="4">
       <div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
         <sc-if value="{{ c.ok }}" hint-placeholder-val="{{ true }}">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
@@ -213,7 +196,7 @@
       </div>
     </sc-for>
 
-    <p style="font-size:12.5px;line-height:1.6;margin:16px 0 0;color:color-mix(in srgb, var(--color-text) 62%, transparent)">ทุกช่องแก้ไขได้ ตัวเลขเปอร์เซ็นต์คือความมั่นใจของ AI ในการอ่านช่องนั้น</p>
+    <p style="font-size:12.5px;line-height:1.6;margin:16px 0 0;color:color-mix(in srgb, var(--color-text) 62%, transparent)">ทุกช่องแก้ไขได้ ช่องที่ AI อ่านได้ไม่ชัดจะถูกทำเครื่องหมายไว้ ต้องยืนยันก่อนจึงจะส่งออกได้</p>
   </div>
 
   <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg);display:flex;flex-direction:column;gap:8px">
@@ -232,10 +215,28 @@
         </div>
         <div style="flex:1;overflow:auto;padding:16px">
           <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
-            <label for="fieldInput" style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">ค่าที่ AI อ่านได้</label>
-            <span class="{{ sheetChipClass }}" style="font-size:11px;font-family:var(--font-heading);font-weight:800">{{ sheetChipText }}</span>
+            <div style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">ค่าที่ AI อ่านได้</div>
+            <sc-if value="{{ sheetHasChip }}" hint-placeholder-val="{{ false }}">
+              <span class="{{ sheetChipClass }}" style="font-size:11px;font-family:var(--font-heading);font-weight:800">{{ sheetChipText }}</span>
+            </sc-if>
           </div>
-          <input id="fieldInput" class="input" value="{{ draft }}" onChange="{{ onDraft }}" style="height:46px;font-size:16px">
+          <sc-if value="{{ sheetIsText }}" hint-placeholder-val="{{ true }}">
+            <input class="input" aria-label="{{ sheetTitle }}" value="{{ draft }}" onChange="{{ onDraft }}" style="height:46px;font-size:16px">
+          </sc-if>
+          <sc-if value="{{ sheetIsChoice }}" hint-placeholder-val="{{ false }}">
+            <div role="radiogroup" aria-label="{{ sheetTitle }}" style="border-top:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+              <sc-for list="{{ sheetChoices }}" as="o" hint-placeholder-count="7">
+                <label class="radio" style="width:100%;box-sizing:border-box;align-items:center;gap:10px;padding:13px 12px;background:{{ o.bg }};border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);font-size:15px">
+                  <input type="radio" name="sheetChoice" checked="{{ o.checked }}" onChange="{{ o.pick }}">
+                  <span class="dot"></span>
+                  <span style="flex:1;min-width:0;line-height:1.4">{{ o.label }}</span>
+                  <sc-if value="{{ o.isAi }}" hint-placeholder-val="{{ false }}">
+                    <span class="tag tag-neutral" style="flex:none;font-size:11px;font-family:var(--font-heading);font-weight:800">AI อ่านได้</span>
+                  </sc-if>
+                </label>
+              </sc-for>
+            </div>
+          </sc-if>
           <sc-if value="{{ sheetLow }}" hint-placeholder-val="{{ false }}">
             <div style="margin-top:14px;border-left:4px solid var(--color-accent);background:var(--color-accent-100);padding:12px 14px">
               <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700)">ต้องยืนยัน</div>
@@ -334,9 +335,12 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
-/* Confidence bands. CLAUDE.md: >=80 plain, 70-79 warn, <70 blocks export. */
+/* Confidence bands. CLAUDE.md: >=80 plain, 70-79 warn, <70 blocks export.
+   The band is shown as a colour and a word, never as a number — a confident
+   field carries no flag at all, so the two that need attention stand out. */
 const CHIP  = { ok: 'tag tag-neutral', warn: 'tag tag-accent-2', bad: 'tag tag-accent' };
 const ROWBG = { ok: 'transparent', warn: 'var(--color-accent-2-100)', bad: 'var(--color-accent-100)' };
+const FLAG  = { warn: 'ควรตรวจ', bad: 'ต้องยืนยัน' };
 const band  = c => (c >= 80 ? 'ok' : (c >= 70 ? 'warn' : 'bad'));
 const baht  = n => '฿' + n.toLocaleString('en-US');
 const DIM   = 'color-mix(in srgb, var(--color-text) 30%, transparent)';
@@ -350,8 +354,16 @@ const LABEL = {
   cashDate: 'วันที่ชำระ', cashAmount: 'จำนวนเงิน',
   trBank: 'ธนาคารปลายทาง', trAccount: 'เลขที่บัญชี', trRef: 'เลขอ้างอิงรายการ', trDate: 'วันที่โอน',
   baBank: 'ชื่อธนาคาร', baName: 'ชื่อบัญชี', baNo: 'เลขที่บัญชี', baDate: 'วันที่', baAmount: 'จำนวนเงิน',
-  assetCat: 'หมวดหมู่ครุภัณฑ์', assetId: 'เลขครุภัณฑ์', assetLoc: 'สถานที่จัดเก็บ', assetOwner: 'ผู้รับผิดชอบ',
 };
+
+/* Fields the editor offers as a pick-list instead of a free-text box. The
+   value AI read is always prepended if it is not already in the list, so an
+   unlisted bank stays selectable and stays the checked option. */
+const BANKS = [
+  'ธนาคารกรุงไทย', 'ธนาคารออมสิน', 'ธนาคารกรุงเทพ',
+  'ธนาคารกสิกรไทย', 'ธนาคารไทยพาณิชย์', 'ธ.ก.ส.',
+];
+const CHOICE_FIELDS = { chequeBank: BANKS, trBank: BANKS, baBank: BANKS };
 
 const FACT_KEYS = ['vendor', 'date', 'item', 'qty', 'unit', 'total'];
 const DOC_KEYS  = ['docType', 'finType', 'project', 'fund'];
@@ -363,93 +375,92 @@ const PAY_METHODS = [
   { id: 'bank',     label: 'บัญชีธนาคาร',   note: 'ระบุชื่อบัญชีและเลขที่บัญชี',    keys: ['baBank', 'baName', 'baNo', 'baDate', 'baAmount'] },
 ];
 
-const ASSET_TYPES = [
-  { id: 'durable',    label: 'ครุภัณฑ์', note: 'มูลค่าต่อหน่วยเกิน ฿5,000 และใช้งานได้เกิน 1 ปี ต้องลงทะเบียน', keys: ['assetCat', 'assetId', 'assetLoc', 'assetOwner'] },
-  { id: 'consumable', label: 'วัสดุ',    note: 'ของใช้สิ้นเปลือง ไม่ต้องลงทะเบียนครุภัณฑ์',                      keys: [] },
-];
-
 /* The voice demo. `to` and the receipt total are the only two numbers that
    have to agree — change both together if you re-script the correction. */
 const VOICE = { transcript: 'เปลี่ยนจำนวนเป็น 10 ชิ้น', key: 'qty', from: '20', to: '10' };
 const VSTEP = { listen: 1, transcript: 7, apply: 12, done: 17 };
 const BARS  = [10, 22, 16, 30, 20, 12, 26, 18, 24, 14, 28, 16];
 
-const DOCS = [
-  {
-    id: 'DOC-0012', unitPrice: 8500, receiptTotal: 85000,
-    v: {
-      vendor: 'ร้าน ABC', date: '15/08/2026', item: 'กล้องจุลทรรศน์', qty: '20', unit: '฿8,500', total: '฿85,000',
-      docType: 'ใบเสร็จ', finType: 'บจ.', project: 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์', fund: 'เงินอุดหนุน',
-      chequeNo: 'CHQ-008421', chequeDate: '15/08/2026', chequeBank: 'ธนาคารตัวอย่าง', chequeAmount: '฿85,000', chequeStatus: 'ยังไม่ขึ้นเงิน',
-      cashDate: '15/08/2026', cashAmount: '฿85,000',
-      trBank: 'ธนาคารตัวอย่าง', trAccount: '123-4-56789-0', trRef: 'TRF-20260815-0042', trDate: '15/08/2026',
-      baBank: 'ธนาคารตัวอย่าง', baName: 'ร้าน ABC', baNo: '123-4-56789-0', baDate: '15/08/2026', baAmount: '฿85,000',
-      assetCat: 'ครุภัณฑ์วิทยาศาสตร์', assetId: 'SCI-000234', assetLoc: 'ห้องปฏิบัติการวิทยาศาสตร์ 1', assetOwner: 'ครูเบญจมาศ',
-    },
-    c: {
-      vendor: 91, date: 95, item: 93, qty: 62, unit: 96, total: 95,
-      docType: 96, finType: 92, project: 94, fund: 93,
-      chequeNo: 95, chequeDate: 94, chequeBank: 92, chequeAmount: 95, chequeStatus: 90,
-      cashDate: 94, cashAmount: 95,
-      trBank: 92, trAccount: 90, trRef: 93, trDate: 94,
-      baBank: 92, baName: 91, baNo: 90, baDate: 94, baAmount: 95,
-      assetCat: 94, assetId: 94, assetLoc: 87, assetOwner: 91,
-    },
-    why: 'ตัวเลขในช่องจำนวนเขียนด้วยลายมือและมีรอยแก้ ทำให้ AI แยกไม่ออกระหว่าง 10 กับ 20 กรุณาตรวจสอบกับเอกสารต้นฉบับ',
-    projectCode: 'SCI-2026-024',
-  },
-  {
-    id: 'DOC-0011', unitPrice: 3200, receiptTotal: 6400,
-    v: {
-      vendor: 'ร้านวิทยาภัณฑ์', date: '14/08/2026', item: 'ชุดทดลองไฟฟ้า', qty: '2', unit: '฿3,200', total: '฿6,400',
-      docType: 'ใบสำคัญรับเงิน', finType: 'บจ.', project: 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์', fund: 'เงินอุดหนุน',
-      chequeNo: 'CHQ-008419', chequeDate: '14/08/2026', chequeBank: 'ธนาคารตัวอย่าง', chequeAmount: '฿6,400', chequeStatus: 'ขึ้นเงินแล้ว',
-      cashDate: '14/08/2026', cashAmount: '฿6,400',
-      trBank: 'ธนาคารตัวอย่าง', trAccount: '123-4-56712-0', trRef: 'TRF-20260814-0038', trDate: '14/08/2026',
-      baBank: 'ธนาคารตัวอย่าง', baName: 'ร้านวิทยาภัณฑ์', baNo: '123-4-56712-0', baDate: '14/08/2026', baAmount: '฿6,400',
-      assetCat: 'ครุภัณฑ์วิทยาศาสตร์', assetId: 'SCI-000235', assetLoc: 'ห้องปฏิบัติการวิทยาศาสตร์ 1', assetOwner: 'ครูสมชาย',
-    },
-    c: {
-      vendor: 89, date: 95, item: 87, qty: 91, unit: 94, total: 93,
-      docType: 94, finType: 91, project: 93, fund: 92,
-      chequeNo: 93, chequeDate: 94, chequeBank: 92, chequeAmount: 93, chequeStatus: 89,
-      cashDate: 93, cashAmount: 93,
-      trBank: 91, trAccount: 89, trRef: 92, trDate: 93,
-      baBank: 91, baName: 90, baNo: 89, baDate: 93, baAmount: 93,
-      assetCat: 92, assetId: 93, assetLoc: 86, assetOwner: 90,
-    },
-    projectCode: 'SCI-2026-024',
-  },
-  {
-    id: 'DOC-0010', unitPrice: 12400, receiptTotal: 12400,
-    v: {
-      vendor: 'ร้านครุภัณฑ์ไทย', date: '13/08/2026', item: 'ตู้เก็บสารเคมี', qty: '1', unit: '฿12,400', total: '฿12,400',
-      docType: 'ใบเสร็จ', finType: 'บจ.', project: 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์', fund: 'เงินอุดหนุน',
-      chequeNo: 'CHQ-008415', chequeDate: '13/08/2026', chequeBank: 'ธนาคารตัวอย่าง', chequeAmount: '฿12,400', chequeStatus: 'ขึ้นเงินแล้ว',
-      cashDate: '13/08/2026', cashAmount: '฿12,400',
-      trBank: 'ธนาคารตัวอย่าง', trAccount: '123-4-56733-0', trRef: 'TRF-20260813-0031', trDate: '13/08/2026',
-      baBank: 'ธนาคารตัวอย่าง', baName: 'ร้านครุภัณฑ์ไทย', baNo: '123-4-56733-0', baDate: '13/08/2026', baAmount: '฿12,400',
-      assetCat: 'ครุภัณฑ์วิทยาศาสตร์', assetId: 'SCI-000236', assetLoc: 'ห้องเก็บสารเคมี', assetOwner: 'ครูมาลี',
-    },
-    c: {
-      vendor: 93, date: 96, item: 90, qty: 95, unit: 96, total: 94,
-      docType: 97, finType: 93, project: 95, fund: 94,
-      chequeNo: 96, chequeDate: 95, chequeBank: 93, chequeAmount: 95, chequeStatus: 92,
-      cashDate: 95, cashAmount: 95,
-      trBank: 93, trAccount: 91, trRef: 94, trDate: 95,
-      baBank: 93, baName: 92, baNo: 91, baDate: 95, baAmount: 95,
-      assetCat: 95, assetId: 95, assetLoc: 88, assetOwner: 92,
-    },
-    projectCode: 'SCI-2026-024',
-  },
+const PROJ_CODE = 'SCI-2026-024';
+const PROJ_NAME = 'โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์';
+const FUND = 'เงินอุดหนุน';
+const BANK = 'ธนาคารตัวอย่าง';
+const ACCT = {
+  'ร้าน ABC': '123-4-56789-0',
+  'ร้านวิทยาภัณฑ์': '123-4-56712-0',
+  'ร้านครุภัณฑ์ไทย': '123-4-56733-0',
+  'โรงเรียนตัวอย่าง': '123-4-56701-0',
+};
+
+/* Base confidence per field. DOC-0012 uses these verbatim — they are the
+   canonical demo numbers — and every other document shifts them by `lift`. */
+const BASE_CONF = {
+  vendor: 91, date: 95, item: 93, qty: 91, unit: 96, total: 95,
+  docType: 96, finType: 92, project: 94, fund: 93,
+  chequeNo: 95, chequeDate: 94, chequeBank: 92, chequeAmount: 95, chequeStatus: 90,
+  cashDate: 94, cashAmount: 95,
+  trBank: 92, trAccount: 90, trRef: 93, trDate: 94,
+  baBank: 92, baName: 91, baNo: 90, baDate: 94, baAmount: 95,
+};
+const clampConf = n => Math.max(80, Math.min(98, n));
+
+/* The batch, one entry per row of ExportScreen's table and per file in
+   ProcessingScreen's queue: same twelve documents, ids, dates, vendors,
+   items, amounts and payment methods. `qty × price` equals `total` on every
+   row except DOC-0012, whose จำนวน is the 62% field the demo corrects. */
+const SPECS = [
+  { id: 'DOC-0012', docType: 'ใบเสร็จ',        finType: 'บจ.', date: '15/08/2026', vendor: 'ร้าน ABC',         item: 'กล้องจุลทรรศน์',   qty: 20, price: 8500,  total: 85000, method: 'cheque',   cheque: 'CHQ-008421', chequeStatus: 'ยังไม่ขึ้นเงิน', lift: 0,  conf: { qty: 62 },
+    why: 'ตัวเลขในช่องจำนวนเขียนด้วยลายมือและมีรอยแก้ ทำให้ AI แยกไม่ออกระหว่าง 10 กับ 20 กรุณาตรวจสอบกับเอกสารต้นฉบับ' },
+  { id: 'DOC-0011', docType: 'ใบสำคัญรับเงิน', finType: 'บจ.', date: '14/08/2026', vendor: 'ร้านวิทยาภัณฑ์',   item: 'ชุดทดลองไฟฟ้า',    qty: 2,  price: 3200,  total: 6400,  method: 'cheque',   cheque: 'CHQ-008419', chequeStatus: 'ขึ้นเงินแล้ว',  lift: -2 },
+  { id: 'DOC-0010', docType: 'ใบเสร็จ',        finType: 'บจ.', date: '13/08/2026', vendor: 'ร้านครุภัณฑ์ไทย',  item: 'ตู้เก็บสารเคมี',    qty: 1,  price: 12400, total: 12400, method: 'cheque',   cheque: 'CHQ-008415', chequeStatus: 'ขึ้นเงินแล้ว',  lift: 1 },
+  { id: 'DOC-0009', docType: 'ใบส่งของ',       finType: 'บจ.', date: '13/08/2026', vendor: 'ร้านครุภัณฑ์ไทย',  item: 'ตู้เก็บสารเคมี',    qty: 1,  price: 12400, total: 12400, method: 'transfer',                                                lift: -1, conf: { item: 76 } },
+  { id: 'DOC-0008', docType: 'ใบเบิกพัสดุ',    finType: 'งด.', date: '12/08/2026', vendor: 'โรงเรียนตัวอย่าง', item: 'กระดาษกรอง',       qty: 10, price: 85,    total: 850,   method: 'cash',                                                    lift: -3 },
+  { id: 'DOC-0007', docType: 'ใบเสร็จ',        finType: 'บจ.', date: '12/08/2026', vendor: 'ร้าน ABC',         item: 'บีกเกอร์แก้ว',      qty: 12, price: 140,   total: 1680,  method: 'cash',                                                    lift: 0 },
+  { id: 'DOC-0006', docType: 'ใบสำคัญรับเงิน', finType: 'ยจ.', date: '11/08/2026', vendor: 'ร้านวิทยาภัณฑ์',   item: 'เครื่องชั่งดิจิทัล', qty: 1,  price: 6900,  total: 6900,  method: 'bank',                                                    lift: -2 },
+  { id: 'DOC-0005', docType: 'ใบเสร็จ',        finType: 'บจ.', date: '11/08/2026', vendor: 'ร้านครุภัณฑ์ไทย',  item: 'ตู้อบความร้อน',     qty: 1,  price: 42000, total: 42000, method: 'cheque',   cheque: 'CHQ-008412', chequeStatus: 'ขึ้นเงินแล้ว',  lift: 1 },
+  { id: 'DOC-0004', docType: 'ใบส่งของ',       finType: 'บจ.', date: '10/08/2026', vendor: 'ร้าน ABC',         item: 'บีกเกอร์แก้ว',      qty: 12, price: 140,   total: 1680,  method: 'transfer',                                                lift: -1 },
+  { id: 'DOC-0003', docType: 'ใบเบิกพัสดุ',    finType: 'งด.', date: '10/08/2026', vendor: 'โรงเรียนตัวอย่าง', item: 'ถุงมือยาง',        qty: 20, price: 58,    total: 1160,  method: 'cash',                                                    lift: -3 },
+  { id: 'DOC-0002', docType: 'ใบเสนอราคา',     finType: 'บจ.', date: '08/08/2026', vendor: 'ร้าน ABC',         item: 'กล้องจุลทรรศน์',   qty: 10, price: 8500,  total: 85000, method: 'cheque',   cheque: 'CHQ-008409', chequeStatus: 'ยังไม่ขึ้นเงิน', lift: 0 },
+  { id: 'DOC-0001', docType: 'ใบเสร็จ',        finType: 'บจ.', date: '07/08/2026', vendor: 'ร้านวิทยาภัณฑ์',   item: 'หลอดทดลอง',        qty: 24, price: 88,    total: 2112,  method: 'bank',                                                    lift: -2 },
 ];
+
+const DOCS = SPECS.map(s => {
+  const amount = baht(s.total);
+  const d = s.date.split('/');
+  const acct = ACCT[s.vendor];
+  const conf = {};
+  for (const k in BASE_CONF) conf[k] = clampConf(BASE_CONF[k] + s.lift);
+  return {
+    id: s.id,
+    unitPrice: s.price,
+    receiptTotal: s.total,
+    projectCode: PROJ_CODE,
+    /* What AI picked for the payment section — the user can override it, and
+       the section then shows a "changed from AI" note. */
+    method: s.method,
+    why: s.why,
+    v: {
+      vendor: s.vendor, date: s.date, item: s.item, qty: String(s.qty), unit: baht(s.price), total: amount,
+      docType: s.docType, finType: s.finType, project: PROJ_NAME, fund: FUND,
+      chequeNo: s.cheque || '—', chequeDate: s.date, chequeBank: BANK, chequeAmount: amount,
+      chequeStatus: s.chequeStatus || 'ยังไม่ขึ้นเงิน',
+      cashDate: s.date, cashAmount: amount,
+      trBank: BANK, trAccount: acct, trRef: 'TRF-' + d[2] + d[1] + d[0] + '-' + s.id.slice(-4), trDate: s.date,
+      baBank: BANK, baName: s.vendor, baNo: acct, baDate: s.date, baAmount: amount,
+    },
+    c: { ...conf, ...s.conf },
+  };
+/* "เรียงตามความมั่นใจต่ำสุดก่อน" — so DOC-0012 and its 62% จำนวน is the
+   document the reviewer lands on. */
+}).sort((a, b) => Math.min(...Object.values(a.c)) - Math.min(...Object.values(b.c)));
 
 class Component extends DCLogic {
   state = {
     i: 0,
     edits: {}, confirmed: {}, fixedBy: '',
-    open: { doc: false, pay: false, asset: false },
-    method: 'cheque', assetType: 'durable',
+    open: { doc: false, pay: false },
+    /* Overrides only — an unset document keeps what AI picked for it. */
+    methods: {},
     sheetKey: null, draft: '',
     voiceTick: -1,
     savedOpen: false,
@@ -469,6 +480,13 @@ class Component extends DCLogic {
     return isNaN(n) ? 0 : n;
   }
 
+  methodOf(doc) { return this.state.methods[doc.id] || doc.method; }
+
+  /* Fields AI read below 70% and nobody has confirmed yet. */
+  lowFields(doc) {
+    return Object.keys(doc.c).filter(k => doc.c[k] < 70 && !this.state.confirmed[doc.id + '.' + k]);
+  }
+
   /* One row shape, used by the always-visible facts and by every section. */
   row(doc, key) {
     const conf = doc.c[key];
@@ -478,10 +496,12 @@ class Component extends DCLogic {
     return {
       label: LABEL[key],
       value: key === 'qty' ? raw + ' หน่วย' : raw,
-      showChip: !(b !== 'ok' && done),
+      /* Only an unsure field is flagged, and the flag gives way to a
+         checkmark once a human has confirmed the value. */
+      showChip: b !== 'ok' && !done,
       showTick: b !== 'ok' && done,
       chipClass: CHIP[b],
-      chipText: conf + '%',
+      chipText: FLAG[b] || '',
       rowBg: b === 'ok' || done ? 'transparent' : ROWBG[b],
       edit: () => this.setState({ sheetKey: key, draft: raw }),
     };
@@ -531,20 +551,22 @@ class Component extends DCLogic {
     const doc = DOCS[st.i];
     const key = k => doc.id + '.' + k;
 
-    /* Anything below 70% blocks until a human confirms it. */
-    const badKeys = Object.keys(doc.c).filter(k => doc.c[k] < 70 && !st.confirmed[key(k)]);
-    const errKey = badKeys[0];
-    const blocked = badKeys.length > 0;
+    /* Anything below 70% blocks until a human confirms it — anywhere in the
+       batch, not just on the document currently on screen. */
+    const errKey = this.lowFields(doc)[0];
+    const pending = DOCS.reduce((n, d) => n + this.lowFields(d).length, 0);
+    const blocked = pending > 0;
     const fixed = !!st.fixedBy && !!st.confirmed[key(VOICE.key)];
 
     const qty = this.qtyOf(doc);
     const calc = qty * doc.unitPrice;
     const calcOk = calc === doc.receiptTotal;
 
-    const method = PAY_METHODS.find(m => m.id === st.method);
-    const asset = ASSET_TYPES.find(a => a.id === st.assetType);
+    const methodId = this.methodOf(doc);
+    const method = PAY_METHODS.find(m => m.id === methodId);
+    const methodAi = PAY_METHODS.find(m => m.id === doc.method);
 
-    const payDetail = { cheque: 'chequeNo', cash: 'cashDate', transfer: 'trRef', bank: 'baNo' }[st.method];
+    const payDetail = { cheque: 'chequeNo', cash: 'cashDate', transfer: 'trRef', bank: 'baNo' }[methodId];
 
     const sections = [
       {
@@ -556,26 +578,17 @@ class Component extends DCLogic {
         key: 'pay', title: 'การชำระเงิน',
         summary: method.label + ' · ' + this.valueOf(doc, payDetail) + ' · ' + baht(doc.receiptTotal),
         rows: method.keys,
-        choiceName: 'payMethod', choiceLabel: 'วิธีการชำระเงิน', choiceChip: '95%',
-        choices: PAY_METHODS, picked: st.method, pick: id => this.setState({ method: id }),
-        aiPick: 'cheque',
-      },
-      {
-        key: 'asset', title: 'ครุภัณฑ์และวัสดุ',
-        summary: st.assetType === 'durable'
-          ? 'ครุภัณฑ์ · ' + this.valueOf(doc, 'assetCat') + ' · ' + this.valueOf(doc, 'assetId')
-          : 'วัสดุ · ไม่ต้องลงทะเบียนครุภัณฑ์',
-        rows: asset.keys,
-        choiceName: 'assetType', choiceLabel: 'ประเภทพัสดุ', choiceChip: '94%',
-        choices: ASSET_TYPES, picked: st.assetType, pick: id => this.setState({ assetType: id }),
-        aiPick: 'durable',
+        choiceName: 'payMethod', choiceLabel: 'วิธีการชำระเงิน',
+        choices: PAY_METHODS, picked: methodId,
+        pick: id => this.setState(s => ({ methods: { ...s.methods, [doc.id]: id } })),
+        aiPick: doc.method,
+        noteText: 'ระบบจะบันทึกว่าผู้ใช้เปลี่ยนวิธีการชำระเงินจาก ' + methodAi.label + ' เป็น ' + method.label,
       },
     ];
 
     const checks = [
       { label: 'ยอดคำนวณตรงกับยอดในใบเสร็จ', ok: calcOk },
       { label: 'เลขที่เช็คไม่ซ้ำกับเอกสารอื่น', ok: true },
-      { label: 'เลขครุภัณฑ์ไม่ซ้ำในทะเบียน', ok: true },
       { label: 'โครงการและแหล่งเงินตรงกัน', ok: true },
       { label: 'ครั้งที่เบิกจ่ายไม่ซ้ำในโครงการ', ok: true },
     ];
@@ -583,7 +596,13 @@ class Component extends DCLogic {
 
     const sheetKey = st.sheetKey;
     const sheetConf = sheetKey ? doc.c[sheetKey] : 0;
-    const sheetLow = !!sheetKey && sheetConf < 70 && !st.confirmed[key(sheetKey)];
+    const sheetBand = sheetKey ? band(sheetConf) : 'ok';
+    const sheetDone = !!sheetKey && !!st.confirmed[key(sheetKey)];
+    const sheetLow = sheetBand === 'bad' && !sheetDone;
+    const sheetList = sheetKey ? CHOICE_FIELDS[sheetKey] : null;
+    const sheetAi = sheetKey ? doc.v[sheetKey] : '';
+    const sheetOptions = !sheetList ? []
+      : (sheetList.includes(sheetAi) ? sheetList : [sheetAi, ...sheetList]);
 
     const tick = st.voiceTick;
     const listening = tick >= VSTEP.listen && tick < VSTEP.transcript;
@@ -594,7 +613,7 @@ class Component extends DCLogic {
     return {
       back: () => go('scan'),
       pagerLabel: 'เอกสาร ' + (st.i + 1) + ' / ' + DOCS.length,
-      docId: doc.id,
+      docSub: doc.id + ' · ' + doc.v.docType + ' · ' + baht(doc.receiptTotal),
       atFirst: st.i === 0,
       atLast: st.i === DOCS.length - 1,
       prevColor: st.i === 0 ? DIM : 'var(--color-text)',
@@ -602,12 +621,12 @@ class Component extends DCLogic {
       prev: () => this.setState(s => ({ i: Math.max(0, s.i - 1), sheetKey: null })),
       next: () => this.setState(s => ({ i: Math.min(DOCS.length - 1, s.i + 1), sheetKey: null })),
 
-      overallLabel: 'AI อ่านได้ ' + Object.keys(doc.c).length + ' ช่อง · ความมั่นใจเฉลี่ย 93%',
+      overallLabel: 'AI อ่านได้ ' + Object.keys(doc.c).length + ' ช่อง · เรียงตามความมั่นใจต่ำสุดก่อน',
 
       hasError: blocked,
       errLabel: errKey ? LABEL[errKey] : '',
       errValue: errKey ? this.valueOf(doc, errKey) : '',
-      errChipText: errKey ? 'ความมั่นใจ ' + doc.c[errKey] + '%' : '',
+      errChipText: FLAG.bad,
       errWhy: doc.why || 'AI อ่านช่องนี้ได้ไม่ชัด กรุณาตรวจสอบกับเอกสารต้นฉบับก่อนยืนยัน',
       openVoice: () => this.setState({ voiceTick: 0 }),
       editErr: () => this.setState({ sheetKey: errKey, draft: this.valueOf(doc, errKey) }),
@@ -635,7 +654,6 @@ class Component extends DCLogic {
         hasChoices: !!s.choices,
         choiceName: s.choiceName,
         choiceLabel: s.choiceLabel,
-        choiceChip: s.choiceChip,
         choices: (s.choices || []).map(c => ({
           label: c.label, note: c.note,
           checked: c.id === s.picked,
@@ -643,24 +661,20 @@ class Component extends DCLogic {
           pick: () => s.pick(c.id),
         })),
         rows: s.rows.map(k => this.row(doc, k)),
-        /* The only note this screen shows is "you overrode the AI" — which for
-           the asset group is exactly the วัสดุ case. */
+        /* The only note this screen shows is "you overrode the AI". */
         hasNote: !!s.aiPick && s.picked !== s.aiPick,
         noteKicker: 'แก้ไขจากที่ AI แนะนำ',
-        noteText: s.key === 'asset'
-          ? 'ระบบจะบันทึกว่าผู้ใช้เปลี่ยนจาก ครุภัณฑ์ เป็น วัสดุ — วัสดุไม่ต้องลงทะเบียนและไม่มีเลขครุภัณฑ์'
-          : 'ระบบจะบันทึกว่าผู้ใช้เปลี่ยนวิธีการชำระเงินจากที่ AI อ่านได้',
+        noteText: s.noteText || '',
         noteBar: 'var(--color-accent-2)',
         noteBg: 'var(--color-accent-2-100)',
         noteColor: 'var(--color-accent-2-800)',
-        hasQr: s.key === 'asset' && st.assetType === 'durable',
       })),
 
       checkLabel: 'ผ่าน ' + passed + ' จาก ' + checks.length + ' ข้อ',
       checks: checks.map(c => ({ label: c.label, ok: c.ok, bad: !c.ok })),
 
       blocked: blocked,
-      primaryLabel: blocked ? 'แก้ช่องที่ความมั่นใจต่ำก่อน' : 'ส่งออกข้อมูล',
+      primaryLabel: blocked ? 'ยังมี ' + pending + ' ช่องที่ต้องยืนยัน' : 'ส่งออกข้อมูล',
       submit: () => go('export'),
       save: () => this.setState({ savedOpen: true }),
       savedOpen: st.savedOpen,
@@ -669,11 +683,21 @@ class Component extends DCLogic {
 
       sheetOpen: !!sheetKey,
       sheetTitle: sheetKey ? LABEL[sheetKey] : '',
-      sheetChipClass: sheetKey ? CHIP[band(sheetConf)] : 'tag tag-neutral',
-      sheetChipText: 'ความมั่นใจ ' + sheetConf + '%',
+      sheetHasChip: sheetBand !== 'ok' && !sheetDone,
+      sheetChipClass: CHIP[sheetBand],
+      sheetChipText: FLAG[sheetBand] || '',
       sheetLow: sheetLow,
       sheetNote: doc.why || '',
       sheetSaveLabel: sheetLow ? 'ยืนยันค่านี้' : 'บันทึก',
+      sheetIsChoice: !!sheetList,
+      sheetIsText: !!sheetKey && !sheetList,
+      sheetChoices: sheetOptions.map(o => ({
+        label: o,
+        checked: o === st.draft,
+        isAi: o === sheetAi,
+        bg: o === st.draft ? 'var(--color-accent-100)' : 'transparent',
+        pick: () => this.setState({ draft: o }),
+      })),
       draft: st.draft,
       onDraft: e => this.setState({ draft: e.target.value }),
       saveField: () => this.setState(s => ({

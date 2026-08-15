@@ -21,7 +21,6 @@ Root: `height:100%;position:relative;overflow:hidden;display:flex;flex-direction
 Header `flex:none` + 2px bottom rule. Middle `flex:1;overflow:auto;padding:20px 16px 18px`.
 Footer `flex:none` + 2px top rule + `padding:12px 16px`. Overlays are
 `position:absolute;inset:0` siblings inside the root — 50 sheet, 60 success.
-The FAB is a non-overlay sibling at z-30 so every overlay still covers it.
 
 ### Header — two kinds
 
@@ -60,13 +59,11 @@ need more than one `<path>`, so ship all three as literal SVG blocks selected by
 tab object must set **all three** `isHome`/`isSchedule`/`isProfile` booleans — a
 missing one resolves to undefined and the runtime warns.
 
-### FAB — Home only
+### No FAB
 
-`position:absolute;right:16px;bottom:78px;z-index:30`, 60×60, `--color-accent`
-fill, `2px solid var(--color-text)` border, camera glyph in `--color-bg`,
-`aria-label="สแกนเอกสารใหม่"`. Square, no shadow — the ink border does the
-lifting the design system refuses to do with elevation. `bottom:78px` = the
-62px bar plus a 16px gutter.
+Home carried a camera FAB in earlier builds; it was removed as a duplicate —
+scanning is reached from the project detail screen's อัปโหลดเอกสาร button, which
+is also the only path that knows which project the documents belong to.
 
 ### Field row
 
@@ -144,8 +141,12 @@ its own error line: **อีเมล** (must contain `@` and `.`), **รหั�
 `text` — the eye gains a `M4 4l16 16` strike path while visible), and
 **หมายเลข API ของโรงเรียน** (`^SCH-\d{4}-\d{4}$`).
 
-`ลืมรหัสผ่าน?` is a `.btn-ghost` opening a z-50 explanatory sheet. Below the
-fields, the numbered 1-2-3 explainer grid.
+`ลืมรหัสผ่าน?` is a `.btn-ghost` opening a z-50 sheet with two states, both
+composed in `renderVals()`: the explainer, then — after
+`ส่งลิงก์ตั้งรหัสผ่านใหม่` — a confirmation titled `ส่งคำขอแล้ว` with a
+checkmark in `--color-text` on `--color-neutral-200` and the email the link
+went to, closed with `เข้าใจแล้ว`. Below the fields, the numbered 1-2-3
+explainer grid.
 
 Footer: primary `ขอรหัส OTP` → `otp`, disabled with label
 `กรอกข้อมูลให้ครบก่อน` while any field is bad; secondary
@@ -165,12 +166,18 @@ Footer primary relabels three ways: `ยอมรับเงื่อนไข�
 ## Screen 2b — OTP
 
 Back arrow → `login`. Six 58px boxes; the next empty box takes a
-`2px solid var(--color-accent)` border. `กรอกรหัสถัดไป` (`.btn-secondary`)
-reveals one character of `402817` per tap; `ล้างรหัส` (`.btn-ghost`) resets.
-Static resend hint below a 2px rule.
+`2px solid var(--color-accent)` border. The code is **typed**: a transparent
+`opacity:0` input is layered `inset:0` over the row of boxes, so tapping any
+box focuses it and the keystrokes land in `state.digits` (filtered to digits,
+capped at six) while the boxes stay the only display. Enter submits.
+`ล้างรหัส` (`.btn-ghost`) resets; a muted counter sits opposite it. Static
+resend hint below a 2px rule, then the demo note carrying the test code
+`402817`.
 
 **Demo gate 1.** Footer is `disabled` and reads `กรอกรหัสให้ครบ 6 หลัก` until
-six digits are in, then `ยืนยัน` → `home`.
+six digits are in. A complete-but-wrong code turns every box accent, shows
+`รหัส OTP ไม่ถูกต้อง ลองใหม่อีกครั้ง`, and keeps the footer disabled reading
+`รหัสไม่ถูกต้อง`. `402817` → `ยืนยัน` → `home`.
 
 ## Screen 3 — Home / project list
 
@@ -182,15 +189,27 @@ three alerts) and a tappable avatar → `profile`.
 ยอดใช้จ่ายเดือนนี้ (divider border). Then a full-width primary
 `สร้างโครงการ` → `newProject`.
 
-`โครงการของฉัน` — three cards, each with name, `code · owner`, a status tag,
-a 6px progress bar with its percentage, doc count and last-updated line; all
-→ `project`. Status tags: กำลังดำเนินการ `.tag-accent-2` · รอตรวจสอบ
-`.tag-outline` · เสร็จสิ้น `.tag-neutral`.
+`โครงการล่าสุด` — the three most recent projects only, as 254px boxed cards
+(`2px solid var(--color-divider)`) in a horizontal scroller that bleeds past the
+screen padding (`margin:0 -16px;padding:12px 16px 2px;overflow-x:auto`). Each
+card stacks a status tag, name, `code · owner`, a 6px progress bar with its
+percentage, then doc count and last-updated; all → `project`. Status tags:
+กำลังดำเนินการ `.tag-accent-2` · รอตรวจสอบ `.tag-outline` · เสร็จสิ้น
+`.tag-neutral`. Below the row, a full-width secondary `ดูโครงการทั้งหมด`
+→ `projects`.
 
 `งานที่ต้องทำ` — two rows with a 4px severity bar → `review` / `export`.
 
-No action footer. Tab bar (Home active) + FAB → `scan`. The scroll pads
-`96px` at the bottom so the FAB never covers the last row.
+No action footer, no FAB. Tab bar with Home active.
+
+## Screen 3b — All projects
+
+Task screen: back arrow → `home`, title `โครงการทั้งหมด`. A full-width `.seg`
+filter (ทั้งหมด · ดำเนินการ · รอตรวจ · เสร็จสิ้น) resolved in `renderVals()` —
+`<sc-for>` only ever receives the finished list. Section header carries the
+active filter's title and the filtered count, then the same boxed project cards
+as Home, stacked vertically at full width, newest first. Footer: primary
+`สร้างโครงการ` → `newProject`. No tab bar.
 
 ## Screen 4 — Project detail
 
@@ -339,11 +358,44 @@ Footer primary `ส่งออกเป็นไฟล์ {format}` paints the 
 Brand header. Project name, an 8px progress bar at 68%, and a 2×2 stat grid
 (งบที่ใช้ไป, เอกสารในโครงการ, ขั้นตอนที่เสร็จแล้ว, เหลือถึงกำหนดส่ง).
 
-`ขั้นตอนการดำเนินงาน` — six timeline entries on a 14px square marker with a
-2px rail between them (the last one's rail is transparent so it does not
-dangle). Each carries name, date range, status tag, owner and document count.
-Tones: `done` accent-filled marker + `.tag-neutral`, `active` accent-2 outlined
-marker + `.tag-accent-2`, `wait` neutral-400 outlined marker + `.tag-outline`.
+`ขั้นตอนการดำเนินงาน` carries two views of the same six steps, switched by a
+full-width `.seg` with an icon per option — `โรดแมป` and `บอร์ด`. Both read
+from one task list, so a step's tone, dates and owner are identical in either
+view, and both open the same detail sheet.
+
+**โรดแมป** — a GitHub-Projects-style roadmap covering
+10 ส.ค. – 2 ก.ย. 2026, framed by a 2px border. A frozen 122px left column
+lists the six steps (9px tone square + two-line name); the right pane scrolls
+horizontally over a 48px axis (month band over day numbers) and one 45px row
+per step. Each step is a bar positioned by date.
+
+A `.seg` above the chart switches column width — `เดือน` 20px/day (chart 480px)
+or `สัปดาห์` 46px/day, which also reveals the weekday letter under each date.
+Weekends are `--color-neutral-200`; Mondays and the 1st get a `--color-divider`
+rule, other days 18%. Today (16 ส.ค.) is an accent-filled date cell plus a 2px
+`--color-accent` line running from the axis to the last row.
+
+Tones drive marker and bar together: `done` accent fill, `active`
+accent-2-200 on a 2px accent-2-700 border, `wait` neutral-200 on neutral-400.
+A bar labels itself only when it is wide enough — the step name at ≥150px, the
+duration at ≥56px, nothing below that. Every column width, bar offset and
+label is computed in `renderVals()`; the template does no arithmetic.
+
+Under the chart: a four-item legend (three tones + วันนี้) and a swipe hint.
+
+**บอร์ด** — a Kanban board of three 220px columns scrolling horizontally in
+workflow order: รอดำเนินการ (3) · กำลังดำเนินการ (1) · เสร็จแล้ว (2). Each
+column is a 2px-bordered `--color-neutral-100` panel whose header carries the
+tone square, name, a `.tag-neutral` count and a one-line description, over a
+2px rule. Cards are `--color-bg` with a 2px border and a 4px tone-coloured left
+edge, holding `SCI-2026-024 #n`, a 22×22 square owner initial, the step name,
+its date range and a document count with a file icon. An empty column shows
+`ยังไม่มีขั้นตอนในสถานะนี้` — nested `<sc-for>` over `columns` → `cards`, which
+the runtime supports.
+
+Tapping a bar, a roadmap row or a board card opens the same z-50 sheet: date
+range, status tag, ระยะเวลา, ผู้รับผิดชอบ, เอกสารในขั้นตอน and a secondary
+`ดูเอกสารในโครงการ` → `project`.
 
 Closes with an accent-2 banner `คาดว่าจะเสร็จ 20 ส.ค. 2026`. No action footer.
 Tab bar (Schedule active).
@@ -415,7 +467,7 @@ Targets live in `flow.js`; handlers call `go(key)` and never a raw
 
 | Gate | Screen | Cleared by |
 |---|---|---|
-| Six OTP digits | 2b | Tapping `กรอกรหัสถัดไป` six times |
+| Six OTP digits | 2b | Typing `402817` into the boxes |
 | The 62% จำนวน field | 6 | `แก้ด้วยเสียง` (voice sheet) or `แก้เอง` (z-50 editor) |
 
 Clearing the second gate also flips `ยอดคำนวณ` from ฿170,000 to ฿85,000 and the

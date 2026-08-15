@@ -69,17 +69,32 @@
     <div style="position:absolute;inset:0;z-index:50;background:color-mix(in srgb, #201e1d 45%, transparent);display:flex;flex-direction:column;justify-content:flex-end">
       <div style="background:var(--color-bg);border-top:2px solid var(--color-text);display:flex;flex-direction:column">
         <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:2px solid var(--color-divider)">
-          <div style="font-family:var(--font-heading);font-weight:800;font-size:17px">ลืมรหัสผ่าน</div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:17px">{{ forgotTitle }}</div>
           <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;background:transparent;border:0;cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
           </button>
         </div>
         <div style="padding:16px">
-          <p style="font-size:14px;line-height:1.7;margin:0">ระบบจะส่งลิงก์ตั้งรหัสผ่านใหม่ไปยังอีเมลที่ผูกกับหมายเลข API ของโรงเรียน หากยังเข้าไม่ได้ กรุณาติดต่อผู้ดูแลระบบของสถานศึกษา</p>
+          <sc-if value="{{ forgotIdle }}" hint-placeholder-val="{{ true }}">
+            <p style="font-size:14px;line-height:1.7;margin:0">ระบบจะส่งลิงก์ตั้งรหัสผ่านใหม่ไปยังอีเมลที่ผูกกับหมายเลข API ของโรงเรียน หากยังเข้าไม่ได้ กรุณาติดต่อผู้ดูแลระบบของสถานศึกษา</p>
+          </sc-if>
+          <sc-if value="{{ forgotSent }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:12px;align-items:flex-start">
+              <div style="width:40px;height:40px;flex:none;background:var(--color-neutral-200);border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;color:var(--color-text)">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M4 12l5 5L20 6"></path></svg>
+              </div>
+              <div style="min-width:0">
+                <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">ส่งคำขอตั้งรหัสผ่านใหม่แล้ว</div>
+                <p style="font-size:13px;line-height:1.7;margin:6px 0 0;color:color-mix(in srgb, var(--color-text) 62%, transparent);word-break:break-word">ลิงก์ตั้งรหัสผ่านใหม่ถูกส่งไปที่ {{ resetEmail }} แล้ว กรุณาตรวจสอบกล่องจดหมายภายใน 5 นาที</p>
+              </div>
+            </div>
+          </sc-if>
         </div>
         <div style="flex:none;padding:12px 16px;border-top:2px solid var(--color-divider);display:flex;flex-direction:column;gap:8px">
-          <button onClick="{{ closeAll }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:50px;font-size:16px;padding-inline:16px">ส่งลิงก์ตั้งรหัสผ่านใหม่</button>
-          <button onClick="{{ closeAll }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ยกเลิก</button>
+          <button onClick="{{ forgotAction }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:50px;font-size:16px;padding-inline:16px">{{ forgotActionLabel }}</button>
+          <sc-if value="{{ forgotIdle }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ closeAll }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ยกเลิก</button>
+          </sc-if>
         </div>
       </div>
     </div>
@@ -99,6 +114,7 @@ class Component extends DCLogic {
     v: { email: 'benjamas@example.ac.th', pass: 'kruscan2026', apiNo: 'SCH-1042-8890' },
     showPass: false,
     forgotOpen: false,
+    forgotSent: false,
   };
 
   renderVals() {
@@ -129,13 +145,25 @@ class Component extends DCLogic {
     return {
       fields,
       blocked: blocked,
-      submitLabel: blocked ? 'กรอกข้อมูลให้ครบก่อน' : 'ขอรหัส OTP',
+      submitLabel: blocked ? 'กรอกข้อมูลให้ครบก่อน' : ' Login',
       submit: () => go('otp'),
       toRegister: () => go('register'),
 
       forgotOpen: this.state.forgotOpen,
-      forgot: () => this.setState({ forgotOpen: true }),
-      closeAll: () => this.setState({ forgotOpen: false }),
+      forgot: () => this.setState({ forgotOpen: true, forgotSent: false }),
+      closeAll: () => this.setState({ forgotOpen: false, forgotSent: false }),
+
+      /* The sheet carries both states: the explainer, then the confirmation
+         that the reset request went out. Composed here — the template only
+         switches on the two flags. */
+      forgotIdle: !this.state.forgotSent,
+      forgotSent: this.state.forgotSent,
+      forgotTitle: this.state.forgotSent ? 'ส่งคำขอแล้ว' : 'ลืมรหัสผ่าน',
+      forgotActionLabel: this.state.forgotSent ? 'เข้าใจแล้ว' : 'ส่งลิงก์ตั้งรหัสผ่านใหม่',
+      forgotAction: this.state.forgotSent
+        ? () => this.setState({ forgotOpen: false, forgotSent: false })
+        : () => this.setState({ forgotSent: true }),
+      resetEmail: v.email.trim() || 'อีเมลที่ผูกกับบัญชี',
     };
   }
 }

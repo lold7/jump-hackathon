@@ -43,35 +43,141 @@
     </div>
 
     <div style="margin-top:26px">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px;margin-bottom:18px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
         <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ขั้นตอนการดำเนินงาน</h6>
         <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ taskCountLabel }}</span>
       </div>
 
-      <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="6">
-        <div style="display:flex;gap:12px">
-          <div style="width:14px;flex:none;display:flex;flex-direction:column;align-items:center">
-            <span style="width:14px;height:14px;flex:none;background:{{ t.dotBg }};border:2px solid {{ t.dotBorder }}"></span>
-            <span style="width:2px;flex:1;background:{{ t.rail }}"></span>
+      <div class="seg" style="display:flex;width:100%;margin-top:12px">
+        <sc-for list="{{ views }}" as="v" hint-placeholder-count="2">
+          <label class="seg-opt" style="flex:1;justify-content:center;padding:9px 6px;font-size:12.5px;gap:7px">
+            <input type="radio" name="scheduleView" checked="{{ v.checked }}" onChange="{{ v.pick }}">
+            <sc-if value="{{ v.isRoadmap }}" hint-placeholder-val="{{ true }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 6h11M4 12h16M4 18h8"></path></svg>
+            </sc-if>
+            <sc-if value="{{ v.isBoard }}" hint-placeholder-val="{{ false }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M3 4h5v16H3zM10 4h5v11h-5zM17 4h4v7h-4z"></path></svg>
+            </sc-if>
+            <span>{{ v.label }}</span>
+          </label>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ roadmapView }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+        <span style="flex:1;min-width:0;font-size:11.5px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ rangeLabel }}</span>
+        <div class="seg" style="flex:none">
+          <sc-for list="{{ zooms }}" as="z" hint-placeholder-count="2">
+            <label class="seg-opt" style="padding:7px 12px;font-size:12px">
+              <input type="radio" name="roadmapZoom" checked="{{ z.checked }}" onChange="{{ z.pick }}">
+              <span>{{ z.label }}</span>
+            </label>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;margin-top:12px;border:2px solid var(--color-divider);overflow:hidden">
+
+        <div style="flex:none;width:122px;border-right:2px solid var(--color-divider)">
+          <div style="height:48px;border-bottom:2px solid var(--color-divider);display:flex;align-items:flex-end;padding:0 10px 7px">
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ขั้นตอน</span>
           </div>
-          <div style="flex:1;min-width:0;padding-bottom:20px;margin-top:-3px">
-            <div style="display:flex;align-items:flex-start;gap:10px">
-              <div style="flex:1;min-width:0">
-                <div style="font-family:var(--font-heading);font-weight:800;font-size:15.5px;line-height:1.3;letter-spacing:-0.01em">{{ t.name }}</div>
-                <div style="font-size:12px;line-height:1.55;margin-top:4px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ t.dates }}</div>
+          <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="6">
+            <button onClick="{{ t.open }}" aria-label="{{ t.aria }}" style="width:100%;height:45px;display:flex;align-items:center;gap:7px;padding:0 8px 0 10px;background:transparent;border:0;border-bottom:1px solid {{ t.rowRule }};cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
+              <span style="width:9px;height:9px;flex:none;background:{{ t.dotBg }};border:2px solid {{ t.dotBorder }}"></span>
+              <span style="flex:1;min-width:0;font-family:var(--font-heading);font-weight:800;font-size:11.5px;line-height:1.28;letter-spacing:-0.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ t.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="flex:1;min-width:0;overflow-x:auto">
+          <div style="position:relative;width:{{ chartW }}">
+
+            <div style="position:absolute;inset:0;display:flex;pointer-events:none">
+              <sc-for list="{{ days }}" as="d" hint-placeholder-count="24">
+                <span style="flex:none;width:{{ d.w }};background:{{ d.bg }};border-right:1px solid {{ d.line }}"></span>
+              </sc-for>
+            </div>
+
+            <div style="position:relative;height:48px;border-bottom:2px solid var(--color-divider)">
+              <div style="display:flex;height:22px">
+                <sc-for list="{{ months }}" as="m" hint-placeholder-count="2">
+                  <span style="flex:none;width:{{ m.w }};padding-left:6px;border-right:1px solid var(--color-divider);font-family:var(--font-heading);font-weight:800;font-size:10.5px;line-height:22px;letter-spacing:0.02em;white-space:nowrap;overflow:hidden">{{ m.label }}</span>
+                </sc-for>
               </div>
-              <span class="tag {{ t.tagClass }}" style="flex:none;font-size:11px">{{ t.status }}</span>
+              <div style="display:flex;height:24px">
+                <sc-for list="{{ days }}" as="d" hint-placeholder-count="24">
+                  <span style="flex:none;width:{{ d.w }};display:flex;flex-direction:column;align-items:center;justify-content:center;background:{{ d.numBg }};color:{{ d.numColor }};font-family:var(--font-heading);font-weight:800;font-size:9.5px;line-height:1.1">
+                    <span>{{ d.num }}</span>
+                    <sc-if value="{{ d.showDow }}" hint-placeholder-val="{{ false }}">
+                      <span style="font-weight:400;font-size:8.5px;margin-top:2px">{{ d.dow }}</span>
+                    </sc-if>
+                  </span>
+                </sc-for>
+              </div>
             </div>
-            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-top:8px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
-              <span>{{ t.owner }}</span>
-              <span>{{ t.docs }}</span>
-            </div>
+
+            <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="6">
+              <div style="position:relative;height:45px;border-bottom:1px solid {{ t.rowRule }}">
+                <button onClick="{{ t.open }}" aria-label="{{ t.aria }}" style="position:absolute;top:11px;left:{{ t.barX }};width:{{ t.barW }};height:22px;display:flex;align-items:center;padding:0 6px;background:{{ t.barBg }};border:2px solid {{ t.barBorder }};color:{{ t.barText }};cursor:pointer;font-family:var(--font-heading);font-weight:800;font-size:10.5px;letter-spacing:-0.01em;white-space:nowrap;overflow:hidden">{{ t.barLabel }}</button>
+              </div>
+            </sc-for>
+
+            <div style="position:absolute;left:{{ todayX }};top:48px;bottom:0;width:2px;background:var(--color-accent);pointer-events:none"></div>
           </div>
         </div>
-      </sc-for>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px">
+        <sc-for list="{{ legend }}" as="l" hint-placeholder-count="4">
+          <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
+            <span style="width:{{ l.w }};height:9px;flex:none;background:{{ l.bg }};border:2px solid {{ l.border }}"></span>{{ l.label }}
+          </span>
+        </sc-for>
+      </div>
+
+      <p style="margin:8px 0 0;font-size:11px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ปัดตารางไปทางซ้ายเพื่อดูช่วงเวลาถัดไป · แตะแถบเพื่อดูรายละเอียด</p>
+      </sc-if>
+
+      <sc-if value="{{ boardView }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:10px;margin-top:12px;overflow-x:auto;padding-bottom:4px">
+        <sc-for list="{{ columns }}" as="c" hint-placeholder-count="3">
+          <div style="flex:none;width:220px;display:flex;flex-direction:column;border:2px solid var(--color-divider);background:var(--color-neutral-100)">
+            <div style="flex:none;padding:11px 12px;border-bottom:2px solid var(--color-divider)">
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="width:9px;height:9px;flex:none;background:{{ c.dotBg }};border:2px solid {{ c.dotBorder }}"></span>
+                <span style="flex:1;min-width:0;font-family:var(--font-heading);font-weight:800;font-size:13.5px;letter-spacing:-0.01em">{{ c.label }}</span>
+                <span class="tag tag-neutral" style="flex:none;font-size:10.5px;padding:2px 8px;font-family:var(--font-heading);font-weight:800">{{ c.count }}</span>
+              </div>
+              <div style="font-size:11px;line-height:1.5;margin-top:5px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ c.note }}</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding:10px">
+              <sc-for list="{{ c.cards }}" as="k" hint-placeholder-count="2">
+                <button onClick="{{ k.open }}" aria-label="{{ k.aria }}" style="display:block;width:100%;text-align:left;padding:10px 11px;background:var(--color-bg);border:2px solid var(--color-divider);border-left:4px solid {{ k.edge }};cursor:pointer;color:var(--color-text);font-family:var(--font-body)">
+                  <span style="display:flex;align-items:center;gap:8px">
+                    <span style="flex:1;min-width:0;font-size:10.5px;line-height:1.4;letter-spacing:0.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ k.code }}</span>
+                    <span style="width:22px;height:22px;flex:none;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:10px">{{ k.initial }}</span>
+                  </span>
+                  <span style="display:block;margin-top:6px;font-family:var(--font-heading);font-weight:800;font-size:14.5px;line-height:1.3;letter-spacing:-0.01em">{{ k.name }}</span>
+                  <span style="display:block;margin-top:6px;font-size:11.5px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ k.dates }}</span>
+                  <span style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" style="flex:none"><path d="M5 3h9l5 5v13H5z"></path><path d="M14 3v5h5"></path></svg>{{ k.docs }}
+                  </span>
+                </button>
+              </sc-for>
+              <sc-if value="{{ c.empty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:16px 0;font-size:11.5px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ยังไม่มีขั้นตอนในสถานะนี้</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <p style="margin:8px 0 0;font-size:11px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">ปัดไปทางซ้ายเพื่อดูคอลัมน์ถัดไป · แตะการ์ดเพื่อดูรายละเอียด</p>
+      </sc-if>
     </div>
 
-    <div style="margin-top:4px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--color-accent-2);padding:12px 14px;background:var(--color-accent-2-100)">
+    <div style="margin-top:20px;display:flex;align-items:center;gap:10px;border-left:4px solid var(--color-accent-2);padding:12px 14px;background:var(--color-accent-2-100)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-2-800)" stroke-width="2.2" stroke-linecap="square" style="flex:none"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>
       <span style="font-size:13.5px;line-height:1.5;color:var(--color-accent-2-800)">คาดว่าจะเสร็จ 20 ส.ค. 2026</span>
     </div>
@@ -94,11 +200,38 @@
     </sc-for>
   </nav>
 
+  <sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:50;background:color-mix(in srgb, #201e1d 45%, transparent);display:flex;flex-direction:column;justify-content:flex-end">
+      <div style="background:var(--color-bg);border-top:2px solid var(--color-text)">
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:14px 16px;border-bottom:2px solid var(--color-divider)">
+          <div style="flex:1;min-width:0">
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:17px;line-height:1.25;letter-spacing:-0.01em">{{ detailName }}</div>
+            <div style="font-size:12px;line-height:1.55;margin-top:4px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ detailDates }}</div>
+          </div>
+          <button onClick="{{ closeDetail }}" aria-label="ปิด" style="width:44px;height:44px;margin:-8px -10px 0 0;background:transparent;border:0;cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+          </button>
+        </div>
+        <div style="padding:14px 16px 18px">
+          <span class="tag {{ detailTagClass }}" style="font-size:11px">{{ detailStatus }}</span>
+          <sc-for list="{{ detailRows }}" as="r" hint-placeholder-count="3">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+              <span style="flex:none;font-size:12.5px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ r.label }}</span>
+              <span style="flex:1;min-width:0;text-align:right;font-family:var(--font-heading);font-weight:800;font-size:13.5px;letter-spacing:-0.01em">{{ r.value }}</span>
+            </div>
+          </sc-for>
+          <button onClick="{{ toProject }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;margin-top:14px;font-size:15px;padding-inline:16px;gap:10px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M5 3h9l5 5v13H5z"></path><path d="M14 3v5h5"></path></svg>ดูเอกสารในโครงการ</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = {};
+  state = { view: 'roadmap', zoom: 'month', openIdx: null };
 
   tabsFor(here) {
     const T = [
@@ -126,33 +259,179 @@ class Component extends DCLogic {
       { value: '5 วัน',     label: 'เหลือถึงกำหนดส่ง',          color: 'var(--color-accent-2-800)' },
     ];
 
-    /* tone: done | active | wait — drives marker, rail and tag together. */
+    /* ── roadmap axis ───────────────────────────────────────────────────
+       The template has no arithmetic, so every column width, bar offset
+       and label is resolved to a px string here. */
+    const DAY = 86400000;
+    const M_SHORT = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const M_FULL  = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const DOW     = ['อา','จ','อ','พ','พฤ','ศ','ส'];
+    const at = (m, d) => new Date(2026, m - 1, d);
+    /* A range inside one month names the month once — '10 – 15 ส.ค. 2026'. */
+    const range = (a, b) => a.getMonth() === b.getMonth()
+      ? a.getDate() + ' – ' + b.getDate() + ' ' + M_SHORT[b.getMonth()] + ' ' + b.getFullYear()
+      : a.getDate() + ' ' + M_SHORT[a.getMonth()] + ' – ' + b.getDate() + ' ' + M_SHORT[b.getMonth()] + ' ' + b.getFullYear();
+
+    const start = at(8, 10);
+    const end   = at(9, 2);
+    const today = at(8, 16);
+    const idxOf = dt => Math.round((dt - start) / DAY);
+    const dayCount = idxOf(end) + 1;
+
+    const zoom = this.state.zoom;
+    const dayW = zoom === 'week' ? 46 : 20;
+    const chartW = dayCount * dayW;
+
+    const days = [];
+    for (let i = 0; i < dayCount; i++) {
+      const dt = new Date(start.getTime() + i * DAY);
+      const dow = dt.getDay();
+      const weekend = dow === 0 || dow === 6;
+      const isToday = i === idxOf(today);
+      days.push({
+        w: dayW + 'px',
+        num: dt.getDate(),
+        dow: DOW[dow],
+        showDow: zoom === 'week',
+        bg: weekend ? 'var(--color-neutral-200)' : 'transparent',
+        /* Mondays and the 1st get the heavier rule, so weeks and months read
+           as blocks rather than 24 identical ticks. */
+        line: (dow === 1 || dt.getDate() === 1) ? 'var(--color-divider)' : 'color-mix(in srgb, var(--color-text) 18%, transparent)',
+        numBg: isToday ? 'var(--color-accent)' : 'transparent',
+        numColor: isToday ? 'var(--color-bg)' : 'color-mix(in srgb, var(--color-text) 62%, transparent)',
+      });
+    }
+
+    const months = [];
+    for (let i = 0; i < dayCount; i++) {
+      const dt = new Date(start.getTime() + i * DAY);
+      const last = months[months.length - 1];
+      if (last && last.m === dt.getMonth()) last.n++;
+      else months.push({ m: dt.getMonth(), n: 1 });
+    }
+
+    /* ── tasks ─────────────────────────────────────────────────────────
+       tone: done | active | wait — drives marker, bar and tag together. */
     const tasks = [
-      { name: 'ตั้งงบประมาณ',      tone: 'done',   status: 'เสร็จแล้ว',      dates: '10 – 15 ส.ค. 2026', owner: 'ครูเบญจมาศ', docs: '2 เอกสาร' },
-      { name: 'ตรวจสอบแบบและราคา', tone: 'done',   status: 'เสร็จแล้ว',      dates: '15 – 16 ส.ค. 2026', owner: 'ครูสมชาย',   docs: '3 เอกสาร' },
-      { name: 'จัดซื้อจัดจ้าง',     tone: 'active', status: 'กำลังดำเนินการ', dates: '17 – 20 ส.ค. 2026', owner: 'ครูเบญจมาศ', docs: '7 เอกสาร' },
-      { name: 'เบิกจ่าย',           tone: 'wait',   status: 'รอดำเนินการ',    dates: '21 – 25 ส.ค. 2026', owner: 'ครูมาลี',    docs: 'ยังไม่มีเอกสาร' },
-      { name: 'ล้างหนี้',           tone: 'wait',   status: 'รอดำเนินการ',    dates: '26 – 28 ส.ค. 2026', owner: 'ครูมาลี',    docs: 'ยังไม่มีเอกสาร' },
-      { name: 'ส่งรายงาน',          tone: 'wait',   status: 'รอดำเนินการ',    dates: '29 ส.ค. – 2 ก.ย. 2026', owner: 'ครูเบญจมาศ', docs: 'ยังไม่มีเอกสาร' },
+      { name: 'ตั้งงบประมาณ',      tone: 'done',   status: 'เสร็จแล้ว',      s: at(8, 10), e: at(8, 15), owner: 'ครูเบญจมาศ', initial: 'บ', docs: '2 เอกสาร' },
+      { name: 'ตรวจสอบแบบและราคา', tone: 'done',   status: 'เสร็จแล้ว',      s: at(8, 15), e: at(8, 16), owner: 'ครูสมชาย',   initial: 'ส', docs: '3 เอกสาร' },
+      { name: 'จัดซื้อจัดจ้าง',     tone: 'active', status: 'กำลังดำเนินการ', s: at(8, 17), e: at(8, 20), owner: 'ครูเบญจมาศ', initial: 'บ', docs: '7 เอกสาร' },
+      { name: 'เบิกจ่าย',           tone: 'wait',   status: 'รอดำเนินการ',    s: at(8, 21), e: at(8, 25), owner: 'ครูมาลี',    initial: 'ม', docs: 'ยังไม่มีเอกสาร' },
+      { name: 'ล้างหนี้',           tone: 'wait',   status: 'รอดำเนินการ',    s: at(8, 26), e: at(8, 28), owner: 'ครูมาลี',    initial: 'ม', docs: 'ยังไม่มีเอกสาร' },
+      { name: 'ส่งรายงาน',          tone: 'wait',   status: 'รอดำเนินการ',    s: at(8, 29), e: at(9, 2),  owner: 'ครูเบญจมาศ', initial: 'บ', docs: 'ยังไม่มีเอกสาร' },
     ];
 
+    const BAR = {
+      done:   { bg: 'var(--color-accent)',       border: 'var(--color-accent)',       text: 'var(--color-bg)' },
+      active: { bg: 'var(--color-accent-2-200)', border: 'var(--color-accent-2-700)', text: 'var(--color-accent-2-800)' },
+      wait:   { bg: 'var(--color-neutral-200)',  border: 'var(--color-neutral-400)',  text: 'color-mix(in srgb, var(--color-text) 55%, transparent)' },
+    };
     const DOT_BG     = { done: 'var(--color-accent)', active: 'var(--color-bg)',       wait: 'var(--color-bg)' };
     const DOT_BORDER = { done: 'var(--color-accent)', active: 'var(--color-accent-2)', wait: 'var(--color-neutral-400)' };
     const TAG        = { done: 'tag-neutral',         active: 'tag-accent-2',          wait: 'tag-outline' };
-    const done = tasks.filter(t => t.tone === 'done').length;
+
+    const doneCount = tasks.filter(t => t.tone === 'done').length;
+    const sel = this.state.openIdx === null ? null : tasks[this.state.openIdx];
+    const selSpan = sel ? idxOf(sel.e) - idxOf(sel.s) + 1 : 0;
+
+    const rows = tasks.map((t, i) => {
+      const span = idxOf(t.e) - idxOf(t.s) + 1;
+      const w = span * dayW;
+      const dates = range(t.s, t.e);
+      return {
+        ...t,
+        dates,
+        aria: t.name + ' ' + dates + ' ' + t.status,
+        dotBg: DOT_BG[t.tone],
+        dotBorder: DOT_BORDER[t.tone],
+        barX: (idxOf(t.s) * dayW) + 'px',
+        barW: w + 'px',
+        barBg: BAR[t.tone].bg,
+        barBorder: BAR[t.tone].border,
+        barText: BAR[t.tone].text,
+        /* Board card: same object, so a tap opens the same detail sheet. */
+        code: 'SCI-2026-024 #' + (i + 1),
+        edge: BAR[t.tone].border,
+        /* Narrow bars stay graphic — a clipped word reads worse than none. */
+        barLabel: w >= 150 ? t.name : (w >= 56 ? span + ' วัน' : ''),
+        /* Last row has no successor, so its rule would double the frame. */
+        rowRule: i === tasks.length - 1 ? 'transparent' : 'color-mix(in srgb, var(--color-text) 18%, transparent)',
+        open: () => this.setState({ openIdx: i }),
+      };
+    });
+
+    /* Kanban columns run in workflow order — the same three tones the
+       roadmap paints, grouped instead of laid out on the axis. */
+    const columns = [
+      { tone: 'wait',   label: 'รอดำเนินการ',    note: 'ยังไม่เริ่มดำเนินการ' },
+      { tone: 'active', label: 'กำลังดำเนินการ', note: 'กำลังทำอยู่ตอนนี้' },
+      { tone: 'done',   label: 'เสร็จแล้ว',      note: 'ดำเนินการเสร็จแล้ว' },
+    ].map(c => {
+      const cards = rows.filter(r => r.tone === c.tone);
+      return {
+        ...c,
+        cards,
+        count: cards.length,
+        empty: cards.length === 0,
+        dotBg: DOT_BG[c.tone],
+        dotBorder: DOT_BORDER[c.tone],
+      };
+    });
+
+    const view = this.state.view;
 
     return {
       tabs: this.tabsFor('schedule'),
       stats,
-      taskCountLabel: done + ' / ' + tasks.length + ' เสร็จแล้ว',
-      tasks: tasks.map((t, i) => ({
-        ...t,
-        dotBg: DOT_BG[t.tone],
-        dotBorder: DOT_BORDER[t.tone],
-        tagClass: TAG[t.tone],
-        /* Last row has no successor, so its rail would dangle. */
-        rail: i === tasks.length - 1 ? 'transparent' : 'color-mix(in srgb, var(--color-text) 18%, transparent)',
+      taskCountLabel: doneCount + ' / ' + tasks.length + ' เสร็จแล้ว',
+      views: [
+        { key: 'roadmap', label: 'โรดแมป' },
+        { key: 'board',   label: 'บอร์ด' },
+      ].map(v => ({
+        ...v,
+        isRoadmap: v.key === 'roadmap',
+        isBoard: v.key === 'board',
+        checked: view === v.key,
+        pick: () => this.setState({ view: v.key }),
       })),
+      roadmapView: view === 'roadmap',
+      boardView: view === 'board',
+      columns,
+      rangeLabel: range(start, end),
+      zooms: [
+        { key: 'month', label: 'เดือน' },
+        { key: 'week',  label: 'สัปดาห์' },
+      ].map(z => ({
+        ...z,
+        checked: zoom === z.key,
+        pick: () => this.setState({ zoom: z.key }),
+      })),
+      chartW: chartW + 'px',
+      todayX: (idxOf(today) * dayW + Math.round(dayW / 2) - 1) + 'px',
+      days,
+      months: months.map(m => ({
+        w: (m.n * dayW) + 'px',
+        label: (m.n * dayW < 90 ? M_SHORT[m.m] : M_FULL[m.m]) + ' 2026',
+      })),
+      tasks: rows,
+      legend: [
+        { label: 'เสร็จแล้ว',      w: '16px', bg: BAR.done.bg,   border: BAR.done.border },
+        { label: 'กำลังดำเนินการ', w: '16px', bg: BAR.active.bg, border: BAR.active.border },
+        { label: 'รอดำเนินการ',    w: '16px', bg: BAR.wait.bg,   border: BAR.wait.border },
+        { label: 'วันนี้',          w: '2px',  bg: 'var(--color-accent)', border: 'var(--color-accent)' },
+      ],
+      detailOpen: sel !== null,
+      detailName: sel ? sel.name : '',
+      detailDates: sel ? range(sel.s, sel.e) : '',
+      detailStatus: sel ? sel.status : '',
+      detailTagClass: sel ? TAG[sel.tone] : 'tag-neutral',
+      detailRows: sel ? [
+        { label: 'ระยะเวลา',      value: selSpan + ' วัน' },
+        { label: 'ผู้รับผิดชอบ',   value: sel.owner },
+        { label: 'เอกสารในขั้นตอน', value: sel.docs },
+      ] : [],
+      closeDetail: () => this.setState({ openIdx: null }),
+      toProject: () => go('project'),
       toProfile: () => go('profile'),
     };
   }

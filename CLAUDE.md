@@ -183,6 +183,7 @@ Spec sections in `docs/spec.md`. Build order follows demo order.
 | 2 | Register | **built** — `RegisterScreen.dc.html` |
 | 2b | OTP verification | **built** — `OtpScreen.dc.html` |
 | 3 | Home / project list | **built** — `HomeScreen.dc.html` |
+| 3b | All projects | **built** — `ProjectsScreen.dc.html` |
 | 4 | Project detail | **built** — `ProjectDetailScreen.dc.html` |
 | 5 | Scan / upload | **built** — `ScanScreen.dc.html` |
 | 5b | AI processing | **built** — `ProcessingScreen.dc.html` |
@@ -198,16 +199,18 @@ Screens navigate via `flow.js` — handlers call `go('review')`, never a raw
 `preview.html` when it lands.
 
 **Navigation shell.** *App screens* (Home, Project detail, Schedule, Profile)
-carry a brand header and the fixed bottom tab bar; Home also carries the FAB.
-*Task screens* (Login, Register, OTP, Scan, Processing, Review, Export, Create
-project, Help) carry a 44×44 back arrow with a title, and no tab bar. There is
+carry a brand header and the fixed bottom tab bar. There is no FAB — scanning
+is reached from the project detail screen's อัปโหลดเอกสาร button.
+*Task screens* (Login, Register, OTP, All projects, Scan, Processing, Review,
+Export, Create project, Help) carry a 44×44 back arrow with a title, and no tab
+bar. There is
 no hamburger menu anywhere.
 
 **Demo path.** `login → otp → home → project → scan → processing → review →
 export → home`. Two gates must be cleared by hand, and they are the point of
 the demo:
 
-1. **six OTP digits** on Screen 2b — tap `กรอกรหัสถัดไป` six times.
+1. **six OTP digits** on Screen 2b — tap the boxes and type `402817`.
 2. **the 62% จำนวน field** on Screen 6 — the footer stays disabled until the
    user clears it, via `แก้ด้วยเสียง` (the scripted voice sheet) or `แก้เอง`
    (the z-50 field editor). Clearing it flips `ยอดคำนวณ` from ฿170,000 to

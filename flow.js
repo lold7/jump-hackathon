@@ -7,6 +7,7 @@ window.FLOW = {
   register:      'RegisterScreen.dc.html',
   otp:           'OtpScreen.dc.html',
   home:          'HomeScreen.dc.html',
+  projects:      'ProjectsScreen.dc.html',
   project:       'ProjectDetailScreen.dc.html',
   newProject:    'CreateProjectScreen.dc.html',
   schedule:      'ScheduleScreen.dc.html',
