@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SchoolBackoffice AI — preview</title>
+<link rel="stylesheet" href="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/styles.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap">
+<style>
+  :root{--font-body:"Archivo","Noto Sans Thai",system-ui,sans-serif;--font-heading:"Archivo","Noto Sans Thai",system-ui,sans-serif}
+  body{padding:32px 24px 64px}
+  .grid{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+  .cell{width:390px}
+  .cell figcaption{display:flex;align-items:baseline;gap:8px;margin:0 0 8px;font-size:11px}
+  .cell .n{font-family:var(--font-heading);font-weight:800;font-size:11px;color:var(--color-accent-700)}
+  .cell a{font-family:var(--font-heading);font-weight:800;font-size:13px;color:var(--color-text);text-decoration:none}
+  .cell a:hover{color:var(--color-accent)}
+  .cell .file{margin-left:auto;color:color-mix(in srgb, var(--color-text) 55%, transparent)}
+  iframe{width:390px;height:844px;border:2px solid var(--color-divider);background:var(--color-bg);display:block}
+  .todo{width:390px;height:844px;border:2px dashed var(--color-divider);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px;color:color-mix(in srgb, var(--color-text) 40%, transparent)}
+</style>
+</head>
+<body>
+  <h4 style="margin:0 0 4px">SchoolBackoffice AI</h4>
+  <p style="font-size:13px;margin:0 0 8px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">
+    ทุกหน้าจอที่ขนาดจริง 390×844 — คลิกชื่อหน้าจอเพื่อเปิดเต็มจอ
+  </p>
+  <p style="font-size:12px;margin:0 0 28px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
+    Serve over HTTP: <code>python -m http.server 8000 --bind 127.0.0.1</code> — the runtime re-fetches its own URL, so <code>file://</code> will not boot.
+  </p>
+  <div class="grid" id="grid"></div>
+
+<script>
+/* Add a screen here when it lands. `file: null` renders a placeholder. */
+var SCREENS = [
+  { n: '0',  label: 'เข้าสู่ระบบ',            file: 'LoginScreen.dc.html' },
+  { n: '0b', label: 'ยืนยันรหัส OTP',         file: 'OtpScreen.dc.html' },
+  { n: '1',  label: 'สแกนเอกสาร',             file: 'ScanScreen.dc.html' },
+  { n: '2',  label: 'AI ประมวลผล',            file: 'ProcessingScreen.dc.html' },
+  { n: '3',  label: 'ตรวจสอบข้อมูล',          file: 'ReviewScreen.dc.html' },
+  { n: '4',  label: 'จัดหมวดหมู่',            file: 'CategorizeScreen.dc.html' },
+  { n: '5',  label: 'ตรวจสอบการเบิกจ่าย',     file: 'DisbursementScreen.dc.html' },
+  { n: '6',  label: 'ตรวจสอบการชำระเงิน',     file: 'PaymentScreen.dc.html' },
+  { n: '7',  label: 'ตรวจสอบข้ามเอกสาร',      file: 'CrossDocScreen.dc.html' },
+  { n: '8',  label: 'จำแนกครุภัณฑ์',          file: 'AssetClassifyScreen.dc.html' },
+  { n: '9',  label: 'ลงทะเบียนครุภัณฑ์',      file: 'AssetRegisterScreen.dc.html' },
+  { n: '10', label: 'ศูนย์ตรวจสอบ',           file: 'ValidationScreen.dc.html' },
+  { n: '11', label: 'ส่งออกข้อมูล',           file: 'ExportScreen.dc.html' },
+];
+
+document.getElementById('grid').innerHTML = SCREENS.map(function (s) {
+  var head = '<figcaption><span class="n">' + s.n + '</span>' +
+    (s.file ? '<a href="' + s.file + '">' + s.label + '</a><span class="file">' + s.file + '</span>'
+            : '<span style="font-family:var(--font-heading);font-weight:800;font-size:13px;color:color-mix(in srgb, var(--color-text) 40%, transparent)">' + s.label + '</span>') +
+    '</figcaption>';
+  var body = s.file
+    ? '<iframe src="' + s.file + '" title="' + s.label + '" loading="lazy"></iframe>'
+    : '<div class="todo">ยังไม่ได้สร้าง</div>';
+  return '<figure class="cell" style="margin:0">' + head + body + '</figure>';
+}).join('');
+</script>
+</body>
+</html>

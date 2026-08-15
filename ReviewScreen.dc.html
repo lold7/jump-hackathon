@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/styles.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;800&display=swap">
+<script src="_ds/modernist-3270be51-2277-458c-bede-3d5623dd6fa7/_ds_bundle.js"></script>
+<script src="flow.js"></script>
+<style>:root{--font-body:"Archivo","Noto Sans Thai",system-ui,sans-serif;--font-heading:"Archivo","Noto Sans Thai",system-ui,sans-serif}</style>
+</helmet>
+<div style="height:100%;position:relative;overflow:hidden;display:flex;flex-direction:column;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <header style="flex:none;display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:2px solid var(--color-divider);background:var(--color-bg)">
+    <button onClick="{{ openMenu }}" aria-label="เมนู" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+    </button>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">SchoolBackoffice <span style="color:var(--color-accent-700)">AI</span></div>
+    <div style="width:36px;height:36px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:13px">บ</div>
+  </header>
+
+  <div style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 6px 8px 6px;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+    <button onClick="{{ prev }}" disabled="{{ atFirst }}" aria-label="เอกสารก่อนหน้า" style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:{{ prevColor }}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
+    </button>
+    <div style="flex:1;min-width:0;text-align:center">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:14px;line-height:1.2">{{ pagerLabel }}</div>
+      <div style="font-size:11px;line-height:1.4;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ docId }} · เรียงตามความมั่นใจต่ำสุดก่อน</div>
+    </div>
+    <button onClick="{{ next }}" disabled="{{ atLast }}" aria-label="เอกสารถัดไป" style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:{{ nextColor }}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M9 5l7 7-7 7"></path></svg>
+    </button>
+  </div>
+
+  <div style="flex:1;overflow:auto;padding:16px 16px 18px">
+
+    <div style="height:148px;background:var(--color-neutral-200);border:1px solid var(--color-divider);position:relative;overflow:hidden">
+      <div style="position:absolute;left:18px;right:18px;top:20px;height:9px;background:var(--color-neutral-400)"></div>
+      <div style="position:absolute;left:18px;width:110px;top:38px;height:6px;background:var(--color-neutral-300)"></div>
+      <div style="position:absolute;left:18px;right:18px;top:58px;height:1px;background:var(--color-neutral-400)"></div>
+      <div style="position:absolute;left:18px;width:150px;top:70px;height:6px;background:var(--color-neutral-300)"></div>
+      <div style="position:absolute;left:18px;width:96px;top:84px;height:6px;background:var(--color-neutral-300)"></div>
+      <div style="position:absolute;right:18px;width:70px;top:104px;height:14px;background:var(--color-neutral-400)"></div>
+      <div style="position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:11px;letter-spacing:.04em;color:var(--color-neutral-700)">ตัวอย่างเอกสาร</div>
+    </div>
+
+    <sc-if value="{{ blocked }}" hint-placeholder-val="{{ true }}">
+      <div style="margin-top:16px;border-left:4px solid var(--color-accent-2);background:var(--color-accent-2-100);padding:12px 14px;display:flex;gap:10px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent-2-800)" stroke-width="2" stroke-linecap="square" style="flex:none;margin-top:2px"><path d="M12 3l9 17H3z"></path><path d="M12 10v4"></path><path d="M12 17v1"></path></svg>
+        <div style="min-width:0">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-2-800)">ความมั่นใจต่ำ</div>
+          <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ blockedNote }}</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <div style="margin-top:22px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
+      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ข้อมูลที่ดึงได้</h6>
+      <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ fieldCountLabel }}</span>
+    </div>
+
+    <sc-for list="{{ fields }}" as="f" hint-placeholder-count="7">
+      <button onClick="{{ f.edit }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 0;background:{{ f.rowBg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
+        <span style="flex:1;min-width:0">
+          <span style="display:block;font-size:12px;line-height:1.4;color:color-mix(in srgb, var(--color-text) 70%, transparent)">{{ f.label }}</span>
+          <span style="display:block;font-size:15px;font-weight:600;line-height:1.45;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.value }}</span>
+        </span>
+        <sc-if value="{{ f.showChip }}" hint-placeholder-val="{{ true }}">
+          <span class="{{ f.chipClass }}" style="flex:none;font-size:11px;font-family:var(--font-heading);font-weight:800">{{ f.chipText }}</span>
+        </sc-if>
+        <sc-if value="{{ f.showTick }}" hint-placeholder-val="{{ false }}">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="2.4" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+        </sc-if>
+        <span style="width:36px;height:36px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--color-neutral-700)">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 20h4L20 8l-4-4L4 16z"></path></svg>
+        </span>
+      </button>
+    </sc-for>
+
+    <p style="font-size:12.5px;line-height:1.6;margin:16px 0 0;color:color-mix(in srgb, var(--color-text) 62%, transparent)">ทุกช่องแก้ไขได้ ตัวเลขเปอร์เซ็นต์คือความมั่นใจของ AI ในการอ่านช่องนั้น</p>
+  </div>
+
+  <div style="flex:none;border-top:2px solid var(--color-divider);padding:12px 16px;background:var(--color-bg)">
+    <button onClick="{{ confirmAll }}" disabled="{{ blocked }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:52px;font-size:16px;padding-inline:16px">{{ nextLabel }}</button>
+  </div>
+
+  <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:50;background:color-mix(in srgb, #201e1d 45%, transparent);display:flex;flex-direction:column;justify-content:flex-end">
+      <div style="background:var(--color-bg);border-top:2px solid var(--color-text);max-height:86%;display:flex;flex-direction:column">
+        <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:2px solid var(--color-divider)">
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:17px">{{ sheetTitle }}</div>
+          <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;background:transparent;border:0;cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+          </button>
+        </div>
+        <div style="flex:1;overflow:auto;padding:16px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px">
+            <label for="fieldInput" style="font-size:12px;color:color-mix(in srgb, var(--color-text) 70%, transparent)">ค่าที่ AI อ่านได้</label>
+            <span class="{{ sheetChipClass }}" style="font-size:11px;font-family:var(--font-heading);font-weight:800">{{ sheetChipText }}</span>
+          </div>
+          <input id="fieldInput" class="input" value="{{ draft }}" onChange="{{ onDraft }}" style="height:46px;font-size:16px">
+          <sc-if value="{{ sheetLow }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:14px;border-left:4px solid var(--color-accent-2);background:var(--color-accent-2-100);padding:12px 14px">
+              <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-2-800)">ต้องยืนยัน</div>
+              <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ sheetNote }}</div>
+            </div>
+          </sc-if>
+        </div>
+        <div style="flex:none;padding:12px 16px;border-top:2px solid var(--color-divider);display:flex;flex-direction:column;gap:8px">
+          <button onClick="{{ saveField }}" class="btn btn-primary" style="width:100%;justify-content:flex-start;height:50px;font-size:16px;padding-inline:16px">{{ sheetSaveLabel }}</button>
+          <button onClick="{{ closeAll }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:40;background:var(--color-bg);display:flex;flex-direction:column">
+      <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--color-divider)">
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:15px">เมนู</div>
+        <button onClick="{{ closeAll }}" aria-label="ปิด" style="width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+        </button>
+      </div>
+      <div style="flex:1;overflow:auto">
+        <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+          <button onClick="{{ item.go }}" style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 16px;background:{{ item.bg }};border:0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);cursor:pointer;text-align:left;font-family:var(--font-heading);font-weight:800;font-size:18px;line-height:1.4;color:var(--color-text)">
+            <span>{{ item.label }}</span>
+            <span style="font-size:12px;font-family:var(--font-body);font-weight:400;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ item.note }}</span>
+          </button>
+        </sc-for>
+      </div>
+      <div style="flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:2px solid var(--color-divider)">
+        <div style="width:40px;height:40px;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-weight:800;font-size:14px">บ</div>
+        <div>
+          <div style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">ครูเบญจมาศ</div>
+          <div style="font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">โรงเรียนตัวอย่าง · ใช้งานอยู่</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const KEYS = [
+  { key: 'type',   label: 'ประเภทเอกสาร' },
+  { key: 'num',    label: 'เลขที่เอกสาร' },
+  { key: 'date',   label: 'วันที่' },
+  { key: 'vendor', label: 'ผู้ขาย' },
+  { key: 'item',   label: 'รายการ' },
+  { key: 'qty',    label: 'จำนวน' },
+  { key: 'amount', label: 'จำนวนเงิน' },
+];
+
+/* Queue is sorted lowest-confidence first, so the document that needs a human
+   is the one the reviewer lands on. DOC-0012 is the canonical demo document. */
+const DOCS = [
+  { id: 'DOC-0012', type: 'ใบเสร็จ', num: 'INV-0012', date: '14/08/2026', vendor: 'ร้านสมใจ', item: 'กล้องจุลทรรศน์', qty: '1 หน่วย', amount: '฿8,500',
+    conf: { type: 96, num: 95, date: 94, vendor: 91, item: 88, qty: 93, amount: 72 },
+    note: 'ลายมือในช่องจำนวนเงินอ่านได้ไม่ชัด กรุณาตรวจสอบกับเอกสารต้นฉบับก่อนยืนยัน' },
+  { id: 'DOC-0011', type: 'ใบสำคัญรับเงิน', num: '0089', date: '14/08/2026', vendor: 'ร้านวิทยาภัณฑ์', item: 'ชุดทดลองไฟฟ้า', qty: '2 หน่วย', amount: '฿3,200',
+    conf: { type: 94, num: 92, date: 95, vendor: 89, item: 87, qty: 91, amount: 78 },
+    note: 'ตัวเลขหลักสุดท้ายในช่องจำนวนเงินอ่านได้ไม่ชัด กรุณาตรวจสอบก่อนยืนยัน' },
+  { id: 'DOC-0010', type: 'ใบเสร็จ', num: 'INV-0010', date: '13/08/2026', vendor: 'ร้านครุภัณฑ์ไทย', item: 'ตู้เก็บสารเคมี', qty: '1 หน่วย', amount: '฿12,400', conf: { type: 97, num: 96, date: 96, vendor: 93, item: 90, qty: 95, amount: 94 } },
+  { id: 'DOC-0009', type: 'ใบส่งของ', num: '0422', date: '13/08/2026', vendor: 'ร้านครุภัณฑ์ไทย', item: 'ตู้เก็บสารเคมี', qty: '1 หน่วย', amount: '฿12,400', conf: { type: 95, num: 94, date: 95, vendor: 92, item: 91, qty: 94, amount: 93 } },
+  { id: 'DOC-0008', type: 'ใบเบิกพัสดุ', num: '0034', date: '12/08/2026', vendor: 'โรงเรียนตัวอย่าง', item: 'กระดาษกรอง', qty: '10 หน่วย', amount: '฿850', conf: { type: 96, num: 95, date: 97, vendor: 96, item: 92, qty: 93, amount: 96 } },
+  { id: 'DOC-0007', type: 'ใบเสร็จ', num: 'INV-0007', date: '12/08/2026', vendor: 'ร้านสมใจ', item: 'บีกเกอร์แก้ว', qty: '12 หน่วย', amount: '฿1,680', conf: { type: 96, num: 94, date: 95, vendor: 93, item: 90, qty: 92, amount: 95 } },
+  { id: 'DOC-0006', type: 'ใบสำคัญรับเงิน', num: '0088', date: '11/08/2026', vendor: 'ร้านวิทยาภัณฑ์', item: 'เครื่องชั่งดิจิทัล', qty: '1 หน่วย', amount: '฿6,900', conf: { type: 95, num: 93, date: 94, vendor: 91, item: 89, qty: 94, amount: 92 } },
+  { id: 'DOC-0005', type: 'ใบเสร็จ', num: 'INV-0005', date: '11/08/2026', vendor: 'ร้านครุภัณฑ์ไทย', item: 'กล้องจุลทรรศน์', qty: '1 หน่วย', amount: '฿8,500', conf: { type: 97, num: 96, date: 96, vendor: 94, item: 93, qty: 95, amount: 96 } },
+  { id: 'DOC-0004', type: 'ใบส่งของ', num: '0421', date: '10/08/2026', vendor: 'ร้านสมใจ', item: 'บีกเกอร์แก้ว', qty: '12 หน่วย', amount: '฿1,680', conf: { type: 94, num: 93, date: 94, vendor: 92, item: 90, qty: 91, amount: 93 } },
+  { id: 'DOC-0003', type: 'ใบเบิกพัสดุ', num: '0033', date: '10/08/2026', vendor: 'โรงเรียนตัวอย่าง', item: 'ถุงมือยาง', qty: '20 หน่วย', amount: '฿1,150', conf: { type: 96, num: 95, date: 96, vendor: 95, item: 93, qty: 94, amount: 95 } },
+  { id: 'DOC-0002', type: 'ใบเสนอราคา', num: 'SCI-2026-024', date: '08/08/2026', vendor: 'ร้านสมใจ', item: 'กล้องจุลทรรศน์', qty: '1 หน่วย', amount: '฿8,500', conf: { type: 97, num: 97, date: 96, vendor: 95, item: 94, qty: 96, amount: 97 } },
+  { id: 'DOC-0001', type: 'ใบเสร็จ', num: 'INV-0001', date: '07/08/2026', vendor: 'ร้านวิทยาภัณฑ์', item: 'หลอดทดลอง', qty: '24 หน่วย', amount: '฿2,120', conf: { type: 96, num: 95, date: 95, vendor: 93, item: 91, qty: 93, amount: 94 } },
+];
+
+const LOW = 80;
+const DIM = 'color-mix(in srgb, var(--color-text) 30%, transparent)';
+
+class Component extends DCLogic {
+  state = { i: 0, sheetKey: null, draft: '', edits: {}, confirmed: {}, menuOpen: false };
+
+  close = () => this.setState({ menuOpen: false, sheetKey: null });
+
+  valueOf(doc, key) {
+    const edited = this.state.edits[doc.id + '.' + key];
+    return edited === undefined ? doc[key] : edited;
+  }
+
+  renderVals() {
+    const { i, sheetKey, confirmed } = this.state;
+    const doc = DOCS[i];
+
+    const unconfirmed = KEYS.filter(k => doc.conf[k.key] < LOW && !confirmed[doc.id + '.' + k.key]);
+    const blocked = unconfirmed.length > 0;
+
+    const sheetField = sheetKey ? KEYS.find(k => k.key === sheetKey) : null;
+    const sheetConf = sheetField ? doc.conf[sheetKey] : 0;
+    const sheetLow = !!sheetField && sheetConf < LOW && !confirmed[doc.id + '.' + sheetKey];
+
+    const nav = [
+      { label: 'เอกสาร', note: 'คุณอยู่ที่นี่', here: true },
+      { label: 'การเบิกจ่าย', note: 'รอตรวจ 8 รายการ', to: 'disbursement' },
+      { label: 'ครุภัณฑ์', note: '7 รายการ', to: 'assetRegister' },
+      { label: 'โครงการ', note: '4 โครงการ', to: 'validation' },
+      { label: 'ประวัติการใช้งาน', note: '' },
+      { label: 'ช่วยเหลือ', note: '' },
+    ];
+
+    return {
+      pagerLabel: 'เอกสาร ' + (i + 1) + ' / ' + DOCS.length,
+      docId: doc.id,
+      atFirst: i === 0,
+      atLast: i === DOCS.length - 1,
+      prevColor: i === 0 ? DIM : 'var(--color-text)',
+      nextColor: i === DOCS.length - 1 ? DIM : 'var(--color-text)',
+      prev: () => this.setState(s => ({ i: Math.max(0, s.i - 1), sheetKey: null })),
+      next: () => this.setState(s => ({ i: Math.min(DOCS.length - 1, s.i + 1), sheetKey: null })),
+
+      blocked: blocked,
+      blockedNote: doc.note || '',
+      fieldCountLabel: KEYS.length + ' ช่อง',
+      nextLabel: blocked ? 'ยืนยันช่องที่ความมั่นใจต่ำก่อน' : 'ยืนยันและไปต่อ',
+      confirmAll: () => go('categorize'),
+
+      fields: KEYS.map(k => {
+        const conf = doc.conf[k.key];
+        const isLow = conf < LOW;
+        const isConfirmed = !!confirmed[doc.id + '.' + k.key];
+        return {
+          label: k.label,
+          value: this.valueOf(doc, k.key),
+          showChip: !(isLow && isConfirmed),
+          showTick: isLow && isConfirmed,
+          chipClass: isLow ? 'tag tag-accent-2' : 'tag tag-neutral',
+          chipText: conf + '%',
+          rowBg: isLow && !isConfirmed ? 'var(--color-accent-2-100)' : 'transparent',
+          edit: () => this.setState({ sheetKey: k.key, draft: this.valueOf(doc, k.key) }),
+        };
+      }),
+
+      sheetOpen: !!sheetField,
+      sheetTitle: sheetField ? sheetField.label : '',
+      sheetChipClass: sheetConf < LOW ? 'tag tag-accent-2' : 'tag tag-neutral',
+      sheetChipText: 'ความมั่นใจ ' + sheetConf + '%',
+      sheetLow: sheetLow,
+      sheetNote: doc.note || '',
+      sheetSaveLabel: sheetLow ? 'ยืนยันค่านี้' : 'บันทึก',
+      draft: this.state.draft,
+      onDraft: e => this.setState({ draft: e.target.value }),
+      saveField: () => this.setState(s => ({
+        sheetKey: null,
+        edits: { ...s.edits, [doc.id + '.' + s.sheetKey]: s.draft },
+        confirmed: { ...s.confirmed, [doc.id + '.' + s.sheetKey]: true },
+      })),
+
+      navItems: nav.map(n => ({
+        label: n.label, note: n.note,
+        bg: n.here ? 'var(--color-accent-100)' : 'transparent',
+        go: n.to ? () => go(n.to) : this.close,
+      })),
+      menuOpen: this.state.menuOpen,
+      openMenu: () => this.setState({ menuOpen: true }),
+      closeAll: this.close,
+    };
+  }
+}
+</script>
+</body>
+</html>
