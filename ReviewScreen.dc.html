@@ -39,13 +39,69 @@
 
   <div style="flex:1;overflow:auto;padding:16px 16px 20px">
 
-    <div style="height:108px;background:var(--color-neutral-200);border:1px solid var(--color-divider);position:relative;overflow:hidden">
-      <div style="position:absolute;left:18px;right:18px;top:16px;height:9px;background:var(--color-neutral-400)"></div>
-      <div style="position:absolute;left:18px;width:110px;top:33px;height:6px;background:var(--color-neutral-300)"></div>
-      <div style="position:absolute;left:18px;right:18px;top:50px;height:1px;background:var(--color-neutral-400)"></div>
-      <div style="position:absolute;left:18px;width:150px;top:60px;height:6px;background:var(--color-neutral-300)"></div>
-      <div style="position:absolute;right:18px;width:70px;top:74px;height:14px;background:var(--color-neutral-400)"></div>
-      <div style="position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:11px;letter-spacing:.04em;color:var(--color-neutral-700)">ตัวอย่างเอกสาร</div>
+    <div style="border:2px solid var(--color-divider);background:var(--color-neutral-100)">
+
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);background:var(--color-neutral-200)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--color-neutral-700)" stroke-width="2" stroke-linecap="square" style="flex:none"><path d="M6 3h9l3 3v15H6z"></path><path d="M9 12h6M9 16h6"></path></svg>
+        <span style="flex:1;min-width:0;font-size:11px;line-height:1.5;color:var(--color-neutral-800);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ paperFile }}</span>
+        <span class="tag tag-neutral" style="flex:none;font-size:10.5px;font-family:var(--font-heading);font-weight:800">AI กรอกให้แล้ว</span>
+      </div>
+
+      <div style="padding:12px 14px 13px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+          <span style="min-width:0">
+            <span style="display:inline-block;padding:0 4px;font-family:var(--font-heading);font-weight:800;font-size:14px;line-height:1.45;background:{{ paper.vendor.bg }};color:{{ paper.vendor.color }}">{{ paper.vendor.text }}</span>
+            <span style="display:block;font-size:10.5px;line-height:1.5;margin-top:3px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ paperAddr }}</span>
+          </span>
+          <span style="flex:none;text-align:right">
+            <span style="display:block;font-family:var(--font-heading);font-weight:800;font-size:12.5px;line-height:1.45">{{ paperTitle }}</span>
+            <span style="display:block;font-size:10.5px;line-height:1.5;margin-top:3px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">เลขที่ {{ paperDocId }}</span>
+          </span>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;margin-top:9px;padding-top:8px;border-top:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);font-size:11px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
+          <span style="flex:none">วันที่ <span style="display:inline-block;padding:0 4px;background:{{ paper.date.bg }};color:{{ paper.date.color }}">{{ paper.date.text }}</span></span>
+          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">ผู้ซื้อ โรงเรียนตัวอย่าง</span>
+        </div>
+
+        <div style="margin-top:10px;border-top:1px solid var(--color-neutral-400);border-bottom:1px solid var(--color-neutral-400)">
+          <div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);font-size:10px;line-height:1.5;letter-spacing:.04em;white-space:nowrap;color:var(--color-neutral-700)">
+            <span style="flex:1;min-width:0">รายการ</span>
+            <span style="width:52px;flex:none;text-align:right">จำนวน</span>
+            <span style="width:58px;flex:none;text-align:right">ราคา</span>
+            <span style="width:66px;flex:none;text-align:right">จำนวนเงิน</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-size:11.5px;line-height:1.5">
+            <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span style="display:inline-block;padding:0 4px;background:{{ paper.item.bg }};color:{{ paper.item.color }}">{{ paper.item.text }}</span></span>
+            <span style="width:52px;flex:none;display:flex;align-items:center;justify-content:flex-end;gap:3px">
+              <sc-if value="{{ paper.qty.tick }}" hint-placeholder-val="{{ false }}">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-text)" stroke-width="3" stroke-linecap="square" style="flex:none"><path d="M4 12l5 5L20 6"></path></svg>
+              </sc-if>
+              <span style="display:inline-block;padding:0 4px;font-family:var(--font-heading);font-weight:800;background:{{ paper.qty.bg }};color:{{ paper.qty.color }}">{{ paper.qty.text }}</span>
+            </span>
+            <span style="width:58px;flex:none;text-align:right"><span style="display:inline-block;padding:0 4px;background:{{ paper.unit.bg }};color:{{ paper.unit.color }}">{{ paper.unit.text }}</span></span>
+            <span style="width:66px;flex:none;text-align:right"><span style="display:inline-block;padding:0 4px;background:{{ paper.amount.bg }};color:{{ paper.amount.color }}">{{ paper.amount.text }}</span></span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px">
+          <span style="font-size:11px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">รวมทั้งสิ้น</span>
+          <span style="display:inline-block;padding:0 4px;font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35;background:{{ paper.total.bg }};color:{{ paper.total.color }}">{{ paper.total.text }}</span>
+        </div>
+
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:10px;padding-top:9px;border-top:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+          <span style="flex:1;min-width:0;font-size:11px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ paperPayLabel }} <span style="display:inline-block;padding:0 4px;color:{{ paper.pay.color }};background:{{ paper.pay.bg }}">{{ paper.pay.text }}</span></span>
+          <span style="width:86px;flex:none;text-align:center;font-size:10px;line-height:1.5;padding-top:5px;border-top:1px solid var(--color-neutral-400);color:color-mix(in srgb, var(--color-text) 55%, transparent)">ผู้รับเงิน</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:6px 14px;padding:7px 10px;border-top:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);background:var(--color-neutral-200)">
+        <sc-for list="{{ paperLegend }}" as="l" hint-placeholder-count="2">
+          <span style="display:flex;align-items:center;gap:6px;font-size:10.5px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 62%, transparent)">
+            <span style="width:11px;height:11px;flex:none;background:{{ l.swatch }};border:1px solid var(--color-divider)"></span>{{ l.label }}
+          </span>
+        </sc-for>
+      </div>
     </div>
     <div style="font-size:12px;line-height:1.6;margin-top:8px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ overallLabel }}</div>
 
@@ -392,6 +448,27 @@ const ACCT = {
   'โรงเรียนตัวอย่าง': '123-4-56701-0',
 };
 
+/* The scanned page is drawn, not photographed: the same document data laid
+   out as paper, with every value AI filled in highlighted where it sits. The
+   highlight carries the field's own confidence band, so the 62% จำนวน reads as
+   uncertain on the page itself and turns into a tick when it is corrected. */
+const PAPER_TITLE = {
+  'ใบเสร็จ': 'ใบเสร็จรับเงิน', 'ใบสำคัญรับเงิน': 'ใบสำคัญรับเงิน',
+  'ใบส่งของ': 'ใบส่งของ', 'ใบเบิกพัสดุ': 'ใบเบิกพัสดุ', 'ใบเสนอราคา': 'ใบเสนอราคา',
+};
+const ADDR = {
+  'ร้าน ABC': '128/4 ถ.ตัวอย่าง อ.เมือง จ.ตัวอย่าง 10110',
+  'ร้านวิทยาภัณฑ์': '55 ถ.วิทยา อ.เมือง จ.ตัวอย่าง 10110',
+  'ร้านครุภัณฑ์ไทย': '9/2 ถ.พัสดุ อ.เมือง จ.ตัวอย่าง 10250',
+  'โรงเรียนตัวอย่าง': '1 ถ.โรงเรียน อ.เมือง จ.ตัวอย่าง 10110',
+};
+const MARK = {
+  ok:   { bg: 'var(--color-neutral-300)',  color: 'var(--color-text)' },
+  warn: { bg: 'var(--color-accent-2-200)', color: 'var(--color-accent-2-800)' },
+  bad:  { bg: 'var(--color-accent-200)',   color: 'var(--color-accent-700)' },
+};
+const PAY_LABEL = { cheque: 'ชำระโดยเช็ค', cash: 'ชำระด้วยเงินสด', transfer: 'ชำระโดยโอนเงิน', bank: 'ชำระผ่านบัญชีธนาคาร' };
+
 /* Base confidence per field. DOC-0012 uses these verbatim — they are the
    canonical demo numbers — and every other document shifts them by `lift`. */
 const BASE_CONF = {
@@ -507,6 +584,20 @@ class Component extends DCLogic {
     };
   }
 
+  /* One highlighted value on the facsimile. Same band as the field row it
+     belongs to, and a confirmed low-confidence field drops the flag for a
+     tick — the page and the form always agree. */
+  mark(doc, key, text) {
+    const b = band(doc.c[key]);
+    const done = !!this.state.confirmed[doc.id + '.' + key];
+    const m = MARK[done ? 'ok' : b];
+    return {
+      text: text === undefined ? this.valueOf(doc, key) : text,
+      bg: m.bg, color: m.color,
+      tick: done && b !== 'ok',
+    };
+  }
+
   toggle(k) {
     this.setState(s => ({ open: { ...s.open, [k]: !s.open[k] } }));
   }
@@ -567,6 +658,17 @@ class Component extends DCLogic {
     const methodAi = PAY_METHODS.find(m => m.id === doc.method);
 
     const payDetail = { cheque: 'chequeNo', cash: 'cashDate', transfer: 'trRef', bank: 'baNo' }[methodId];
+    const payOnPaper = {
+      cheque: this.valueOf(doc, 'chequeNo') + ' · ' + this.valueOf(doc, 'chequeBank'),
+      cash: this.valueOf(doc, 'cashDate'),
+      transfer: this.valueOf(doc, 'trRef'),
+      bank: this.valueOf(doc, 'baNo'),
+    }[methodId];
+
+    /* The legend only names the bands the page actually shows. */
+    const legend = [{ swatch: MARK.ok.bg, label: 'ช่องที่ AI อ่านและกรอกให้' }];
+    if (Object.keys(doc.c).some(k => band(doc.c[k]) === 'warn')) legend.push({ swatch: MARK.warn.bg, label: 'ควรตรวจซ้ำ' });
+    if (this.lowFields(doc).length) legend.push({ swatch: MARK.bad.bg, label: 'AI ไม่มั่นใจ ต้องยืนยัน' });
 
     const sections = [
       {
@@ -620,6 +722,26 @@ class Component extends DCLogic {
       nextColor: st.i === DOCS.length - 1 ? DIM : 'var(--color-text)',
       prev: () => this.setState(s => ({ i: Math.max(0, s.i - 1), sheetKey: null })),
       next: () => this.setState(s => ({ i: Math.min(DOCS.length - 1, s.i + 1), sheetKey: null })),
+
+      paperFile: doc.v.docType + ' ' + doc.v.vendor + ' ' + doc.id + '.jpg',
+      paperTitle: PAPER_TITLE[doc.v.docType] || doc.v.docType,
+      paperDocId: doc.id,
+      paperAddr: ADDR[doc.v.vendor],
+      paperPayLabel: PAY_LABEL[methodId],
+      paperLegend: legend,
+      paper: {
+        vendor: this.mark(doc, 'vendor'),
+        date: this.mark(doc, 'date'),
+        item: this.mark(doc, 'item'),
+        qty: this.mark(doc, 'qty'),
+        unit: this.mark(doc, 'unit'),
+        /* The line amount and the footer total are what the paper prints —
+           they stay the receipt's own number, which is exactly why a wrong
+           จำนวน on the same line is visible without opening anything. */
+        amount: this.mark(doc, 'total', baht(doc.receiptTotal)),
+        total: this.mark(doc, 'total'),
+        pay: this.mark(doc, payDetail, payOnPaper),
+      },
 
       overallLabel: 'AI อ่านได้ ' + Object.keys(doc.c).length + ' ช่อง · เรียงตามความมั่นใจต่ำสุดก่อน',
 
