@@ -47,12 +47,17 @@
           <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ countLabel }}</span>
         </div>
         <sc-for list="{{ docs }}" as="doc" hint-placeholder-count="0">
-          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
-            <div style="width:40px;height:52px;flex:none;background:var(--color-neutral-200);border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;color:var(--color-neutral-700);font-family:var(--font-heading);font-weight:800;font-size:9px">{{ doc.ext }}</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:14px;font-weight:600;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ doc.name }}</div>
-              <div style="font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ doc.meta }}</div>
-            </div>
+          <div style="display:flex;align-items:center;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+            <button onClick="{{ doc.preview }}" aria-label="{{ doc.previewLabel }}" style="flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:12px 0;background:transparent;border:0;cursor:pointer;text-align:left;color:var(--color-text);font-family:var(--font-body)">
+              <span style="width:40px;height:52px;flex:none;background:var(--color-neutral-200);border:1px solid var(--color-divider);display:flex;align-items:center;justify-content:center;color:var(--color-neutral-700);font-family:var(--font-heading);font-weight:800;font-size:9px">{{ doc.ext }}</span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-size:14px;font-weight:600;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ doc.name }}</span>
+                <span style="display:block;font-size:12px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ doc.meta }}</span>
+              </span>
+              <span style="width:36px;height:36px;flex:none;display:flex;align-items:center;justify-content:center;color:var(--color-neutral-700)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M4 5h16v14H4z"></path><path d="M7 9h10M7 13h6"></path></svg>
+              </span>
+            </button>
             <button onClick="{{ doc.remove }}" aria-label="ลบ" style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-neutral-700)">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
             </button>
@@ -132,11 +137,118 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ previewOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:50;background:color-mix(in srgb, #201e1d 45%, transparent);display:flex;flex-direction:column;justify-content:flex-end">
+      <div style="background:var(--color-bg);border-top:2px solid var(--color-text);max-height:86%;display:flex;flex-direction:column">
+        <div style="flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 16px;border-bottom:2px solid var(--color-divider)">
+          <div style="flex:1;min-width:0;font-family:var(--font-heading);font-weight:800;font-size:17px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ previewName }}</div>
+          <button onClick="{{ closePreview }}" aria-label="ปิด" style="width:44px;height:44px;flex:none;margin-right:-10px;background:transparent;border:0;cursor:pointer;color:var(--color-text);display:flex;align-items:center;justify-content:center">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+          </button>
+        </div>
+
+        <div style="flex:1;overflow:auto;padding:16px">
+          <div style="border:2px solid var(--color-divider);background:var(--color-neutral-100);padding:14px 14px 15px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+              <span style="min-width:0">
+                <span style="display:block;font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.3">{{ paper.vendor }}</span>
+                <span style="display:block;font-size:10.5px;line-height:1.5;margin-top:3px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ paper.addr }}</span>
+              </span>
+              <span style="flex:none;text-align:right">
+                <span style="display:block;font-family:var(--font-heading);font-weight:800;font-size:12.5px;line-height:1.4">{{ paper.title }}</span>
+                <span style="display:block;font-size:10.5px;line-height:1.5;margin-top:3px;color:color-mix(in srgb, var(--color-text) 55%, transparent)">เลขที่ {{ paper.id }}</span>
+              </span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;margin-top:9px;padding-top:8px;border-top:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);font-size:11px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">
+              <span style="flex:none">วันที่ {{ paper.date }}</span>
+              <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">ผู้ซื้อ โรงเรียนตัวอย่าง</span>
+            </div>
+
+            <div style="margin-top:10px;border-top:1px solid var(--color-neutral-400);border-bottom:1px solid var(--color-neutral-400)">
+              <div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid color-mix(in srgb, var(--color-text) 18%, transparent);font-size:10px;line-height:1.5;letter-spacing:.04em;white-space:nowrap;color:var(--color-neutral-700)">
+                <span style="flex:1;min-width:0">รายการ</span>
+                <span style="width:56px;flex:none;text-align:right">จำนวน</span>
+                <span style="width:58px;flex:none;text-align:right">ราคา</span>
+                <span style="width:66px;flex:none;text-align:right">จำนวนเงิน</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-size:11.5px;line-height:1.5">
+                <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ paper.item }}</span>
+                <span style="width:56px;flex:none;display:flex;align-items:center;justify-content:flex-end;gap:4px">
+                  <sc-if value="{{ paper.hasAmend }}" hint-placeholder-val="{{ true }}">
+                    <span style="text-decoration:line-through;color:color-mix(in srgb, var(--color-text) 45%, transparent)">{{ paper.qtyOld }}</span>
+                  </sc-if>
+                  <span>{{ paper.qty }}</span>
+                </span>
+                <span style="width:58px;flex:none;text-align:right">{{ paper.unit }}</span>
+                <span style="width:66px;flex:none;text-align:right">{{ paper.total }}</span>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px">
+              <span style="font-size:11px;line-height:1.5;color:color-mix(in srgb, var(--color-text) 55%, transparent)">รวมทั้งสิ้น</span>
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:15px;line-height:1.35">{{ paper.total }}</span>
+            </div>
+
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:10px;padding-top:9px;border-top:1px solid color-mix(in srgb, var(--color-text) 18%, transparent)">
+              <span style="flex:1;min-width:0;font-size:11px;line-height:1.6;color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ paper.foot }}</span>
+              <span style="width:86px;flex:none;text-align:center;font-size:10px;line-height:1.5;padding-top:5px;border-top:1px solid var(--color-neutral-400);color:color-mix(in srgb, var(--color-text) 55%, transparent)">{{ paper.sign }}</span>
+            </div>
+          </div>
+
+          <div style="margin-top:14px;border-left:4px solid var(--color-neutral-400);background:var(--color-neutral-200);padding:12px 14px">
+            <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-neutral-800)">ยังไม่ได้อ่านด้วย AI</div>
+            <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ previewNote }}</div>
+          </div>
+        </div>
+
+        <div style="flex:none;padding:12px 16px;border-top:2px solid var(--color-divider)">
+          <button onClick="{{ closePreview }}" class="btn btn-secondary" style="width:100%;justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px">ปิด</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script>
+/* The scan as paper, before anything has read it: the same documents
+   ReviewScreen extracts from, drawn with nothing highlighted and nothing
+   filled in. Keyed by the file id the list row carries; a camera shot has no
+   library id and falls back to the receipt the demo is built around.
+
+   `qtyOld` is the physical amendment on DOC-0012 — 20 struck out, 10 written
+   over it. That is the paper AI reads at 62% and the reason the review screen
+   asks a human which of the two it is. Do not "clean it up". */
+const PAPERS = {
+  f1: {
+    id: 'DOC-0012', title: 'ใบเสร็จรับเงิน', vendor: 'ร้าน ABC',
+    addr: '128/4 ถ.ตัวอย่าง อ.เมือง จ.ตัวอย่าง 10110', date: '15/08/2026',
+    item: 'กล้องจุลทรรศน์', qtyOld: '20', qty: '10', unit: '฿8,500', total: '฿85,000',
+    foot: 'ชำระโดยเช็ค CHQ-008421 · ธนาคารตัวอย่าง', sign: 'ผู้รับเงิน',
+  },
+  f2: {
+    id: 'DOC-0007', title: 'ใบเสร็จรับเงิน', vendor: 'ร้าน ABC',
+    addr: '128/4 ถ.ตัวอย่าง อ.เมือง จ.ตัวอย่าง 10110', date: '12/08/2026',
+    item: 'บีกเกอร์แก้ว', qty: '12', unit: '฿140', total: '฿1,680',
+    foot: 'ชำระด้วยเงินสด 12/08/2026', sign: 'ผู้รับเงิน',
+  },
+  f3: {
+    id: 'DOC-0002', title: 'ใบเสนอราคา', vendor: 'ร้าน ABC',
+    addr: '128/4 ถ.ตัวอย่าง อ.เมือง จ.ตัวอย่าง 10110', date: '08/08/2026',
+    item: 'กล้องจุลทรรศน์', qty: '10', unit: '฿8,500', total: '฿85,000',
+    foot: 'ยืนราคา 30 วัน · โครงการ SCI-2026-024', sign: 'ผู้เสนอราคา',
+  },
+  f4: {
+    id: 'DOC-0009', title: 'ใบส่งของ', vendor: 'ร้านครุภัณฑ์ไทย',
+    addr: '9/2 ถ.พัสดุ อ.เมือง จ.ตัวอย่าง 10250', date: '13/08/2026',
+    item: 'ตู้เก็บสารเคมี', qty: '1', unit: '฿12,400', total: '฿12,400',
+    foot: 'ส่งของครบถ้วน · ตรวจรับโดยเจ้าหน้าที่พัสดุ', sign: 'ผู้ส่งของ',
+  },
+};
+
 class Component extends DCLogic {
-  state = { cameraOpen: false, uploadOpen: false, docs: [], picked: {}, shots: 0 };
+  state = { cameraOpen: false, uploadOpen: false, docs: [], picked: {}, shots: 0, previewId: null };
 
   /* Cancelling the sheet discards the ticks too — otherwise reopening it shows
      a selection the user already backed out of. */
@@ -153,9 +265,23 @@ class Component extends DCLogic {
     const inList = new Set(docs.map(d => d.id));
     const pickedCount = lib.filter(f => picked[f.id] && !inList.has(f.id)).length;
 
+    const shown = this.state.previewId ? docs.find(d => d.id === this.state.previewId) : null;
+    const paper = shown ? (PAPERS[shown.id] || PAPERS.f1) : PAPERS.f1;
+
     return {
       back: () => go('project'),
-      docs: docs.map((d, i) => ({ ...d, remove: () => this.setState(s => ({ docs: s.docs.filter((_, j) => j !== i) })) })),
+      docs: docs.map((d, i) => ({
+        ...d,
+        previewLabel: 'ดูเอกสาร ' + d.name,
+        preview: () => this.setState({ previewId: d.id }),
+        remove: () => this.setState(s => ({ docs: s.docs.filter((_, j) => j !== i) })),
+      })),
+
+      previewOpen: !!shown,
+      previewName: shown ? shown.name : '',
+      previewNote: 'เอกสารต้นฉบับตามที่สแกนมา ยังไม่มีการดึงข้อมูล เมื่อส่งให้ AI แล้วระบบจะอ่านและกรอกข้อมูลทุกช่องให้อัตโนมัติ',
+      paper: { ...paper, hasAmend: !!paper.qtyOld, qtyOld: paper.qtyOld || '' },
+      closePreview: () => this.setState({ previewId: null }),
       hasDocs: docs.length > 0,
       countLabel: docs.length + ' รายการ',
       sendLabel: 'ส่ง ' + docs.length + ' เอกสารให้ AI',
