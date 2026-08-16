@@ -21,11 +21,11 @@
     <button onClick="{{ back }}" aria-label="ย้อนกลับ" style="width:44px;height:44px;margin-left:-10px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;cursor:pointer;color:var(--color-text)">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"><path d="M15 5l-7 7 7 7"></path></svg>
     </button>
-    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">ส่งออกข้อมูล</div>
+    <div style="flex:1;font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:-0.01em;line-height:1.1">ดาวน์โหลดข้อมูล</div>
   </header>
 
   <div style="flex:1;overflow:auto;padding:20px 16px 18px">
-    <h1 style="font-size:25px;line-height:1.24;letter-spacing:-0.01em;margin:0 0 8px;text-wrap:pretty">ตรวจข้อมูลก่อนส่งออก</h1>
+    <h1 style="font-size:25px;line-height:1.24;letter-spacing:-0.01em;margin:0 0 8px;text-wrap:pretty">ตรวจข้อมูลก่อนดาวน์โหลด</h1>
     <p style="font-size:13.5px;line-height:1.6;margin:0 0 20px;color:color-mix(in srgb, var(--color-text) 62%, transparent);text-wrap:pretty">โครงการจัดซื้ออุปกรณ์วิทยาศาสตร์ · SCI-2026-024 · เงินอุดหนุน</p>
 
     <div style="display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
@@ -44,7 +44,7 @@
     </div>
 
     <div style="margin-top:26px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
-      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">การตรวจสอบก่อนส่งออก</h6>
+      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">การตรวจสอบก่อนดาวน์โหลด</h6>
       <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ checkLabel }}</span>
     </div>
     <sc-for list="{{ checks }}" as="c" hint-placeholder-count="4">
@@ -64,7 +64,7 @@
 
     <sc-if value="{{ blocked }}" hint-placeholder-val="{{ false }}">
       <div style="margin-top:18px;border-left:4px solid var(--color-accent);background:var(--color-accent-100);padding:12px 14px">
-        <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700)">ยังส่งออกไม่ได้</div>
+        <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-accent-700)">ยังดาวน์โหลดไม่ได้</div>
         <div style="font-size:13px;line-height:1.6;margin-top:4px">{{ blockedNote }}</div>
         <button onClick="{{ toReview }}" class="btn btn-secondary" style="justify-content:flex-start;height:44px;font-size:14px;padding-inline:14px;margin-top:10px;background:var(--color-bg)">กลับไปตรวจสอบข้อมูล</button>
       </div>
@@ -87,7 +87,7 @@
     </div>
 
     <div style="margin-top:26px;display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--color-divider);padding-bottom:8px">
-      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ตัวอย่างข้อมูลที่จะส่งออก</h6>
+      <h6 style="margin:0;font-size:12px;letter-spacing:0.04em">ตัวอย่างข้อมูลที่จะดาวน์โหลด</h6>
       <span style="font-family:var(--font-heading);font-weight:800;font-size:12px">{{ tableShape }}</span>
     </div>
 
@@ -162,7 +162,7 @@
   <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
     <div style="position:absolute;inset:0;z-index:60;background:var(--color-bg);display:flex;flex-direction:column;justify-content:center;padding:28px 20px">
       <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2.4" stroke-linecap="square"><path d="M4 12l5 5L20 6"></path></svg>
-      <div style="font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1.3;letter-spacing:-0.01em;margin-top:18px">ส่งออกไฟล์สำเร็จ</div>
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:24px;line-height:1.3;letter-spacing:-0.01em;margin-top:18px">ดาวน์โหลดไฟล์สำเร็จ</div>
       <p style="font-size:14px;line-height:1.65;margin-top:10px;color:color-mix(in srgb, var(--color-text) 62%, transparent)">{{ doneNote }}</p>
       <button onClick="{{ toHome }}" class="btn btn-secondary" style="justify-content:flex-start;height:48px;font-size:15px;padding-inline:16px;margin-top:8px">กลับหน้าหลัก</button>
     </div>
@@ -243,7 +243,7 @@ class Component extends DCLogic {
 
       blocked: blocked,
       blockedNote: blocked
-        ? 'มี ' + bad.length + ' ข้อที่ยังไม่ผ่านการตรวจสอบ แก้ไขให้ครบก่อนจึงจะส่งออกได้'
+        ? 'มี ' + bad.length + ' ข้อที่ยังไม่ผ่านการตรวจสอบ แก้ไขให้ครบก่อนจึงจะดาวน์โหลดได้'
         : '',
       toReview: () => go('review'),
 
@@ -262,7 +262,7 @@ class Component extends DCLogic {
       openTable: () => this.setState({ tableOpen: true }),
       closeTable: () => this.setState({ tableOpen: false }),
 
-      submitLabel: blocked ? 'แก้ไขข้อที่ไม่ผ่านก่อน' : 'ส่งออกเป็นไฟล์ ' + fmt.label,
+      submitLabel: blocked ? 'แก้ไขข้อที่ไม่ผ่านก่อน' : 'ดาวน์โหลดเป็นไฟล์ ' + fmt.label,
       submit: () => this.setState({ done: true }),
 
       done: this.state.done,
